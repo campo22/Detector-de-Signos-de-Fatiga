@@ -391,7 +391,7 @@ def main():
                 keepalive_payload = {
                     "driverId": analyzer.driver_id,
                     "vehicleId": analyzer.vehicle_id,
-                    "timestamp": datetime.now().isoformat(),
+                    "timestamp": datetime.now( timezone.utc).isoformat(),
                     "fatigueLevel": "NINGUNO",
                     "fatigueType": "NINGUNO",
                     "eyeClosureDuration": 0.0,

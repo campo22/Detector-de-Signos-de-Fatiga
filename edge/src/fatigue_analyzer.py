@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import collections
 
 class FatigueAnalyzer:
@@ -186,11 +186,11 @@ class FatigueAnalyzer:
         final_payload = {
             "driverId": self.driver_id,
             "vehicleId": self.vehicle_id,
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": datetime.now( timezone.utc).isoformat(),
             "fatigueLevel": level_es,        # ahora en español
             "fatigueType": type_es,          # ahora en español
             "eyeClosureDuration": round(self.eye_closure_duration, 2),
-            "yawnCount": self.yawn_count,
+            "yawnCount": self.yawn_count, # el número de bostezos
             "blinkRate": round(self.blink_rate, 1)
         }
 

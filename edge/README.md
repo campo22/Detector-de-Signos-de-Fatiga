@@ -53,7 +53,7 @@ Sistema de visión por computadora para monitorear en tiempo real signos de somn
 
 ## Instalación
 
-1) Crear entorno virtual e instalar dependencias
+1. Crear entorno virtual e instalar dependencias
 
 ```bash
 python3 -m venv .venv
@@ -61,7 +61,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-2) Descargar el modelo de landmarks de dlib (si no está en `models/`)
+2. Descargar el modelo de landmarks de dlib (si no está en `models/`)
 
 - Enlace oficial (comprimido): http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
 - Pasos:
@@ -69,7 +69,7 @@ pip install -r requirements.txt
   - Colócalo en `models/`
   - Ajusta `shape_predictor_path` en `config.yaml` si usas otra ruta
 
-3) Verifica el archivo de sonido (opcional)
+3. Verifica el archivo de sonido (opcional)
 
 - Asegúrate de tener `assets/music.wav` o cambia `alarm_sound_path` en `config.yaml`
 
@@ -112,6 +112,7 @@ Se abrirá una ventana con la cámara. Por defecto verás los overlays (landmark
   - `FATIGUE_HEAD_PITCH_DOWN_THRESHOLD`: umbral (grados) de pitch hacia abajo
 
 Notas:
+
 - La aplicación estima el FPS real (~2s tras iniciar) y reajusta internamente los valores de frames consecutivos para mantener las mismas duraciones nominales.
 
 ## Payload al Backend
