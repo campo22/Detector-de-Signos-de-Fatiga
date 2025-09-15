@@ -76,3 +76,11 @@ Thumbs.db
 # Project specific
 *.dat
 *.wav
+
+# Reports and logs
+reports/
+*/reports/
+*.csv
+*.png
+app.log
+*.log
