@@ -69,6 +69,7 @@ public class JwtUtils {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
+            // compara el username del token con el username del userDetails de la base de datos
             return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         } catch (JwtException e) {
             // Si hay cualquier error de validación, el token no es válido.
