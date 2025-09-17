@@ -43,26 +43,49 @@ public class SecurityConfig {
                         // Endpoints públicos que no requieren autenticación
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
+
+                        // --- Las reglas de Swagger se han movido a la configuración de WebSecurity ---
+
                         // Cualquier otra petición debe ser autenticada
                         .anyRequest().authenticated()
                 )
-                // Configuramos la gestión de sesiones como STATELESS (sin estado)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Añadimos nuestro proveedor de autenticación personalizado
                 .authenticationProvider(authenticationProvider())
-                // Añadimos nuestro filtro JWT antes del filtro de usuario y contraseña de Spring
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+
+    /**
+     * Configuración de HttpFirewall para manejar peticiones con malformed URLs.
+     *
+     * @return una instancia de HttpFirewall
+     */
+    @Bean
+    public org.springframework.security.web.firewall.HttpFirewall httpFirewall() {
+        return new org.springframework.security.web.firewall.DefaultHttpFirewall();
+    }
+
+    /**
+     * Configuración de WebSecurityCustomizer para ignorar peticiones a los endpoints de Swagger.
+     *
+     * @return una instancia de WebSecurityCustomizer
+     */
+    @Bean
+    public org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+                "/swagger-ui/**",  // Endpoints de Swagger UI
+                "/v3/api-docs/**",  // Documentación de la API en formato OpenAPI 3.0.0
+                "/swagger-ui.html", // Página de Swagger UI
+                "/api-docs/**"      // Documentación de la API en formato OpenAPI 2.0
+        );
+    }
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        // Le decimos al proveedor que use nuestro UserDetailsService para encontrar usuarios
         authProvider.setUserDetailsService(userDetailsService);
-        // Le decimos al proveedor que use BCrypt para verificar las contraseñas
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

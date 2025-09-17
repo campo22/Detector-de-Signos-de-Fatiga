@@ -37,6 +37,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role rol;
 
+    @Builder.Default
     private boolean activo = true;
     private Instant createdAt;
     private Instant updatedAt;
@@ -45,7 +46,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rol.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+ rol.name()));
     }
 
     @Override

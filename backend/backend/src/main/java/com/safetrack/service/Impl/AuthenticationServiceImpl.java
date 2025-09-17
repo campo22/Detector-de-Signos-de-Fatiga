@@ -2,7 +2,7 @@ package com.safetrack.service.Impl;
 
 import com.safetrack.domain.dto.request.LoginRequest;
 import com.safetrack.domain.dto.request.RegisterRequest;
-import com.safetrack.domain.dto.response.LoginResponse;
+import com.safetrack.domain.dto.response.AuthResponse;
 import com.safetrack.domain.dto.result.AuthResult;
 import com.safetrack.domain.entity.User;
 import com.safetrack.exception.TokenRefreshException;
@@ -22,6 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.WebUtils;
+
+import java.time.Instant;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +54,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .rol(request.getRol())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .activo(true)
                 .build();
         userRepository.save(user);
         log.info("Usuario registrado exitosamente: {}", user);
@@ -66,19 +72,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         log.info("Iniciando sesión para el usuario: {}", request.getEmail());
 
-        Authentication authentication=authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            // ESTE LOG NOS DARÁ LA RESPUESTA DEFINITIVA
+            log.error("¡FALLO LA AUTENTICACIÓN! Causa: [{}], Mensaje: [{}]", e.getClass().getSimpleName(), e.getMessage());
+            throw e; // Relanzamos la excepción para que Spring devuelva el 403
+        }
 
         var user = (User) authentication.getPrincipal();
 
         var accessToken=jwtUtils.generateToken(user);
         var refreshToken=jwtUtils.generateRefreshToken(user);
 
-        LoginResponse response= LoginResponse.builder()
+        AuthResponse response= AuthResponse.builder()
                 .accessToken(accessToken)
                 .username(user.getUsername())
                 .rol(user.getRol())
@@ -115,13 +128,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String newAccessToken = jwtUtils.generateToken(userDetails);
         String newRefreshToken = jwtUtils.generateRefreshToken(userDetails); // Generamos también un nuevo refresh token
 
-        LoginResponse loginResponse = LoginResponse.builder()
+        AuthResponse response  = AuthResponse.builder()
                 .accessToken(newAccessToken)
                 .username(userDetails.getUsername()) // Aquí getUsername() devuelve el email
                 .rol(((User) userDetails).getRol()) // Hacemos un cast para obtener nuestro User
                 .build();
 
         log.info("Tokens refrescados exitosamente para el usuario: {}", userEmail);
-        return new AuthResult(loginResponse, newRefreshToken);
+        return new AuthResult(response, newRefreshToken);
     }
 }
