@@ -14,11 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Implementación del servicio para la lógica de negocio de los conductores.
+ */
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class DriverServiceImpl implements DriverService {
 
@@ -26,84 +29,68 @@ public class DriverServiceImpl implements DriverService {
     private final DriverMapper driverMapper;
 
     @Override
+    @Transactional
+    public DriverResponse createDriver(DriverRequest request) {
+        log.info("Iniciando la creación de un nuevo conductor con licencia: {}", request.getLicencia());
+
+        // Validación de negocio: no permitir licencias duplicadas.
+        driverRepository.findByLicencia(request.getLicencia()).ifPresent(d -> {
+            throw new DuplicateResourceException("Ya existe un conductor con la licencia: " + request.getLicencia());
+        });
+
+        Driver driver = driverMapper.toDriver(request);
+        Driver savedDriver = driverRepository.save(driver);
+        log.info("Conductor creado exitosamente con ID: {}", savedDriver.getId());
+        return driverMapper.toDriverResponse(savedDriver);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DriverResponse getDriverById(UUID id) {
+        log.info("Buscando conductor con ID: {}", id);
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Conductor no encontrado con ID: " + id));
+        return driverMapper.toDriverResponse(driver);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<DriverResponse> getAllDrivers() {
-        log.info("Getting all drivers");
-        return driverRepository.findAll()
-                .stream()
-                .map(driverMapper::toResponse)
+        log.info("Obteniendo la lista de todos los conductores");
+        List<Driver> drivers = driverRepository.findAll();
+        return drivers.stream()
+                .map(driverMapper::toDriverResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public DriverResponse getDriverById(Long id) {
-        log.info("Getting driver by id: {}", id);
-        Driver driver = driverRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Driver", "id", id));
-        return driverMapper.toResponse(driver);
-    }
+    @Transactional
+    public DriverResponse updateDriver(UUID id, DriverRequest request) {
+        log.info("Iniciando la actualización del conductor con ID: {}", id);
+        Driver driverToUpdate = driverRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Conductor no encontrado con ID: " + id));
 
-    @Override
-    public DriverResponse createDriver(DriverRequest request) {
-        log.info("Creating new driver with license: {}", request.getLicenseNumber());
-        
-        // Verificar si ya existe un conductor con ese número de licencia
-        if (driverRepository.findByLicenseNumber(request.getLicenseNumber()).isPresent()) {
-            throw new DuplicateResourceException("Driver", "licenseNumber", request.getLicenseNumber());
+        // Validación: si se está cambiando la licencia, asegurarse de que no exista ya en otro conductor.
+        if (request.getLicencia() != null && !request.getLicencia().equals(driverToUpdate.getLicencia())) {
+            driverRepository.findByLicencia(request.getLicencia()).ifPresent(d -> {
+                throw new DuplicateResourceException("La nueva licencia '" + request.getLicencia() + "' ya está en uso por otro conductor.");
+            });
         }
 
-        Driver driver = driverMapper.toEntity(request);
-        Driver savedDriver = driverRepository.save(driver);
-        log.info("Driver created successfully with id: {}", savedDriver.getId());
-        
-        return driverMapper.toResponse(savedDriver);
+        driverMapper.updateDriverFromRequest(request, driverToUpdate);
+        Driver updatedDriver = driverRepository.save(driverToUpdate);
+        log.info("Conductor con ID: {} actualizado exitosamente", updatedDriver.getId());
+        return driverMapper.toDriverResponse(updatedDriver);
     }
 
     @Override
-    public DriverResponse updateDriver(Long id, DriverRequest request) {
-        log.info("Updating driver with id: {}", id);
-        
-        Driver existingDriver = driverRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Driver", "id", id));
-
-        // Verificar si el nuevo número de licencia ya existe (si es diferente)
-        if (!existingDriver.getLicenseNumber().equals(request.getLicenseNumber()) &&
-            driverRepository.findByLicenseNumber(request.getLicenseNumber()).isPresent()) {
-            throw new DuplicateResourceException("Driver", "licenseNumber", request.getLicenseNumber());
+    @Transactional
+    public void deleteDriver(UUID id) {
+        log.info("Iniciando la eliminación del conductor con ID: {}", id);
+        if (!driverRepository.existsById(id)) {
+            throw new ResourceNotFoundException("No se puede eliminar. Conductor no encontrado con ID: " + id);
         }
-
-        // Actualizar campos
-        existingDriver.setFirstName(request.getFirstName());
-        existingDriver.setLastName(request.getLastName());
-        existingDriver.setLicenseNumber(request.getLicenseNumber());
-        existingDriver.setPhoneNumber(request.getPhoneNumber());
-        existingDriver.setEmail(request.getEmail());
-
-        Driver updatedDriver = driverRepository.save(existingDriver);
-        log.info("Driver updated successfully with id: {}", updatedDriver.getId());
-        
-        return driverMapper.toResponse(updatedDriver);
-    }
-
-    @Override
-    public void deleteDriver(Long id) {
-        log.info("Deleting driver with id: {}", id);
-        
-        Driver driver = driverRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Driver", "id", id));
-        
-        driverRepository.delete(driver);
-        log.info("Driver deleted successfully with id: {}", id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<DriverResponse> findDriversByName(String name) {
-        log.info("Searching drivers by name: {}", name);
-        return driverRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name)
-                .stream()
-                .map(driverMapper::toResponse)
-                .collect(Collectors.toList());
+        driverRepository.deleteById(id);
+        log.info("Conductor con ID: {} eliminado exitosamente", id);
     }
 }
