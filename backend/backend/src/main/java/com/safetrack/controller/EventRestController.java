@@ -16,16 +16,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/events") // Ruta base para todos los endpoints en esta clase
+@RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
-@Tag(name = "Events", description = "Endpoints para la gestión de eventos de fatiga") // Agrupa los endpoints en la UI de Swagger
+@Tag(name = "Events", description = "Endpoints para la gestión de eventos de fatiga")
 public class EventRestController {
 
     private final VehicleEventRepository eventRepository;
     private final VehicleEventMapper eventMapper;
 
-    @Operation(summary = "Obtener todos los eventos de fatiga") // Descripción del endpoint
-    @ApiResponse(responseCode = "200", description = "Lista de eventos obtenida exitosamente") // Documenta la respuesta exitosa
+    @Operation(summary = "Obtener todos los eventos de fatiga")
+    @ApiResponse(responseCode = "200", description = "Lista de eventos obtenida exitosamente")
     @GetMapping
     public List<VehicleEventDTO> getAllEvents() {
         // Buscamos todas las entidades en la base de datos
