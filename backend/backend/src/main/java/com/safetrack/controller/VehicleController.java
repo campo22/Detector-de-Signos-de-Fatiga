@@ -1,5 +1,6 @@
 package com.safetrack.controller;
 
+import com.safetrack.domain.dto.request.VehicleFilterRequest;
 import com.safetrack.domain.dto.request.VehicleRequest;
 import com.safetrack.domain.dto.response.VehicleResponse;
 import com.safetrack.service.VehicleService;
@@ -42,8 +43,8 @@ public class VehicleController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')")
     @Operation(summary = "Obtener una lista de todos los vehículos")
-    public ResponseEntity<List<VehicleResponse>> getAllVehicles() {
-        return ResponseEntity.ok(vehicleService.getAllVehicles());
+    public ResponseEntity<List<VehicleResponse>> getAllVehicles(VehicleFilterRequest filter ) {
+        return ResponseEntity.ok(vehicleService.getAllVehicles(filter));
     }
 
     @PutMapping("/{id}")

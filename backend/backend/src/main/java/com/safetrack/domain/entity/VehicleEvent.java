@@ -27,24 +27,27 @@ public class VehicleEvent {
     /**
      * El ID del conductor asociado al evento.
      */
-    private String driverId;
+    private UUID driverId;
     /**
      * El ID del vehículo en el que ocurrió el evento.
      */
-    private String vehicleId;
+    private UUID vehicleId;
     /**
      * La marca de tiempo del evento.
      */
+    @Column(nullable = false)
     private Instant timestamp;
     /**
      * El nivel de fatiga detectado (ej. "bajo", "medio", "alto").
      */
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FatigueLevel fatigueLevel;
     /**
      * El tipo de fatiga detectada (ej. "somnolencia", "distracción").
      */
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FatigueType fatigueType;
     /**
      * La duración del cierre de ojos en segundos, un indicador de somnolencia.

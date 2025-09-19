@@ -1,5 +1,6 @@
 package com.safetrack.service;
 
+import com.safetrack.domain.dto.request.VehicleFilterRequest;
 import com.safetrack.domain.dto.request.VehicleRequest;
 import com.safetrack.domain.dto.response.VehicleResponse;
 
@@ -29,7 +30,7 @@ public interface VehicleService {
      *
      * @return Una lista de objetos VehicleResponse, cada uno representando un vehículo.
      */
-    List<VehicleResponse> getAllVehicles();
+    List<VehicleResponse> getAllVehicles(VehicleFilterRequest filter);
 
     /**
      * Actualiza la información de un vehículo existente.

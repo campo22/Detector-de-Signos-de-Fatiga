@@ -1,42 +1,37 @@
 package com.safetrack.controller;
 
-import com.safetrack.domain.dto.VehicleEventDTO;
-import com.safetrack.domain.entity.VehicleEvent;
-import com.safetrack.mapper.VehicleEventMapper;
-import com.safetrack.service.EventService;
+import com.safetrack.domain.dto.request.VehicleEventFilterRequest;
+import com.safetrack.domain.dto.response.VehicleEventResponse;
+import com.safetrack.service.VehicleEventService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
-@Slf4j
+@Tag(name = "Event Analytics", description = "Endpoints para la consulta de datos históricos de fatiga")
+@SecurityRequirement(name = "bearerAuth")
 public class VehicleEventController {
 
-    private final EventService eventService;
-    private final VehicleEventMapper vehicleEventMapper;
+    private final VehicleEventService eventService;
 
-    /**
-     * Maneja los eventos de vehículos recibidos a través de WebSockets.
-     * Este método está configurado para escuchar mensajes en el destino "/vehicle-event"
-     * y enviar el resultado a todos los suscriptores del tema "/topic/vehicle-event".
-     *
-     * @param eventDTO El objeto VehicleEventDTO que contiene los datos del evento del vehículo.
-     *                 Este DTO se recibe del cliente a través del WebSocket.
-     * @return Un VehicleEventDTO que representa el evento del vehículo guardado.
-     *         Este DTO se envía de vuelta a los clientes suscritos al tema.
-     */
-    @MessageMapping("/vehicle-event")
-    @SendTo("/topic/vehicle-event")
-    public VehicleEventDTO handleFatigueEvent(VehicleEventDTO eventDTO) {
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')")
+    @Operation(summary = "Buscar y paginar eventos de fatiga históricos con filtros")
+    public ResponseEntity<Page<VehicleEventResponse>> searchEvents(
+            VehicleEventFilterRequest filter,
+            @PageableDefault(size = 20, sort = "timestamp") Pageable pageable) {
 
-        // Registra la información del evento de vehículo recibido para depuración.
-        log.info("Recibido evento de vehículo: {}", eventDTO);
-        VehicleEvent savedEvent = eventService.saveEvent(eventDTO);
-        return vehicleEventMapper.toDto(savedEvent);
-
+        return ResponseEntity.ok(eventService.searchEvents(filter, pageable));
     }
 }
-

@@ -1,5 +1,6 @@
 package com.safetrack.service.Impl;
 
+import com.safetrack.domain.dto.request.VehicleFilterRequest;
 import com.safetrack.domain.dto.request.VehicleRequest;
 import com.safetrack.domain.dto.response.VehicleResponse;
 import com.safetrack.domain.entity.Driver;
@@ -9,9 +10,11 @@ import com.safetrack.exception.ResourceNotFoundException;
 import com.safetrack.mapper.VehicleMapper;
 import com.safetrack.repository.DriverRepository;
 import com.safetrack.repository.VehicleRepository;
+import com.safetrack.repository.specification.VehicleSpecification;
 import com.safetrack.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ public class VehicleServiceImpl implements VehicleService {
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
     private final DriverRepository driverRepository;
+    private final VehicleSpecification vehicleSpecification;
 
     /**
      * Crea un nuevo vehículo en el sistema.
@@ -87,12 +91,12 @@ public class VehicleServiceImpl implements VehicleService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<VehicleResponse> getAllVehicles() {
-        log.info("Obteniendo la lista de todos los vehiculos");
-        List<Vehicle> vehicles= vehicleRepository.findAll();
-        return vehicles
-                .stream()
-                .map(vehicleMapper::toVehicleResponse )
+    public List<VehicleResponse> getAllVehicles(VehicleFilterRequest filter) {
+        log.info("Obteniendo la lista de todos los vehiculos con filtro: {}", filter);
+        Specification<Vehicle> spec= vehicleSpecification.getSpecification(filter);
+
+        return vehicleRepository.findAll(spec).stream()
+                .map(vehicleMapper::toVehicleResponse)
                 .collect(Collectors.toList());
     }
 
