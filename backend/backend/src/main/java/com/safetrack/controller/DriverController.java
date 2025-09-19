@@ -1,5 +1,6 @@
 package com.safetrack.controller;
 
+import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.dto.request.DriverRequest;
 import com.safetrack.domain.dto.response.DriverResponse;
 import com.safetrack.service.DriverService;
@@ -42,8 +43,8 @@ public class DriverController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')")
     @Operation(summary = "Obtener una lista de todos los conductores")
-    public ResponseEntity<List<DriverResponse>> getAllDrivers() {
-        return ResponseEntity.ok(driverService.getAllDrivers());
+    public ResponseEntity<List<DriverResponse>> getAllDrivers( DriverFilterRequest filter) {
+        return ResponseEntity.ok(driverService.getAllDrivers(filter));
     }
 
     @PutMapping("/{id}")

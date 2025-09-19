@@ -1,5 +1,6 @@
 package com.safetrack.service.Impl;
 
+import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.dto.request.DriverRequest;
 import com.safetrack.domain.dto.response.DriverResponse;
 import com.safetrack.domain.entity.Driver;
@@ -7,15 +8,18 @@ import com.safetrack.exception.DuplicateResourceException;
 import com.safetrack.exception.ResourceNotFoundException;
 import com.safetrack.mapper.DriverMapper;
 import com.safetrack.repository.DriverRepository;
+import com.safetrack.repository.specification.DriverSpecification;
 import com.safetrack.service.DriverService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 /**
  * Implementación del servicio para la lógica de negocio de los conductores.
@@ -27,6 +31,7 @@ public class DriverServiceImpl implements DriverService {
 
     private final DriverRepository driverRepository;
     private final DriverMapper driverMapper;
+    private final DriverSpecification driverSpecification;
 
     @Override
     @Transactional
@@ -55,10 +60,10 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DriverResponse> getAllDrivers() {
-        log.info("Obteniendo la lista de todos los conductores");
-        List<Driver> drivers = driverRepository.findAll();
-        return drivers.stream()
+    public List<DriverResponse> getAllDrivers(DriverFilterRequest filter) {
+        log.info("Obteniendo la lista de todos los conductores con filtros: {}", filter);
+        Specification<Driver> spec= driverSpecification.getSpecification( filter);
+        return  driverRepository.findAll(spec).stream()
                 .map(driverMapper::toDriverResponse)
                 .collect(Collectors.toList());
     }

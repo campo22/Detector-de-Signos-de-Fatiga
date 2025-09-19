@@ -1,5 +1,6 @@
 package com.safetrack.service;
 
+import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.dto.request.DriverRequest;
 import com.safetrack.domain.dto.response.DriverResponse;
 
@@ -25,8 +26,9 @@ public interface DriverService {
     /**
      * Obtiene una lista de todos los conductores.
      * @return Lista de DTOs de todos los conductores.
+     * @param filter DTO con los criterios de filtro.
      */
-    List<DriverResponse> getAllDrivers();
+    List<DriverResponse> getAllDrivers( DriverFilterRequest filter);
 
     /**
      * Actualiza la información de un conductor existente.
