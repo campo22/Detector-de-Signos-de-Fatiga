@@ -2,9 +2,9 @@
 
 # --- Identificadores ---
 # ID del conductor
-driver_id: "PILOTO-001"
+driver_id: "8eb62c33-42f2-4453-a91f-6c30560a3765"
 # ID del vehículo
-vehicle_id: "VEHICULO-001"
+vehicle_id: "ff1a20a8-8d7f-4c30-8881-4cd4315a0de9"
 
 # --- Comunicación con el Backend ---
 # Endpoint del backend (STOMP/WebSocket)
@@ -51,8 +51,8 @@ FATIGUE_MAR_THRESHOLD: 0.75
 # Contadores de Frames Consecutivos para la Detección de Fatiga (para evitar falsos positivos)
 # Estos valores se basan en el FPS y la duración deseada (por ejemplo, 1 segundo = 20 frames a 20 FPS)
 FATIGUE_EYE_CLOSED_CONSEC_FRAMES: 30 # Ojos cerrados durante 1.5 segundos para microsueño
-FATIGUE_HEAD_NOD_CONSEC_FRAMES: 50   # Cabeza hacia abajo, más frames para robustez contra vibración
-FATIGUE_YAWN_CONSEC_FRAMES: 18       # Boca abierta ~0.9s a 20 FPS para bostezo sostenido
+FATIGUE_HEAD_NOD_CONSEC_FRAMES: 50 # Cabeza hacia abajo, más frames para robustez contra vibración
+FATIGUE_YAWN_CONSEC_FRAMES: 18 # Boca abierta ~0.9s a 20 FPS para bostezo sostenido
 
 # Umbrales de Pose de la Cabeza (en grados)
 # Ángulo en grados para considerar que la cabeza está mirando hacia abajo de forma significativa

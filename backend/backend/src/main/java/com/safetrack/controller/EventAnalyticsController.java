@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Event Analytics", description = "Endpoints para la consulta de datos históricos de fatiga")
 @SecurityRequirement(name = "bearerAuth")
-public class VehicleEventController {
+public class EventAnalyticsController {
 
     private final VehicleEventService eventService;
 
