@@ -1,17 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts,tsx,js,jsx}"
-  ],
+  darkMode: 'class', // Habilitamos el modo oscuro
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
+      // Añadimos la paleta de colores de tu diseño
       colors: {
-        primary: '#3490dc',
-        secondary: '#ffed4a',
-        danger: '#e3342f',
-        success: '#38c172'
-      }
-    }
+        primary: '#06a8f9',
+        'background-light': '#f5f7f8',
+        'background-dark': '#0f1c23',
+      },
+      fontFamily: {
+        display: ['Inter'], // Añadimos la fuente de tu diseño
+      },
+    },
   },
-  plugins: []
-}
+  plugins: [],
+};
