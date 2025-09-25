@@ -4,14 +4,14 @@ module.exports = {
   content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
-      // Añadimos la paleta de colores de tu diseño
+      // Añadimos la paleta de colores y la fuente de tu diseño
       colors: {
         primary: '#06a8f9',
         'background-light': '#f5f7f8',
         'background-dark': '#0f1c23',
       },
       fontFamily: {
-        display: ['Inter'], // Añadimos la fuente de tu diseño
+        display: ['Inter', 'sans-serif'],
       },
     },
   },

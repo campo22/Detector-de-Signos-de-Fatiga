@@ -1,0 +1,10 @@
+// --- Análisis del Arquitecto ---
+// Usamos este archivo para cualquier estilo que sea DEMASIADO específico
+// para este componente y no pueda ser logrado con Tailwind.
+// En este caso, un pequeño ajuste para que los inputs de PrimeNG se comporten
+// como esperamos dentro de nuestros contenedores de iconos.
+
+// Para asegurar que los inputs de PrimeNG ocupen todo el ancho dentro del span
+:host ::ng-deep .p-input-icon-left .p-inputtext {
+  width: 100%;
+}

@@ -9,8 +9,7 @@
         "@schematics/angular:component": {
           "style": "scss",
           "skipTests": true,
-          "flat": false,
-          "suffix": "service"
+          "flat": false
         }
       },
       "root": "",
