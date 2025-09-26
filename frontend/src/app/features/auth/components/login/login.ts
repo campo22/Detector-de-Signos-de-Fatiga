@@ -9,6 +9,9 @@ import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-login',
@@ -18,20 +21,24 @@ import { MessageService } from 'primeng/api';
     InputTextModule,
     ButtonModule,
     PasswordModule,
-    ToastModule
+    ToastModule,
+    CommonModule,
+    IconFieldModule,
+    InputIconModule
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
   providers: [MessageService] // Proveedor para las notificaciones de PrimeNG
 })
 export class LoginComponent {
+  loading = false;
+  showPassword = false;
 
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
   private messageService = inject(MessageService);
-
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -59,5 +66,8 @@ export class LoginComponent {
         console.error('Error en el login:', err);
       }
     });
+  }
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }

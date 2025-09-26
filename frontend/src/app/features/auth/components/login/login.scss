@@ -1,10 +1,44 @@
-// --- Análisis del Arquitecto ---
-// Usamos este archivo para cualquier estilo que sea DEMASIADO específico
-// para este componente y no pueda ser logrado con Tailwind.
-// En este caso, un pequeño ajuste para que los inputs de PrimeNG se comporten
-// como esperamos dentro de nuestros contenedores de iconos.
+/* Directivas de Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-// Para asegurar que los inputs de PrimeNG ocupen todo el ancho dentro del span
-:host ::ng-deep .p-input-icon-left .p-inputtext {
-  width: 100%;
+/* Estilo base para el body */
+body {
+  font-family: 'Inter', sans-serif;
+  @apply min-h-screen; /* modo oscuro por defecto */
+}
+
+/* Fondo animado */
+@keyframes subtle-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.background-animate {
+  background-image: radial-gradient(circle at 25% 25%, rgba(14, 165, 233, 0.15), transparent 30%),
+    radial-gradient(circle at 75% 75%, rgba(6, 168, 249, 0.1), transparent 35%);
+  background-size: 200% 200%;
+  animation: subtle-pan 20s ease-in-out infinite;
+}
+
+/* Animación para la tarjeta de login */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
 }

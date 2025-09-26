@@ -1,44 +1,112 @@
-<div class="relative flex min-h-screen flex-col items-center justify-center font-display bg-background-light dark:bg-background-dark">
-  <div class="absolute inset-0 w-full h-full background-pattern"></div>
-  <p-toast></p-toast>
-
-  <div class="relative flex w-full max-w-md flex-col items-center p-8 z-10">
-    <div class="mb-8">
-        <svg class="text-primary" fill="currentColor" height="64" viewBox="0 0 24 24" width="64" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8Z"></path><path d="M12 12.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2Zm-4 5c.83-1.17 2.33-2 4-2s3.17.83 4 2H8Z" fill-opacity="0.6"></path><path d="M12 6.5c-2.42 0-4.5 1.76-4.93 4.09.28-.05.57-.09.87-.09 2.21 0 4 1.79 4 4 0 .3-.04.59-.09.87C14.24 15.5 16.5 13.42 16.5 10.5c0-2.49-2.01-4.5-4.5-4.5Z" fill-opacity="0.3"></path></svg>
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f2027] via-[#203a43] to-[#2c5364] font-sans"
+>
+  <!-- Card -->
+  <div
+    class="bg-[#0d1117]/80 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-md border border-gray-700/50"
+  >
+    <!-- Logo -->
+    <div class="flex justify-center mb-6">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center border-2 border-sky-500">
+        <i class="pi pi-user text-sky-500 text-2xl"></i>
+      </div>
     </div>
 
-    <h1 class="text-3xl font-bold text-gray-800  dark:text-white mb-2">Welcome to SafeTrack</h1>
-    <p class="text-gray-600 dark:text-gray-400 mb-8">Login to monitor your fleet's safety.</p>
+    <!-- Título -->
+    <h1 class="text-center text-2xl font-bold text-white">SafeTrack</h1>
+    <p class="text-center text-gray-400 mt-2 mb-6">
+      Bienvenido de nuevo. Inicia sesión en tu cuenta.
+    </p>
 
-    <form class="w-full space-y-4" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div>
-        <span class="p-input-icon-left w-full">
-            <i class="pi pi-envelope"></i>
-            <input pInputText id="email" formControlName="email" placeholder="Email"
-                   class="w-full rounded-lg border-gray-300 dark:border-gray-700 bg-background-light/50 dark:bg-background-dark/50 p-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-primary focus:border-primary" />
-        </span>
+    <!-- Formulario -->
+    <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Email -->
+      <div class="relative">
+        <i
+          class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2"
+          [ngClass]="{
+            'text-gray-400': !loginForm.get('email')?.touched,
+            'text-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
+            'text-green-500': loginForm.get('email')?.valid
+          }"
+        ></i>
+        <input
+          pInputText
+          type="email"
+          formControlName="email"
+          placeholder="Email"
+          class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          [ngClass]="{
+            'border-gray-700': !loginForm.get('email')?.touched,
+            'border-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
+            'border-green-500': loginForm.get('email')?.valid
+          }"
+        />
         @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-          <small class="text-red-500 mt-1 block">Por favor, introduce un email válido.</small>
+        <small class="text-red-500 mt-1 block">Introduce un email válido.</small>
         }
       </div>
 
-      <div>
-        <p-password id="password" formControlName="password" placeholder="Password"
-                    [feedback]="false" styleClass="w-full" [toggleMask]="true"
-                    inputStyleClass="w-full rounded-lg border-gray-300 dark:border-gray-700 bg-background-light/50 dark:bg-background-dark/50 p-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-primary focus:border-primary">
-        </p-password>
+      <!-- Password -->
+      <div class="relative">
+        <i
+          class="pi pi-lock absolute left-3 top-1/2 -translate-y-1/2"
+          [ngClass]="{
+            'text-gray-400': !loginForm.get('password')?.touched,
+            'text-red-500':
+              loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+            'text-green-500': loginForm.get('password')?.valid
+          }"
+        ></i>
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Contraseña"
+          class="w-full pl-10 pr-10 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          [ngClass]="{
+            'border-gray-700': !loginForm.get('password')?.touched,
+            'border-red-500':
+              loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+            'border-green-500': loginForm.get('password')?.valid
+          }"
+        />
+
+        <!-- Ojito toggle -->
+        <button
+          type="button"
+          (click)="togglePassword()"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-500 transition"
+        >
+          <i [ngClass]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+        </button>
+
         @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-          <small class="text-red-500 mt-1 block">La contraseña es requerida.</small>
+        <small class="text-red-500 mt-1 block">La contraseña es requerida.</small>
         }
       </div>
 
+      <!-- Link olvidar -->
       <div class="text-right">
-        <a class="text-sm text-primary hover:underline" href="#">Forgot password?</a>
+        <a href="#" class="text-sm text-sky-500 hover:underline transition-colors">
+          ¿Olvidaste tu contraseña?
+        </a>
       </div>
 
-      <p-button label="Log In" type="submit" styleClass="w-full !rounded-lg !py-3 !px-5 !text-base !font-bold !text-white !bg-primary !border-primary !shadow-lg !shadow-primary/30 !transition-all !duration-300 hover:!bg-primary/90" [disabled]="loginForm.invalid">
-
-      </p-button>
+      <!-- Botón -->
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid || loading"
+        class="w-full py-3 rounded-lg font-semibold text-white shadow-lg transition duration-300 bg-sky-500 shadow-sky-500/30 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-[#0d1117] disabled:bg-gray-600 disabled:cursor-not-allowed"
+      >
+        <span *ngIf="!loading">Iniciar Sesión</span>
+        <i *ngIf="loading" class="pi pi-spin pi-spinner"></i>
+      </button>
     </form>
+
+    <!-- Registro -->
+    <p class="text-center text-gray-400 text-sm mt-6">
+      ¿No tienes una cuenta?
+      <a href="#" class="text-sky-500 hover:underline">Regístrate</a>
+    </p>
   </div>
 </div>

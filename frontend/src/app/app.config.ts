@@ -3,10 +3,12 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthService } from './features/auth/services/auth.service';
 import { firstValueFrom } from 'rxjs';
+import { providePrimeNG } from 'primeng/config';
+import Lara from '@primeuix/themes/lara';
 
 export function initializeApp(authService: AuthService) {
   return (): Promise<any> => {
@@ -19,7 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideAnimations(),
+    provideAnimationsAsync(),
     provideClientHydration(withEventReplay()),
     provideHttpClient(
       withFetch(),
@@ -29,7 +31,11 @@ export const appConfig: ApplicationConfig = {
       useFactory: initializeApp,
       deps: [AuthService],
       multi: true
-    }
-
+    },
+    providePrimeNG({
+      theme: {
+        preset: Lara
+      }
+    })
   ]
 };
