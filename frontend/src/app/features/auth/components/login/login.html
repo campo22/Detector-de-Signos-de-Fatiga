@@ -21,65 +21,62 @@
     <!-- Formulario -->
     <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <!-- Email -->
-      <div class="relative">
-        <i
-          class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2"
-          [ngClass]="{
-            'text-gray-400': !loginForm.get('email')?.touched,
-            'text-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
-            'text-green-500': loginForm.get('email')?.valid
-          }"
-        ></i>
-        <input
-          pInputText
-          type="email"
-          formControlName="email"
-          placeholder="Email"
-          class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
-          [ngClass]="{
-            'border-gray-700': !loginForm.get('email')?.touched,
-            'border-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
-            'border-green-500': loginForm.get('email')?.valid
-          }"
-        />
+      <div>
+        <div class="relative">
+          <i
+            class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2"
+            [ngClass]="{
+              'text-gray-400': !loginForm.get('email')?.touched,
+              'text-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
+              'text-green-500': loginForm.get('email')?.valid
+            }"
+          ></i>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Email"
+            class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+        </div>
         @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
         <small class="text-red-500 mt-1 block">Introduce un email válido.</small>
         }
       </div>
 
       <!-- Password -->
-      <div class="relative">
-        <i
-          class="pi pi-lock absolute left-3 top-1/2 -translate-y-1/2"
-          [ngClass]="{
-            'text-gray-400': !loginForm.get('password')?.touched,
-            'text-red-500':
-              loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
-            'text-green-500': loginForm.get('password')?.valid
-          }"
-        ></i>
-        <input
-          [type]="showPassword ? 'text' : 'password'"
-          formControlName="password"
-          placeholder="Contraseña"
-          class="w-full pl-10 pr-10 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
-          [ngClass]="{
-            'border-gray-700': !loginForm.get('password')?.touched,
-            'border-red-500':
-              loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
-            'border-green-500': loginForm.get('password')?.valid
-          }"
-        />
+      <div>
+        <div class="relative">
+          <i
+            class="pi pi-lock absolute left-3 top-1/2 -translate-y-1/2"
+            [ngClass]="{
+              'text-gray-400': !loginForm.get('password')?.touched,
+              'text-red-500':
+                loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+              'text-green-500': loginForm.get('password')?.valid
+            }"
+          ></i>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Contraseña"
+            class="w-full pl-10 pr-10 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            [ngClass]="{
+              'border-gray-700': !loginForm.get('password')?.touched,
+              'border-red-500':
+                loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+              'border-green-500': loginForm.get('password')?.valid
+            }"
+          />
 
-        <!-- Ojito toggle -->
-        <button
-          type="button"
-          (click)="togglePassword()"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-500 transition"
-        >
-          <i [ngClass]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
-        </button>
-
+          <!-- Ojito toggle -->
+          <button
+            type="button"
+            (click)="togglePassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-500 transition"
+          >
+            <i [ngClass]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          </button>
+        </div>
         @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
         <small class="text-red-500 mt-1 block">La contraseña es requerida.</small>
         }
