@@ -1,6 +1,10 @@
-<!-- app.component.html -->
-<div
-  class="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f2027] via-[#203a43] to-[#2c5364] font-sans"
->
-  <router-outlet></router-outlet>
+<!-- This structure applies the background pattern globally -->
+<div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
+  <!-- The absolute positioned div for the pattern -->
+  <div class="absolute inset-0 h-full w-full background-pattern"></div>
+
+  <!-- The router outlet is the content, needs to be relative and above the background -->
+  <main class="relative z-10">
+    <router-outlet></router-outlet>
+  </main>
 </div>

@@ -10,7 +10,7 @@
 /* Estilo base para el body, aplicando la fuente a toda la app */
 /* styles.css */
 body {
-  @apply min-h-screen bg-gradient-to-b from-[#0f2027] via-[#203a43] to-[#2c5364] font-sans;
+  @apply min-h-screen bg-background-dark font-sans;
 }
 
 /* Patrón de fondo de tu diseño, listo para usar en modo oscuro */

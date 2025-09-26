@@ -1,12 +1,41 @@
-/* Directivas de Tailwind */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Animación de flotar */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 
-/* Estilo base para el body */
-body {
-  font-family: 'Inter', sans-serif;
-  @apply min-h-screen; /* modo oscuro por defecto */
+/* Animación de resplandor */
+@keyframes pulse-glow {
+  0% {
+    filter: drop-shadow(0 0 6px rgba(6, 168, 249, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(6, 168, 249, 0.7));
+  }
+  100% {
+    filter: drop-shadow(0 0 6px rgba(6, 168, 249, 0.3));
+  }
+}
+
+/* Logo dentro del login */
+.login-logo {
+  width: 200px; /* ajusta según tamaño que quieras */
+  margin: 0 auto 20px; /* centrado + espacio abajo */
+  display: block;
+
+  animation: float 4s ease-in-out infinite, pulse-glow 3s ease-in-out infinite;
+
+  /* evitar que se pixelee */
+  image-rendering: auto;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 /* Fondo animado */
@@ -28,7 +57,7 @@ body {
   animation: subtle-pan 20s ease-in-out infinite;
 }
 
-/* Animación para la tarjeta de login */
+/* Animación fade-in de la tarjeta de login */
 @keyframes fade-in-up {
   from {
     opacity: 0;
