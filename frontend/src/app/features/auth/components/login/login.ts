@@ -55,7 +55,14 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']); // Redirigir en caso de éxito
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Inicio de sesión correcto. Redirigiendo...'
+        });
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']); // Redirigir en caso de éxito
+        }, 1500); // Espera 1.5 segundos
       },
       error: (err) => {
         this.messageService.add({

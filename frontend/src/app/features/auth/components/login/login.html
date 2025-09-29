@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <!-- Card -->
 <div
   class="bg-[#0d1117]/80 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-md border border-gray-700/50"
@@ -27,9 +28,11 @@
           }"
         ></i>
         <input
+          id="email"
           type="email"
           formControlName="email"
           placeholder="Email"
+          autocomplete="email"
           class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-colors duration-200 hover:border-gray-600"
           [ngClass]="{
             'border-gray-700':
@@ -57,6 +60,8 @@
           }"
         ></i>
         <input
+          id="password"
+          autocomplete="password"
           [type]="showPassword ? 'text' : 'password'"
           formControlName="password"
           placeholder="Contraseña"
