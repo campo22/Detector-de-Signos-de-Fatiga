@@ -9,6 +9,7 @@ import { AuthService } from './features/auth/services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeuix/themes/lara';
+import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 export function initializeApp(authService: AuthService) {
   return (): Promise<any> => {
@@ -25,7 +26,10 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(
       withFetch(),
-      withInterceptorsFromDi()),
+      withInterceptors([
+        jwtInterceptor
+      ])
+    ),
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,

@@ -1,31 +1,43 @@
-/* Importamos la fuente 'Inter' de Google Fonts */
-@import 'primeicons/primeicons.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-
 /* Directivas de Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Estilo base para el body, aplicando la fuente a toda la app */
-/* styles.css */
+/* Definición de las variables de color y estilo del nuevo diseño */
+@layer base {
+  :root {
+    --background: 222 84% 4%;
+    --foreground: 210 40% 98%;
+    --card: 222 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 217 91% 60%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 300 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --destructive-glow: 300 100% 50%;
+    --warning: 48 96% 50%;
+    --warning-foreground: 210 40% 98%;
+    --warning-glow: 48 96% 50%;
+    --success: 130 90% 50%;
+    --success-foreground: 210 40% 98%;
+    --success-glow: 130 90% 50%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;
+  }
+}
+
+/* Estilo base para el body, aplicando la fuente y el color de fondo a TODA la app */
 body {
-  @apply min-h-screen bg-background-dark font-sans;
-}
-
-/* Patrón de fondo de tu diseño, listo para usar en modo oscuro */
-.background-pattern {
-  background-image: linear-gradient(rgba(15, 28, 35, 0.9), rgba(15, 28, 35, 0.9)),
-    radial-gradient(circle at 1px 1px, rgba(14, 165, 233, 0.1) 1px, transparent 0),
-    linear-gradient(to right, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
-  background-size: 100% 100%, 1.5rem 1.5rem, 1.5rem 1.5rem, 1.5rem 1.5rem;
-}
-
-/* Variante para el modo claro (si se implementa un switcher de tema) */
-.light .background-pattern {
-  background-image: linear-gradient(rgba(245, 247, 248, 0.9), rgba(245, 247, 248, 0.9)),
-    radial-gradient(circle at 1px 1px, rgba(14, 165, 233, 0.1) 1px, transparent 0),
-    linear-gradient(to right, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+  @apply bg-background font-display text-foreground;
 }

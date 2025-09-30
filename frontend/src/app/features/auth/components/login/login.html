@@ -1,115 +1,126 @@
-<p-toast></p-toast>
-<!-- Card -->
-<div
-  class="bg-[#0d1117]/80 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-md border border-gray-700/50"
->
-  <!-- Logo -->
-  <div class="flex justify-center mb-6">
-    <img src="logo2.png" alt="SafeTrack Logo" class="w-300 h-550 login-logo" />
-  </div>
+<!-- Contenedor con fondo gradiente y partículas -->
+<div class="relative flex min-h-screen items-center justify-center overflow-hidden login-gradient">
+  <!-- Partículas animadas sobre el gradiente -->
+  <div class="absolute inset-0 background-animate"></div>
 
-  <!-- Título -->
-  <h1 class="text-center text-2xl font-bold text-white">SafeTrack</h1>
-  <p class="text-center text-gray-400 mt-2 mb-6">
-    Bienvenido de nuevo. Inicia sesión en tu cuenta.
-  </p>
+  <!-- Contenido del login -->
+  <main class="relative z-10 w-full max-w-md px-6 sm:px-8">
+    <p-toast></p-toast>
 
-  <!-- Formulario -->
-  <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <!-- Email -->
-    <div>
-      <div class="relative">
-        <i
-          class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2"
-          [ngClass]="{
-            'text-gray-400': !loginForm.get('email')?.touched,
-            'text-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
-            'text-green-500': loginForm.get('email')?.valid
-          }"
-        ></i>
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          placeholder="Email"
-          autocomplete="email"
-          class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-colors duration-200 hover:border-gray-600"
-          [ngClass]="{
-            'border-gray-700':
-              !loginForm.get('email')?.touched || loginForm.get('email')?.untouched,
-            'border-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
-            'border-green-500': loginForm.get('email')?.valid
-          }"
-        />
-      </div>
-      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-      <small class="text-red-500 mt-1 block">Introduce un email válido.</small>
-      }
-    </div>
-
-    <!-- Password -->
-    <div>
-      <div class="relative">
-        <i
-          class="pi pi-lock absolute left-3 top-1/2 -translate-y-1/2"
-          [ngClass]="{
-            'text-gray-400': !loginForm.get('password')?.touched,
-            'text-red-500':
-              loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
-            'text-green-500': loginForm.get('password')?.valid
-          }"
-        ></i>
-        <input
-          id="password"
-          autocomplete="password"
-          [type]="showPassword ? 'text' : 'password'"
-          formControlName="password"
-          placeholder="Contraseña"
-          class="w-full pl-10 pr-10 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-colors duration-200 hover:border-gray-600"
-          [ngClass]="{
-            'border-gray-700':
-              !loginForm.get('password')?.touched || loginForm.get('password')?.untouched,
-            'border-red-500':
-              loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
-            'border-green-500': loginForm.get('password')?.valid
-          }"
-        />
-
-        <!-- Ojito toggle -->
-        <button
-          type="button"
-          (click)="togglePassword()"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-500 transition"
-        >
-          <i [ngClass]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
-        </button>
-      </div>
-      @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-      <small class="text-red-500 mt-1 block">La contraseña es requerida.</small>
-      }
-    </div>
-
-    <!-- Link olvidar -->
-    <div class="text-right">
-      <a href="#" class="text-sm text-sky-500 hover:underline transition-colors">
-        ¿Olvidaste tu contraseña?
-      </a>
-    </div>
-
-    <!-- Botón -->
-    <button
-      type="submit"
-      [disabled]="loginForm.invalid || loading"
-      class="w-full py-3 rounded-lg font-semibold text-white shadow-lg transition duration-300 bg-sky-500 shadow-sky-500/30 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-[#0d1117] disabled:bg-gray-600 disabled:cursor-not-allowed"
+    <!-- Card -->
+    <div
+      class="bg-[#0d1117]/80 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-md border border-gray-700/50 fade-in-up"
     >
-      <span *ngIf="!loading">Iniciar Sesión</span>
-      <i *ngIf="loading" class="pi pi-spin pi-spinner"></i>
-    </button>
-  </form>
+      <!-- Logo -->
+      <div class="flex justify-center mb-6">
+        <img src="logo2.png" alt="SafeTrack Logo" class="w-300 h-550 login-logo" />
+      </div>
 
-  <!-- Registro -->
-  <p class="text-center text-gray-400 text-sm mt-6">
-    ¿No tienes una cuenta?
-    <a href="#" class="text-sky-500 hover:underline">Regístrate</a>
-  </p>
+      <!-- Título -->
+      <h1 class="text-center text-2xl font-bold text-white">SafeTrack</h1>
+      <p class="text-center text-gray-400 mt-2 mb-6">
+        Bienvenido de nuevo. Inicia sesión en tu cuenta.
+      </p>
+
+      <!-- Formulario -->
+      <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Email -->
+        <div>
+          <div class="relative">
+            <i
+              class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2"
+              [ngClass]="{
+                'text-gray-400': !loginForm.get('email')?.touched,
+                'text-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
+                'text-green-500': loginForm.get('email')?.valid
+              }"
+            ></i>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Email"
+              autocomplete="email"
+              class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-colors duration-200 hover:border-gray-600"
+              [ngClass]="{
+                'border-gray-700':
+                  !loginForm.get('email')?.touched || loginForm.get('email')?.untouched,
+                'border-red-500':
+                  loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
+                'border-green-500': loginForm.get('email')?.valid
+              }"
+            />
+          </div>
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+          <small class="text-red-500 mt-1 block">Introduce un email válido.</small>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <div class="relative">
+            <i
+              class="pi pi-lock absolute left-3 top-1/2 -translate-y-1/2"
+              [ngClass]="{
+                'text-gray-400': !loginForm.get('password')?.touched,
+                'text-red-500':
+                  loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+                'text-green-500': loginForm.get('password')?.valid
+              }"
+            ></i>
+            <input
+              id="password"
+              autocomplete="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Contraseña"
+              class="w-full pl-10 pr-10 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-colors duration-200 hover:border-gray-600"
+              [ngClass]="{
+                'border-gray-700':
+                  !loginForm.get('password')?.touched || loginForm.get('password')?.untouched,
+                'border-red-500':
+                  loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+                'border-green-500': loginForm.get('password')?.valid
+              }"
+            />
+
+            <!-- Ojito toggle -->
+            <button
+              type="button"
+              (click)="togglePassword()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-500 transition"
+            >
+              <i [ngClass]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </button>
+          </div>
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <small class="text-red-500 mt-1 block">La contraseña es requerida.</small>
+          }
+        </div>
+
+        <!-- Link olvidar -->
+        <div class="text-right">
+          <a href="#" class="text-sm text-sky-500 hover:underline transition-colors">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <!-- Botón -->
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid || loading"
+          class="w-full py-3 rounded-lg font-semibold text-white shadow-lg transition duration-300 bg-sky-500 shadow-sky-500/30 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-[#0d1117] disabled:bg-gray-600 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="!loading">Iniciar Sesión</span>
+          <i *ngIf="loading" class="pi pi-spin pi-spinner"></i>
+        </button>
+      </form>
+
+      <!-- Registro -->
+      <p class="text-center text-gray-400 text-sm mt-6">
+        ¿No tienes una cuenta?
+        <a href="#" class="text-sky-500 hover:underline">Regístrate</a>
+      </p>
+    </div>
+  </main>
 </div>

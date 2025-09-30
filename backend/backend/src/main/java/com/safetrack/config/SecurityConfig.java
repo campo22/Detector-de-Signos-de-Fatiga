@@ -75,7 +75,7 @@ public class SecurityConfig {
     @Bean
     public org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(
-                "/swagger-ui/**",  // Endpoints de Swagger UI
+                "/swagger-ui/**",  // Endpoints de Swagger UI ejemplo "/swagger-ui/index.html"
                 "/v3/api-docs/**",  // Documentación de la API en formato OpenAPI 3.0.0
                 "/swagger-ui.html", // Página de Swagger UI
                 "/api-docs/**"      // Documentación de la API en formato OpenAPI 2.0
