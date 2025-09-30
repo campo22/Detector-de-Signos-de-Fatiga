@@ -1,0 +1,5 @@
+// Aplicamos este estilo solo a los botones dentro de este componente.
+:host button {
+  // Añadimos una transición suave para que el cambio de color al pasar el ratón no sea brusco.
+  transition: background-color 200ms ease-in-out;
+}

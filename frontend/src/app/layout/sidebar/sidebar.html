@@ -1,1 +1,68 @@
-<p>sidebar works!</p>
+<aside class="w-64 h-full bg-card border-r border-border flex flex-col">
+  <div class="h-20 flex items-center px-6">
+    <img src="logo2.png" alt="SafeTrack Logo" class="login-logo" />
+  </div>
+
+  <nav class="flex-1 flex flex-col">
+    <div class="px-4 py-4 space-y-2 flex-grow">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active-link"
+        class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
+      >
+        <span class="material-symbols-outlined mr-3">dashboard</span>
+        Dashboard
+      </a>
+      <a
+        routerLink="/fleet"
+        routerLinkActive="active-link"
+        class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
+      >
+        <span class="material-symbols-outlined mr-3">local_shipping</span>
+        Flota
+      </a>
+      <a
+        routerLink="/drivers"
+        routerLinkActive="active-link"
+        class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
+      >
+        <span class="material-symbols-outlined mr-3">person</span>
+        Conductores
+      </a>
+      <a
+        routerLink="/alerts"
+        routerLinkActive="active-link"
+        class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
+      >
+        <span class="material-symbols-outlined mr-3">warning</span>
+        Alertas
+      </a>
+      <a
+        routerLink="/reports"
+        routerLinkActive="active-link"
+        class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
+      >
+        <span class="material-symbols-outlined mr-3">analytics</span>
+        Reportes
+      </a>
+    </div>
+
+    <div class="px-4 py-4 mt-auto">
+      <a
+        routerLink="/settings"
+        routerLinkActive="active-link"
+        class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
+      >
+        <span class="material-symbols-outlined mr-3">settings</span>
+        Configuración
+      </a>
+      <button
+        (click)="logout()"
+        class="w-full flex items-center px-4 py-2 text-lg font-medium rounded-md text-left mt-2"
+      >
+        <span class="material-symbols-outlined mr-3">logout</span>
+        Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+</aside>
