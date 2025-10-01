@@ -45,10 +45,17 @@ export class AuthService {
   }
 
   logout(): void {
-    this.accessToken.set(null);
-    this.currentUserRole.set(null);
-    this.isAuthenticated.set(false);
-    this.router.navigate(['/login']);
+    this.http.post(`${this.apiUrl}/logout`, {}, { responseType: 'text' })
+      .pipe(
+        // el fialize se ejecuta cuando se completa el observable
+        finalize(() => {
+          this.accessToken.set(null);
+          this.currentUserRole.set(null);
+          this.isAuthenticated.set(false);
+          this.router.navigate(['/login']);
+        })
+      )
+      .subscribe();
   }
 
   getToken(): string | null {
