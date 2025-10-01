@@ -21,7 +21,7 @@ public class CookieUtils {
     public String createRefreshTokenCookie(String refreshToken) {
         return ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)    // 🍪 Impide acceso desde JavaScript (previene XSS)
-                .secure(true)      // 🔒 Solo se envía sobre HTTPS
+                .secure(false)      // 🔒 Solo se envía sobre HTTPS
                 .path("/api/v1/auth") // Ruta específica para los endpoints de autenticación
                 .maxAge(refreshTokenExpiration / 1000) // Duración en segundos
                 .sameSite("Lax")   // ✅ Previene ataques CSRF

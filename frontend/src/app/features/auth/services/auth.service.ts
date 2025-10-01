@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthResponse, LoginRequest, Role } from '../../../core/models/auth.models';
 
@@ -17,6 +17,7 @@ export class AuthService {
   private accessToken = signal<string | null>(null);
   private currentUserRole = signal<Role | null>(null);
   public isAuthenticated = signal<boolean>(false);
+  private isRefreshing = signal<boolean>(false);
 
   // --- MÉTODOS PÚBLICOS ---
 
@@ -26,14 +27,20 @@ export class AuthService {
     );
   }
 
-  silentRefresh(): Observable<AuthResponse | null> {
+  silentRefresh(): Observable<boolean> {
+    if (this.isRefreshing()) {
+      return of(false);
+    }
+    this.isRefreshing.set(true);
 
-    return this.http.get<AuthResponse>(`${this.apiUrl}/refresh-token`).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh-token`, {}, { withCredentials: true }).pipe(
       tap(response => this.setAuthData(response)),
+      map(() => true),
       catchError(() => {
         this.logout();
-        return of(null);
-      })
+        return of(false);
+      }),
+      finalize(() => this.isRefreshing.set(false))
     );
   }
 

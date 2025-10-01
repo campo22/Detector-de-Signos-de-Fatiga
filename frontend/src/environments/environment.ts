@@ -5,5 +5,5 @@ export const environment = {
   production: false,
   // La URL base de nuestra API de backend.
   // Nuestro AuthService la usará para saber a dónde hacer las peticiones.
-  apiUrl: 'http://localhost:8080/api/v1'
+  apiUrl: '/api/v1'
 };
