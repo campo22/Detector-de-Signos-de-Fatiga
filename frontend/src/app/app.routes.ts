@@ -1,17 +1,71 @@
 import { Routes } from '@angular/router';
 
+import { Role } from './core/models/auth.models';
+import { MainLayout } from './layout/main-layout/main-layout';
+import { authGuard } from './core/guards/auth-guard';
+import { roleGuard } from './core/guards/role-guard';
+
 export const routes: Routes = [
+  // --- Rutas Públicas ---
   {
     path: 'login',
     loadComponent: () => import('./features/auth/components/login/login').then(m => m.LoginComponent)
   },
 
-  // --- RUTA TEMPORAL PARA VISUALIZAR EL LAYOUT ---
-  // Cuando naveguemos a la raíz (http://localhost:4200/), se cargará nuestro layout.
-  {
-    path: '**', // La ruta raíz
-    loadComponent: () => import('./layout/main-layout/main-layout').then(m => m.MainLayout)
-  },
-  // ---------------------------------------------------
 
+  // --- Rutas Protegidas (dentro del Layout Principal) ---
+  {
+    path: '', // La ruta padre que envuelve a todas las demás.
+    component: MainLayout,
+    canActivate: [authGuard], // 1. Proteger todas las rutas hijas con el AuthGuard.
+    children: [
+      // Redirección por defecto al Dashboard
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
+      // Rutas de los Módulos
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)
+      },
+      {
+        path: 'monitoring/individual',
+        loadComponent: () => import('./features/monitoring/individual-monitoring/individual-monitoring').then(m => m.IndividualMonitoring)
+      },
+      {
+        path: 'monitoring/live-events',
+        loadComponent: () => import('./features/monitoring/live-events/live-events').then(m => m.LiveEvents)
+      },
+      {
+        path: 'analytics/reports',
+        loadComponent: () => import('./features/analytics/reports/reports').then(m => m.Reports)
+      },
+      {
+        path: 'management/drivers',
+        loadComponent: () => import('./features/management/drivers/drivers').then(m => m.Drivers)
+      },
+      {
+        path: 'management/vehicles',
+        loadComponent: () => import('./features/management/vehicles/vehicles').then(m => m.Vehicles)
+      },
+      {
+        path: 'management/rules',
+        loadComponent: () => import('./features/management/rules/rules').then(m => m.Rules)
+      },
+      // 2. Ejemplo de ruta protegida por Rol. Solo los administradores pueden entrar aquí.
+      {
+        path: 'management/users',
+        loadComponent: () => import('./features/management/users/users').then(m => m.Users),
+        canActivate: [roleGuard], // Aplicamos el guardián de rol
+        data: { requiredRole: Role.ADMINISTRADOR } // Le pasamos el rol requerido
+      },
+      {
+        path: 'profile/settings',
+        loadComponent: () => import('./features/user/profile/profile').then(m => m.Profile)
+      },
+    ]
+  },
+
+  // --- Ruta Wildcard (Comodín) ---
+  // Si el usuario escribe una URL que no existe, lo redirigimos al dashboard.
+  { path: '**', redirectTo: 'dashboard' }
 ];
