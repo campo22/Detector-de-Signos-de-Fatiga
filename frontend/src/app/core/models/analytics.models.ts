@@ -1,0 +1,18 @@
+import { FatigueType } from './enums';
+
+/**
+ * Representa el objeto de filtros para las consultas de analítica.
+ */
+export interface AnalyticsFilterRequest {
+  startDate?: string; // Formato YYYY-MM-DD
+  endDate?: string;   // Formato YYYY-MM-DD
+  driverId?: string;
+  vehicleId?: string;
+}
+
+/**
+ * Representa la respuesta del endpoint de distribución de alertas.
+ * Es un objeto donde cada clave es un tipo de fatiga y su valor es el conteo.
+ * Ejemplo: { "BOSTEZO": 150, "MICROSUEÑO": 80 }
+ */
+export type AlertDistributionResponse = Record<FatigueType, number>;

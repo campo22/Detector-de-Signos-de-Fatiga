@@ -16,6 +16,10 @@ export interface FatigueEvent {
   eyeClosureDuration: number;
   yawnCount: number;
   blinkRate: number;
+
+  driverName: string;
+  vehicleIdentifier: string;
+
 }
 
 export interface EventFilterRequest {

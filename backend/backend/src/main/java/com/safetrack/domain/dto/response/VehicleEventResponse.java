@@ -25,4 +25,7 @@ public class VehicleEventResponse {
     private double eyeClosureDuration;
     private int yawnCount;
     private double blinkRate;
+
+    private String driverName;
+    private String vehicleIdentifier;
 }

@@ -37,8 +37,7 @@
           {{ event.fatigueType | titlecase }}
         </p>
         <p class="text-sm text-muted-foreground">
-          Driver: {{ event.driverId | slice : 0 : 8 }} | Vehicle:
-          {{ event.vehicleId | slice : 0 : 8 }}
+          {{ event.driverName }} | Placa: {{ event.vehicleIdentifier }}
         </p>
         <p class="text-xs text-muted-foreground/70 mt-1">
           {{ event.timestamp | timeAgo }}
