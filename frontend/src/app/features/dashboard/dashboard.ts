@@ -1,11 +1,96 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { EventService } from '../shared/services/event.service';
+import { WebSocketService } from '../auth/services/web-socket.service';
+import { FatigueEvent } from '../../core/models/event.models';
+import { Subscription } from 'rxjs';
+import { FatigueLevel } from '../../core/models/enums';
+import { CommonModule } from '@angular/common';
+import { TimeAgoPipe } from '../shared/pipes/time-ago-pipe';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [
+    CommonModule,
+    TimeAgoPipe
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
-export class Dashboard {
+export class Dashboard implements OnInit, OnDestroy {
 
+
+  private eventService = inject(EventService);
+  private webSocketService = inject(WebSocketService);
+
+  // aqui podemos almacenar los eventos recientes
+  public recentEvents = signal<FatigueEvent[]>([]);
+
+  private wsSubscription: Subscription | undefined;
+
+
+  ngOnInit(): void {
+    // cargar los eventos iniciales
+    this.loadInitialEvents();
+
+    // suscribirse a los eventos en vivo
+    this.subscribeToLiveEvents();
+  }
+  ngOnDestroy(): void {
+    // desuscribirse de los eventos en vivo
+    this.wsSubscription?.unsubscribe();
+  }
+
+  private loadInitialEvents(): void {
+    this.eventService.searchEvents({}, 0, 5).subscribe({
+      next: (page) => {
+
+        this.recentEvents.set(page.content);
+        console.log('Eventos historicos cargados', this.recentEvents());
+      },
+      error: (error) => console.error('Error al cargar los eventos', error)
+    });
+  }
+  private subscribeToLiveEvents(): void {
+    this.wsSubscription = this.webSocketService.fatigueEvent$.subscribe({
+      next: (newEvent) => {
+        this.recentEvents.update((currentEvents) => [newEvent, ...currentEvents]);
+      },
+      error: (error) => console.error('Error con la subscripción de los  eventos', error)
+    });
+  }
+
+  /**
+   * Determina el ícono y el color para un evento basado en su nivel de fatiga.
+   * @param event El evento de fatiga.
+   * @returns Un objeto con el nombre del ícono y la clase de color de Tailwind.
+   */
+  getEventAppearance(event: FatigueEvent): { icon: string; colorClass: string; shadowClass: string } {
+    switch (event.fatigueLevel) {
+      //
+      case FatigueLevel.ALTO:
+        return {
+          icon: 'local_fire_department',
+          colorClass: 'text-destructive',
+          shadowClass: 'shadow-glow-destructive'
+        };
+      case FatigueLevel.MEDIO:
+        return {
+          icon: 'warning',
+          colorClass: 'text-warning',
+          shadowClass: 'shadow-glow-warning'
+        };
+      case FatigueLevel.BAJO:
+        return {
+          icon: 'bedtime',
+          colorClass: 'text-primary',
+          shadowClass: 'shadow-glow-primary'
+        };
+      default:
+        return {
+          icon: 'task_alt',
+          colorClass: 'text-success',
+          shadowClass: 'shadow-glow-success'
+        };
+    }
+  }
 }

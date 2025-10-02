@@ -17,3 +17,42 @@ export interface FatigueEvent {
   yawnCount: number;
   blinkRate: number;
 }
+
+export interface EventFilterRequest {
+  startDate?: string; // Formato YYYY-MM-DD
+  endDate?: string;   // Formato YYYY-MM-DD
+  driverId?: string;
+  vehicleId?: string;
+  fatigueLevel?: FatigueLevel;
+}
+
+
+export interface Page<T> {
+  content: T[]; // Contenido de la página
+
+  pageable: {
+    pageNumber: number; // Página actual
+    pageSize: number; // Tamaño de la página
+    sort: { // Información de ordenamiento
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    offset: number; // Desplazamiento
+    paged: boolean; // está paginado
+    unpaged: boolean; // no está paginado
+  };
+  totalPages: number; // Número total de páginas
+  totalElements: number; // Número total de elementos en la colección
+  last: boolean; // Indica si es la última página
+  first: boolean; // Indica si es la primera página
+  size: number; // Tamaño de la página
+  number: number; // Número de página
+  numberOfElements: number; // Número de elementos en la página
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  empty: boolean;
+}
