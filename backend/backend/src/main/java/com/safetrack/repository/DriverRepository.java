@@ -17,4 +17,6 @@ public interface DriverRepository extends JpaRepository<Driver, UUID>, JpaSpecif
      * @return Un Optional que contiene al conductor si se encuentra.
      */
     Optional<Driver> findByLicencia(String licencia);
+
+
 }

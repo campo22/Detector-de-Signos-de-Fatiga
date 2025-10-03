@@ -1,0 +1,18 @@
+<div id="chart-container">
+  @if (chartOptions.series) {
+  <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart!"
+    [plotOptions]="chartOptions.plotOptions"
+    [dataLabels]="chartOptions.dataLabels"
+    [xaxis]="chartOptions.xaxis"
+    [yaxis]="chartOptions.yaxis"
+    [colors]="chartOptions.colors"
+    [legend]="chartOptions.legend"
+  ></apx-chart>
+  } @else {
+  <div class="h-[280px] flex items-center justify-center text-muted-foreground">
+    Cargando datos del gráfico...
+  </div>
+  }
+</div>

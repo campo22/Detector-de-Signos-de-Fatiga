@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { AlertDistributionResponse, AnalyticsFilterRequest } from '../../../core/models/analytics.models';
+import { AlertDistributionResponse, AnalyticsFilterRequest, TopDriver } from '../../../core/models/analytics.models';
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +29,20 @@ export class AnalyticsService {
 
     return this.http.get<AlertDistributionResponse>(`${this.apiUrl}/alert-distribution`, { params });
   }
+
+  getTopDriversByAlerts(filters: AnalyticsFilterRequest = {}): Observable<TopDriver[]> {
+    let params = new HttpParams();
+
+    if (filters.startDate) {
+      params = params.set('startDate', filters.startDate);
+    }
+    if (filters.endDate) {
+      params = params.set('endDate', filters.endDate);
+    }
+    return this.http.get<TopDriver[]>(`${this.apiUrl}/top-drivers`, { params });
+
+  }
+
+
+
 }

@@ -16,3 +16,19 @@ export interface AnalyticsFilterRequest {
  * Ejemplo: { "BOSTEZO": 150, "MICROSUEÑO": 80 }
  */
 export type AlertDistributionResponse = Record<FatigueType, number>;
+
+/**
+ * Representa los datos de un conductor en el ranking de alertas.
+ */
+export interface TopDriver {
+  driver: string;       // Nombre o identificador del conductor
+  total_alerts: number; // Cantidad total de alertas registradas
+  alertCount: number;
+
+}
+
+export interface TopDriverResponse {
+  driverId: string;
+  driverName: string;
+  alertCount: number;
+}

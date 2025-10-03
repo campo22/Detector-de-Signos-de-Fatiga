@@ -6,12 +6,17 @@ import { Subscription } from 'rxjs';
 import { FatigueLevel } from '../../core/models/enums';
 import { CommonModule } from '@angular/common';
 import { TimeAgoPipe } from '../shared/pipes/time-ago-pipe';
+import { AlertDistributionChart } from './components/alert-distribution-chart/alert-distribution-chart';
+import { TopDriversChart } from './components/top-drivers-chart/top-drivers-chart';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     CommonModule,
-    TimeAgoPipe
+    TimeAgoPipe,
+    AlertDistributionChart,
+    TopDriversChart
+
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'

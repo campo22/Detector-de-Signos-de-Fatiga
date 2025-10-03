@@ -8,7 +8,7 @@ import { FatigueType } from '../../../../core/models/enums';
 
 // Definimos los tipos para las opciones del gráfico para tener autocompletado y seguridad.
 export type ChartOptions = {
-  series: ApexNonAxisChartSeries;
+  series: ApexNonAxisChartSeries; // Tipos de fatiga
   chart: ApexChart;
   labels: string[];
   colors: string[];
@@ -42,6 +42,7 @@ export class AlertDistributionChart {
         height: 280,
         sparkline: { enabled: true }
       },
+      // el plotOptions es para personalizar el gráfico
       plotOptions: {
         pie: {
           donut: {
@@ -51,12 +52,13 @@ export class AlertDistributionChart {
               show: true,
               name: { show: false }, // Ocultamos el nombre de la serie individual
               value: {
-                color: 'hsl(var(--foreground))',
+                color: 'hsl(var(--foreground))', //
                 fontFamily: 'Roboto Mono, monospace',
                 fontWeight: 'bold',
                 fontSize: '32px',
                 offsetY: 8,
               },
+              // aqui se muestra el total de alertas en el centro
               total: {
                 show: true,
                 label: 'Total Alertas',
@@ -71,6 +73,7 @@ export class AlertDistributionChart {
           }
         }
       },
+      // los dataLabels son para personalizar el gráfico
       dataLabels: { enabled: false },
       stroke: { width: 4, colors: ['hsl(var(--card))'] },
       tooltip: {

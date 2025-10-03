@@ -23,6 +23,7 @@ export class WebSocketService {
 
       brokerURL: environment.websocketUrl,
 
+
       debug: (str) => {
         console.log(new Date(), str);
 
