@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexXAxis, ChartComponent, NgApexchartsModule, ApexLegend, ApexYAxis } from 'ng-apexcharts';
+import { Component, inject, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexXAxis, ChartComponent, NgApexchartsModule, ApexLegend, ApexYAxis, ApexStroke } from 'ng-apexcharts';
 import { AnalyticsService } from '../../../shared/services/analytics.service';
-
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -13,7 +12,9 @@ export type ChartOptions = {
   yaxis: ApexYAxis;
   colors: string[];
   legend: ApexLegend;
+  stroke: ApexStroke;
 };
+
 @Component({
   selector: 'app-top-drivers-chart',
   imports: [
@@ -21,84 +22,92 @@ export type ChartOptions = {
     NgApexchartsModule
   ],
   templateUrl: './top-drivers-chart.html',
-  styleUrl: './top-drivers-chart.scss'
+  styleUrl: './top-drivers-chart.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TopDriversChart implements OnInit {
+export class TopDriversChart implements OnInit, OnDestroy {
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: ChartOptions;
 
   private analyticsService = inject(AnalyticsService);
 
   constructor() {
-    // 1. Configuramos las opciones VISUALES del gráfico, basadas en tu diseño.
     this.chartOptions = {
-      series: [], // Inicializamos como array vacío
       chart: {
-        type: 'bar',
+        type: 'donut',
         height: 280,
-        toolbar: { show: false },
+        sparkline: { enabled: true }
       },
       plotOptions: {
-        bar: {
-          horizontal: true,
-          borderRadius: 6,
-          barHeight: '50%',
-          distributed: true,
-          dataLabels: {
-            position: 'top'
+        pie: {
+          donut: {
+            size: '80%',
+            background: 'transparent',
+            labels: {
+              show: true,
+              name: { show: false },
+              value: {
+                color: 'hsl(var(--foreground))',
+                fontFamily: 'Roboto Mono, monospace',
+                fontWeight: 'bold',
+                fontSize: '32px',
+                offsetY: 8,
+              },
+              total: {
+                show: true,
+                label: 'Total Alertas',
+                color: 'hsl(var(--muted-foreground))',
+                fontSize: '18px',
+                formatter: (w) => {
+                  return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0).toString();
+                }
+              }
+            }
           }
         }
       },
-      colors: [
-        'hsl(var(--destructive))',
-        'hsl(var(--destructive) / 0.7)',
-        'hsl(var(--warning))',
-        'hsl(var(--primary) / 0.8)',
-        'hsl(var(--primary) / 0.6)'
-      ],
-      dataLabels: {
+      dataLabels: { enabled: false },
+      stroke: { width: 4, colors: ['hsl(var(--card))'] },
+      tooltip: {
         enabled: true,
-        textAnchor: 'start',
-        style: {
-          colors: ['hsl(var(--foreground))'],
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: '600',
-          fontSize: '14px',
-        },
-        formatter: (val, opt) => {
-          return opt.w.globals.labels[opt.dataPointIndex] + " - " + val;
-        },
-        offsetX: 15,
-        dropShadow: { enabled: true, top: 1, left: 1, blur: 1, opacity: 0.7, color: '#000' }
+        y: { formatter: (val) => `${val} alertas` },
+        theme: 'dark'
       },
-      yaxis: { show: false },
-      xaxis: {
-        categories: [], // Inicializamos como array vacío
-        labels: { show: false },
-        axisBorder: { show: false },
-        axisTicks: { show: false },
-      },
-      legend: { show: false },
+      // 🔑 Inicialización vacía para evitar "cargando"
+      series: [],
+      labels: [],
+      colors: []
     };
   }
 
+
   ngOnInit(): void {
     this.analyticsService.getTopDriversByAlerts().subscribe(data => {
+      console.log("TopDriversChart - data recibida:", data);
+
       if (!data || data.length === 0) {
-        // Si no hay datos, simplemente limpiamos el gráfico
         this.chartOptions.series = [{ name: 'Alertas', data: [] }];
         this.chartOptions.xaxis.categories = [];
         return;
       }
 
-      const categories = data.map(driver => driver.driver);
-      const seriesData = data.map(driver => driver.total_alerts);
+      const categories = data.map(driver => driver.driverName || driver.driverName);
+      const seriesData = data.map(driver => driver.alertCount || driver.alertCount);
 
-      // Ahora solo actualizamos las propiedades que cambian, en lugar de todo el objeto.
+
       this.chartOptions.series = [{ name: 'Alertas', data: seriesData }];
       this.chartOptions.xaxis.categories = categories;
     });
   }
+
+  ngOnDestroy(): void {
+
+    if (this.chart) {
+      try {
+        this.chart.destroy();
+      } catch (e) {
+        console.warn("El chart ya estaba destruido o no inicializado", e);
+      }
+    }
+  }
 }
-
-

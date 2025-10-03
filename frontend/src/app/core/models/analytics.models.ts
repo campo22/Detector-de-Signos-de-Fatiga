@@ -21,8 +21,8 @@ export type AlertDistributionResponse = Record<FatigueType, number>;
  * Representa los datos de un conductor en el ranking de alertas.
  */
 export interface TopDriver {
-  driver: string;       // Nombre o identificador del conductor
-  total_alerts: number; // Cantidad total de alertas registradas
+  driverId: string;
+  driverName: string;
   alertCount: number;
 
 }
