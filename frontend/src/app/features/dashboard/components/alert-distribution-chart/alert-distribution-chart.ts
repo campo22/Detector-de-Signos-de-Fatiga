@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild, effect } from '@angular/core';
+import { Component, inject, ViewChild, ChangeDetectorRef, computed, signal, Signal } from '@angular/core';
 import { ApexChart, ApexDataLabels, ApexNonAxisChartSeries, ApexPlotOptions, ApexStroke, ApexTooltip, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { AnalyticsService } from '../../../shared/services/analytics.service';
 import { FatigueType } from '../../../../core/models/enums';
 import { DashboardFilter } from '../../services/dashboard-filter.service';
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 
 
@@ -31,100 +33,109 @@ export type ChartOptions = {
 export class AlertDistributionChart {
 
   @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-
+  
   private analyticsService = inject(AnalyticsService);
   private filterService = inject(DashboardFilter);
+  private cdr = inject(ChangeDetectorRef);
 
-  constructor() {
-    // 1. Configuramos las opciones VISUALES del gráfico, basadas en tu diseño.
-    this.chartOptions = {
-      series: [], // Inicializamos como array vacío
-      labels: [], // Inicializamos como array vacío
-      colors: [], // Inicializamos como array vacío
-      chart: {
-        type: 'donut',
-        height: 280,
-        sparkline: { enabled: true }
-      },
-      // el plotOptions es para personalizar el gráfico
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '80%',
-            background: 'transparent',
-            labels: {
+  // Configuración base del gráfico
+  private baseChartConfig: Partial<ChartOptions> = {
+    chart: {
+      type: 'donut',
+      height: 280,
+      sparkline: { enabled: true }
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '80%',
+          background: 'transparent',
+          labels: {
+            show: true,
+            name: { show: false },
+            value: {
+              color: 'hsl(var(--foreground))',
+              fontFamily: 'Roboto Mono, monospace',
+              fontWeight: 'bold',
+              fontSize: '32px',
+              offsetY: 8,
+            },
+            total: {
               show: true,
-              name: { show: false }, // Ocultamos el nombre de la serie individual
-              value: {
-                color: 'hsl(var(--foreground))', //
-                fontFamily: 'Roboto Mono, monospace',
-                fontWeight: 'bold',
-                fontSize: '32px',
-                offsetY: 8,
-              },
-              // aqui se muestra el total de alertas en el centro
-              total: {
-                show: true,
-                label: 'Total Alertas',
-                color: 'hsl(var(--muted-foreground))',
-                fontSize: '18px',
-                formatter: (w) => {
-                  // Suma todas las series para mostrar el total
-                  return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0).toString();
-                }
+              label: 'Total Alertas',
+              color: 'hsl(var(--muted-foreground))',
+              fontSize: '18px',
+              formatter: (w) => {
+                return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0).toString();
               }
             }
           }
         }
-      },
-      // los dataLabels son para personalizar el gráfico
-      dataLabels: { enabled: false },
-      stroke: { width: 4, colors: ['hsl(var(--card))'] },
-      tooltip: {
-        enabled: true,
-        y: { formatter: (val) => `${val} alertas` },
-        theme: 'dark'
       }
+    },
+    dataLabels: { enabled: false },
+    stroke: { width: 4, colors: ['hsl(var(--card))'] },
+    tooltip: {
+      enabled: true,
+      y: { formatter: (val) => `${val} alertas` },
+      theme: 'dark'
+    }
+  };
+
+  // Convertir el signal de filtros a un observable y obtener los datos
+  private alertData = toSignal(
+    toObservable(this.filterService.filter$).pipe(
+      switchMap(filters => {
+        console.log('AlertDistributionChart - Filtros cambiados:', filters);
+        return this.analyticsService.getAlertDistribution(filters);
+      })
+    ),
+    { initialValue: null }
+  );
+
+  // Computed signal para las opciones del gráfico
+  public chartOptions: Signal<Partial<ChartOptions>> = computed(() => {
+    const data = this.alertData();
+    
+    if (!data) {
+      return {
+        ...this.baseChartConfig,
+        series: [1],
+        labels: ['Cargando...'],
+        colors: ['hsl(var(--muted))']
+      };
+    }
+
+    console.log('AlertDistributionChart - Datos recibidos:', data);
+
+    const labels: string[] = [];
+    const series: number[] = [];
+    const colors: string[] = [];
+
+    const colorMap: Record<FatigueType, string> = {
+      [FatigueType.MICROSUEÑO]: 'hsl(var(--destructive))',
+      [FatigueType.CABECEO]: 'hsl(var(--destructive))',
+      [FatigueType.BOSTEZO]: 'hsl(var(--warning))',
+      [FatigueType.CANSANCIO_VISUAL]: 'hsl(var(--primary))',
+      [FatigueType.NINGUNO]: 'hsl(var(--success))',
     };
 
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        const fatigueType = key as FatigueType;
+        labels.push(fatigueType.replace('_', ' '));
+        series.push(data[fatigueType]);
+        colors.push(colorMap[fatigueType] || 'hsl(var(--secondary))');
+      }
+    }
 
-    effect(() => {
-      const filters = this.filterService.filter$();
-      console.log('AlertDistributionChart reaccionando a los filtros:', filters);
+    console.log('AlertDistributionChart - Series procesadas:', series);
 
-      this.analyticsService.getAlertDistribution(filters).subscribe(data => {
-        const labels: string[] = [];
-        const series: number[] = [];
-        const colors: string[] = [];
-
-        const colorMap: Record<FatigueType, string> = {
-          [FatigueType.MICROSUEÑO]: 'hsl(var(--destructive))',
-          [FatigueType.CABECEO]: 'hsl(var(--destructive))',
-          [FatigueType.BOSTEZO]: 'hsl(var(--warning))',
-          [FatigueType.CANSANCIO_VISUAL]: 'hsl(var(--primary))',
-          [FatigueType.NINGUNO]: 'hsl(var(--success))',
-        };
-
-        for (const key in data) {
-          if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const fatigueType = key as FatigueType;
-            labels.push(fatigueType.replace('_', ' '));
-            series.push(data[fatigueType]);
-            colors.push(colorMap[fatigueType] || 'hsl(var(--secondary))');
-          }
-        }
-
-        // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
-        // Creamos un objeto NUEVO para forzar la detección de cambios.
-        this.chartOptions = {
-          ...this.chartOptions, // 1. Copia toda la configuración visual existente.
-          series: series,       // 2. Sobrescribe 'series' con los nuevos datos.
-          labels: labels,       // 3. Sobrescribe 'labels' con los nuevos datos.
-          colors: colors        // 4. Sobrescribe 'colors' con los nuevos datos.
-        };
-      });
-    });
-
-  }
+    return {
+      ...this.baseChartConfig,
+      series: series.length > 0 ? series : [1],
+      labels: labels.length > 0 ? labels : ['Sin datos'],
+      colors: colors.length > 0 ? colors : ['hsl(var(--muted))']
+    };
+  });
 }

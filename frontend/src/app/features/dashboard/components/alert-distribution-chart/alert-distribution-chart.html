@@ -1,14 +1,14 @@
 <div id="chart-container">
-  @if (chartOptions.series) {
+  @if (chartOptions().series) {
   <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart!"
-    [labels]="chartOptions.labels!"
-    [colors]="chartOptions.colors ?? []"
-    [plotOptions]="chartOptions.plotOptions ?? {}"
-    [dataLabels]="chartOptions.dataLabels ?? {}"
-    [stroke]="chartOptions.stroke ?? {}"
-    [tooltip]="chartOptions.tooltip ?? {}"
+    [series]="chartOptions().series ?? []"
+    [chart]="chartOptions().chart!"
+    [labels]="chartOptions().labels!"
+    [colors]="chartOptions().colors ?? []"
+    [plotOptions]="chartOptions().plotOptions ?? {}"
+    [dataLabels]="chartOptions().dataLabels ?? {}"
+    [stroke]="chartOptions().stroke ?? {}"
+    [tooltip]="chartOptions().tooltip ?? {}"
   ></apx-chart>
   } @else {
   <div class="h-[280px] flex items-center justify-center text-muted-foreground">

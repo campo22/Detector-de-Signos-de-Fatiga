@@ -1,19 +1,19 @@
 <div id="chart-container">
-  @if (chartOptions) {
+  @if (chartOptions().series) {
   <apx-chart
-    [series]="chartOptions.series!"
-    [chart]="chartOptions.chart!"
-    [plotOptions]="chartOptions.plotOptions!"
-    [dataLabels]="chartOptions.dataLabels!"
-    [xaxis]="chartOptions.xaxis!"
-    [yaxis]="chartOptions.yaxis!"
-    [colors]="chartOptions.colors!"
-    [legend]="chartOptions.legend!"
-    [grid]="chartOptions.grid!"
-    [tooltip]="chartOptions.tooltip!"
+    [series]="chartOptions().series ?? []"
+    [chart]="chartOptions().chart!"
+    [plotOptions]="chartOptions().plotOptions ?? {}"
+    [dataLabels]="chartOptions().dataLabels ?? {}"
+    [xaxis]="chartOptions().xaxis!"
+    [yaxis]="chartOptions().yaxis ?? {}"
+    [colors]="chartOptions().colors ?? []"
+    [legend]="chartOptions().legend ?? {}"
+    [grid]="chartOptions().grid ?? {}"
+    [tooltip]="chartOptions().tooltip ?? {}"
   ></apx-chart>
   } @else {
-  <div class="h-[280px] flex items-center justify-center text-muted-foreground animate-pulse">
+  <div class="h-[160px] flex items-center justify-center text-muted-foreground animate-pulse">
     Cargando gráfico...
   </div>
   }
