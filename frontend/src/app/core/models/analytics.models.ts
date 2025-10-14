@@ -27,8 +27,4 @@ export interface TopDriver {
 
 }
 
-export interface TopDriverResponse {
-  driverId: string;
-  driverName: string;
-  alertCount: number;
-}
+
