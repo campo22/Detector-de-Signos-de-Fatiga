@@ -4,11 +4,15 @@ import com.safetrack.domain.entity.Driver;
 import com.safetrack.domain.entity.Rule;
 import com.safetrack.domain.entity.User;
 import com.safetrack.domain.entity.Vehicle;
+import com.safetrack.domain.entity.VehicleEvent;
 import com.safetrack.domain.enums.Role;
+import com.safetrack.domain.enums.FatigueLevel;
+import com.safetrack.domain.enums.FatigueType;
 import com.safetrack.repository.DriverRepository;
 import com.safetrack.repository.RuleRepository;
 import com.safetrack.repository.UserRepository;
 import com.safetrack.repository.VehicleRepository;
+import com.safetrack.repository.VehicleEventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @Profile("dev") // ⚡️ ¡Crítico! Solo se ejecuta si el perfil 'dev' está activo.
@@ -29,6 +36,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final RuleRepository ruleRepository;
     private final DriverRepository driverRepository;
     private final VehicleRepository vehicleRepository;
+    private final VehicleEventRepository vehicleEventRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -58,6 +66,12 @@ public class DatabaseInitializer implements CommandLineRunner {
             createVehicles();
         } else {
             log.info("Vehículos ya existentes, omitiendo creación.");
+        }
+
+        if (vehicleEventRepository.count() == 0) {
+            createFatigueEvents();
+        } else {
+            log.info("Eventos de fatiga ya existentes, omitiendo creación.");
         }
 
         log.info("✅ Sembrador de datos finalizado.");
@@ -136,5 +150,66 @@ public class DatabaseInitializer implements CommandLineRunner {
 
         vehicleRepository.saveAll(List.of(vehicle1, vehicle2));
         log.info("2 vehículos de prueba creados.");
+    }
+
+    private void createFatigueEvents() {
+        log.info("Creando eventos de fatiga de prueba...");
+        
+        // Primero, obtenemos los conductores y vehículos existentes
+        Driver driver1 = driverRepository.findByLicencia("CVC-789").orElse(null);
+        Driver driver2 = driverRepository.findByLicencia("SRL-456").orElse(null);
+        
+        Vehicle vehicle1 = vehicleRepository.findByPlaca("RTX-3090").orElse(null);
+        Vehicle vehicle2 = vehicleRepository.findByPlaca("RX-7900").orElse(null);
+        
+        // Creamos eventos de fatiga de ejemplo
+        List<VehicleEvent> events = List.of(
+            VehicleEvent.builder()
+                .driverId(driver1 != null ? driver1.getId() : UUID.randomUUID())
+                .vehicleId(vehicle1 != null ? vehicle1.getId() : UUID.randomUUID())
+                .timestamp(Instant.now().minus(2, ChronoUnit.HOURS))
+                .fatigueLevel(FatigueLevel.ALTO)
+                .fatigueType(FatigueType.MICROSUEÑO)
+                .eyeClosureDuration(1.5)
+                .yawnCount(0)
+                .blinkRate(0.2)
+                .build(),
+                
+            VehicleEvent.builder()
+                .driverId(driver1 != null ? driver1.getId() : UUID.randomUUID())
+                .vehicleId(vehicle1 != null ? vehicle1.getId() : UUID.randomUUID())
+                .timestamp(Instant.now().minus(1, ChronoUnit.HOURS))
+                .fatigueLevel(FatigueLevel.MEDIO)
+                .fatigueType(FatigueType.BOSTEZO)
+                .eyeClosureDuration(0.0)
+                .yawnCount(3)
+                .blinkRate(0.5)
+                .build(),
+                
+            VehicleEvent.builder()
+                .driverId(driver2 != null ? driver2.getId() : UUID.randomUUID())
+                .vehicleId(vehicle2 != null ? vehicle2.getId() : UUID.randomUUID())
+                .timestamp(Instant.now().minus(30, ChronoUnit.MINUTES))
+                .fatigueLevel(FatigueLevel.BAJO)
+                .fatigueType(FatigueType.CABECEO)
+                .eyeClosureDuration(0.8)
+                .yawnCount(1)
+                .blinkRate(0.3)
+                .build(),
+                
+            VehicleEvent.builder()
+                .driverId(driver2 != null ? driver2.getId() : UUID.randomUUID())
+                .vehicleId(vehicle2 != null ? vehicle2.getId() : UUID.randomUUID())
+                .timestamp(Instant.now().minus(15, ChronoUnit.MINUTES))
+                .fatigueLevel(FatigueLevel.MEDIO)
+                .fatigueType(FatigueType.CANSANCIO_VISUAL)
+                .eyeClosureDuration(0.0)
+                .yawnCount(0)
+                .blinkRate(0.8)
+                .build()
+        );
+        
+        vehicleEventRepository.saveAll(events);
+        log.info("{} eventos de fatiga de prueba creados.", events.size());
     }
 }

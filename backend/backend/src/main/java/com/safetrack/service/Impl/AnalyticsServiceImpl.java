@@ -30,6 +30,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public Map<FatigueType, Long> getAlertDistribution(LocalDate startDate, LocalDate endDate) {
+
         Instant startInstant = toStartInstant(startDate);
         Instant endInstant = toEndInstant(endDate);
 

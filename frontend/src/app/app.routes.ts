@@ -35,10 +35,10 @@ export const routes: Routes = [
         path: 'monitoring/live-events',
         loadComponent: () => import('./features/monitoring/live-events/live-events').then(m => m.LiveEvents)
       },
-      {
-        path: 'analytics/reports',
-        loadComponent: () => import('./features/analytics/reports/reports').then(m => m.Reports)
-      },
+      // {
+      //   path: 'analytics/reports',
+      //   loadComponent: () => import('./features/analytics/reports/reports').then(m => m.Reports)
+      // },
       {
         path: 'management/drivers',
         loadComponent: () => import('./features/management/drivers/drivers').then(m => m.Drivers)
