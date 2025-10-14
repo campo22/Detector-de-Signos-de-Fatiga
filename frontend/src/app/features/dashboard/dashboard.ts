@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { TimeAgoPipe } from '../shared/pipes/time-ago-pipe';
 import { AlertDistributionChart } from './components/alert-distribution-chart/alert-distribution-chart';
 import { TopDriversChart } from './components/top-drivers-chart/top-drivers-chart';
+import { FilterBar } from './components/filter-bar/filter-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +16,8 @@ import { TopDriversChart } from './components/top-drivers-chart/top-drivers-char
     CommonModule,
     TimeAgoPipe,
     AlertDistributionChart,
-    TopDriversChart
+    TopDriversChart,
+    FilterBar,
 
   ],
   templateUrl: './dashboard.html',

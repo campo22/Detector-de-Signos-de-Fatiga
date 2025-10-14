@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, effect } from '@angular/core';
 import { ApexChart, ApexDataLabels, ApexNonAxisChartSeries, ApexPlotOptions, ApexStroke, ApexTooltip, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { AnalyticsService } from '../../../shared/services/analytics.service';
 import { FatigueType } from '../../../../core/models/enums';
+import { DashboardFilter } from '../../services/dashboard-filter.service';
 
 
 
@@ -33,10 +34,14 @@ export class AlertDistributionChart {
   public chartOptions: Partial<ChartOptions>;
 
   private analyticsService = inject(AnalyticsService);
+  private filterService = inject(DashboardFilter);
 
   constructor() {
     // 1. Configuramos las opciones VISUALES del gráfico, basadas en tu diseño.
     this.chartOptions = {
+      series: [], // Inicializamos como array vacío
+      labels: [], // Inicializamos como array vacío
+      colors: [], // Inicializamos como array vacío
       chart: {
         type: 'donut',
         height: 280,
@@ -82,41 +87,44 @@ export class AlertDistributionChart {
         theme: 'dark'
       }
     };
-  }
 
-  ngOnInit(): void {
-    // 2. Pedimos los datos al backend.
-    this.analyticsService.getAlertDistribution().subscribe(data => {
-      // Mapeamos los datos recibidos al formato que ApexCharts necesita.
-      const labels: string[] = [];
-      const series: number[] = [];
-      const colors: string[] = [];
 
-      // Un mapa para asignar colores a cada tipo de fatiga
-      const colorMap: Record<FatigueType, string> = {
-        [FatigueType.MICROSUEÑO]: 'hsl(var(--destructive))',
-        [FatigueType.CABECEO]: 'hsl(var(--destructive))',
-        [FatigueType.BOSTEZO]: 'hsl(var(--warning))',
-        [FatigueType.CANSANCIO_VISUAL]: 'hsl(var(--primary))',
-        [FatigueType.NINGUNO]: 'hsl(var(--success))',
-      };
+    effect(() => {
+      const filters = this.filterService.filter$();
+      console.log('AlertDistributionChart reaccionando a los filtros:', filters);
 
-      // Iteramos sobre la respuesta del servicio
-      for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-          const fatigueType = key as FatigueType;
-          labels.push(fatigueType.replace('_', ' ')); // "CANSANCIO_VISUAL" -> "CANSANCIO VISUAL"
-          series.push(data[fatigueType]);
-          colors.push(colorMap[fatigueType] || 'hsl(var(--secondary))'); // Usamos el color del mapa
+      this.analyticsService.getAlertDistribution(filters).subscribe(data => {
+        const labels: string[] = [];
+        const series: number[] = [];
+        const colors: string[] = [];
+
+        const colorMap: Record<FatigueType, string> = {
+          [FatigueType.MICROSUEÑO]: 'hsl(var(--destructive))',
+          [FatigueType.CABECEO]: 'hsl(var(--destructive))',
+          [FatigueType.BOSTEZO]: 'hsl(var(--warning))',
+          [FatigueType.CANSANCIO_VISUAL]: 'hsl(var(--primary))',
+          [FatigueType.NINGUNO]: 'hsl(var(--success))',
+        };
+
+        for (const key in data) {
+          if (Object.prototype.hasOwnProperty.call(data, key)) {
+            const fatigueType = key as FatigueType;
+            labels.push(fatigueType.replace('_', ' '));
+            series.push(data[fatigueType]);
+            colors.push(colorMap[fatigueType] || 'hsl(var(--secondary))');
+          }
         }
-      }
 
-      // 3. Actualizamos las opciones del gráfico con los datos reales.
-      this.chartOptions.series = series;
-      this.chartOptions.labels = labels;
-      this.chartOptions.colors = colors;
+        // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
+        // Creamos un objeto NUEVO para forzar la detección de cambios.
+        this.chartOptions = {
+          ...this.chartOptions, // 1. Copia toda la configuración visual existente.
+          series: series,       // 2. Sobrescribe 'series' con los nuevos datos.
+          labels: labels,       // 3. Sobrescribe 'labels' con los nuevos datos.
+          colors: colors        // 4. Sobrescribe 'colors' con los nuevos datos.
+        };
+      });
     });
+
   }
-
-
 }

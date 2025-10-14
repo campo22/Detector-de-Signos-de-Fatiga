@@ -1,0 +1,34 @@
+<form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="flex items-center space-x-4">
+  <div
+    class="flex items-center space-x-2 bg-card border border-border rounded-lg px-3 py-2 ring-1 ring-transparent focus-within:ring-primary/50 transition-all duration-300 shadow-sm"
+  >
+    <span class="material-symbols-outlined text-muted-foreground">calendar_today</span>
+    <select
+      formControlName="dateRange"
+      class="bg-transparent focus:outline-none text-foreground appearance-none w-full cursor-pointer"
+    >
+      <option value="last7days">Últimos 7 días</option>
+      <option value="last30days">Últimos 30 días</option>
+      <option value="thisMonth">Este mes</option>
+      <option value="lastMonth">Mes pasado</option>
+    </select>
+  </div>
+
+  <div
+    class="flex items-center space-x-2 bg-card border border-border rounded-lg px-3 py-2 ring-1 ring-transparent focus-within:ring-primary/50 transition-all duration-300 shadow-sm"
+  >
+    <span class="material-symbols-outlined text-muted-foreground">local_shipping</span>
+    <select
+      class="bg-transparent focus:outline-none text-foreground appearance-none w-full cursor-pointer"
+    >
+      <option>Toda la flota</option>
+    </select>
+  </div>
+
+  <button
+    type="submit"
+    class="px-6 py-2 bg-primary text-primary-foreground rounded-lg shadow-glow-primary font-semibold hover:bg-primary/90 transition-colors border border-primary/50 text-lg"
+  >
+    Aplicar
+  </button>
+</form>
