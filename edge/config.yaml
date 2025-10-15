@@ -2,9 +2,9 @@
 
 # --- Identificadores ---
 # ID del conductor
-driver_id: "164fb8b2-c9e0-4e92-8ec3-ac9fe391d55c"
+driver_id: "61515f61-a01c-45bc-8a4b-95346983ae02"
 # ID del vehículo
-vehicle_id: "29c11a88-315c-4484-b2bd-05f2726f5b56q"
+vehicle_id: "86312d5f-c858-4a7e-8b8a-236ab28b07fd"
 
 # --- Comunicación con el Backend ---
 # Endpoint del backend (STOMP/WebSocket)

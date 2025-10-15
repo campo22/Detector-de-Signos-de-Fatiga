@@ -1,5 +1,6 @@
 package com.safetrack.service;
 
+import com.safetrack.domain.dto.response.TimelineDataPoint;
 import com.safetrack.domain.dto.response.TopDriverResponse;
 import com.safetrack.domain.enums.FatigueType;
 import java.time.LocalDate;
@@ -23,5 +24,13 @@ public interface AnalyticsService {
      * @return Una lista de DTOs TopDriverResponse.
      */
     List<TopDriverResponse> getTopDriversByAlerts(LocalDate startDate, LocalDate endDate);
+
+    /**
+     * Obtiene una línea de tiempo con el conteo de eventos críticos por día.
+     * @param startDate Fecha de inicio del filtro (opcional).
+     * @param endDate Fecha de fin del filtro (opcional).
+     * @return Una lista de puntos de datos para la línea de tiempo.
+     */
+    List<TimelineDataPoint> getCriticalEventsTimeline(LocalDate startDate, LocalDate endDate);
 
 }

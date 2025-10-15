@@ -27,4 +27,9 @@ export interface TopDriver {
 
 }
 
+export interface TimelineDataPoint {
+  date: string;
+  count: number;
+}
+
 

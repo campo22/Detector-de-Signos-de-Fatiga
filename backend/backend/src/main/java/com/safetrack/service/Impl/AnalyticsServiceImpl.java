@@ -1,6 +1,8 @@
 package com.safetrack.service.Impl;
 
+import com.safetrack.domain.dto.response.TimelineDataPoint;
 import com.safetrack.domain.dto.response.TopDriverResponse;
+import com.safetrack.domain.enums.FatigueLevel;
 import com.safetrack.domain.enums.FatigueType;
 import com.safetrack.repository.DriverRepository;
 import com.safetrack.repository.VehicleEventRepository;
@@ -63,6 +65,40 @@ public class AnalyticsServiceImpl implements AnalyticsService {
             return new TopDriverResponse(driverId, driverName, alertCount);
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public List<TimelineDataPoint> getCriticalEventsTimeline(LocalDate startDate, LocalDate endDate) {
+        // 1. Establecemos un rango de fechas por defecto (últimos 7 días para la línea de tiempo).
+        Instant startInstant = (startDate != null)
+                ? startDate.atStartOfDay().toInstant(ZoneOffset.UTC)
+                : LocalDate.now().minusDays(6).atStartOfDay().toInstant(ZoneOffset.UTC);
+
+        Instant endInstant = (endDate != null)
+                ? endDate.atTime(LocalTime.MAX).toInstant(ZoneOffset.UTC)
+                : LocalDate.now().atTime(LocalTime.MAX).toInstant(ZoneOffset.UTC);
+
+        // 2. Llamamos al método del repositorio, especificando que 'ALTO' es el nivel crítico.
+        List<Object[]> results = eventRepository.countCriticalEventsByDay(FatigueLevel.ALTO, startInstant, endInstant);
+
+        // 3. Transformamos el resultado en una lista de DTOs.
+        return results.stream().map(result -> {
+            // El tipo de dato de la fecha puede variar según la base de datos (Date, Timestamp, etc.)
+            // Hacemos una conversión segura a LocalDate.
+            LocalDate date;
+            if (result[0] instanceof java.sql.Date) {
+                date = ((java.sql.Date) result[0]).toLocalDate();
+            } else if (result[0] instanceof java.sql.Timestamp) {
+                date = ((java.sql.Timestamp) result[0]).toLocalDateTime().toLocalDate();
+            } else {
+                // Fallback por si es otro tipo, aunque es improbable
+                date = LocalDate.parse(result[0].toString());
+            }
+
+            Long count = (Long) result[1];
+            return new TimelineDataPoint(date, count);
+        }).collect(Collectors.toList());
+    }
+
 
     private Instant toStartInstant(LocalDate startDate) {
         return (startDate != null)

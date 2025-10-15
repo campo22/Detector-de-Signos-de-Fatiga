@@ -1,5 +1,6 @@
 package com.safetrack.controller;
 
+import com.safetrack.domain.dto.response.TimelineDataPoint;
 import com.safetrack.domain.dto.response.TopDriverResponse;
 import com.safetrack.domain.enums.FatigueType;
 import com.safetrack.service.AnalyticsService;
@@ -55,5 +56,19 @@ public class AnalyticsController {
 
         List<TopDriverResponse> topDrivers = analyticsService.getTopDriversByAlerts(startDate, endDate);
         return ResponseEntity.ok(topDrivers);
+    }
+
+    @GetMapping("/critical-events-timeline")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')")
+    @Operation(summary = "Obtiene una línea de tiempo del conteo de eventos críticos por día")
+    public ResponseEntity<List<TimelineDataPoint>> getCriticalEventsTimeline(
+            @Parameter(description = "Fecha de inicio del filtro (formato YYYY-MM-DD)", example = "2025-01-01")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+
+            @Parameter(description = "Fecha de fin del filtro (formato YYYY-MM-DD)", example = "2025-01-31")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        List<TimelineDataPoint> timeline = analyticsService.getCriticalEventsTimeline(startDate, endDate);
+        return ResponseEntity.ok(timeline);
     }
 }

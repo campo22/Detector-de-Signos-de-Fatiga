@@ -9,6 +9,7 @@ import { TimeAgoPipe } from '../shared/pipes/time-ago-pipe';
 import { AlertDistributionChart } from './components/alert-distribution-chart/alert-distribution-chart';
 import { TopDriversChart } from './components/top-drivers-chart/top-drivers-chart';
 import { FilterBar } from './components/filter-bar/filter-bar';
+import { CriticalEventsTimeline } from './components/critical-events-timeline/critical-events-timeline';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +19,8 @@ import { FilterBar } from './components/filter-bar/filter-bar';
     AlertDistributionChart,
     TopDriversChart,
     FilterBar,
+    CriticalEventsTimeline,
+
 
   ],
   templateUrl: './dashboard.html',

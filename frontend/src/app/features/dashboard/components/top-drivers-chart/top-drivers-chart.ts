@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild, ChangeDetectorRef, computed, Signal } from '@angular/core';
+import { Component, inject, ViewChild, computed, Signal } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -18,7 +18,7 @@ import { DashboardFilter } from '../../services/dashboard-filter.service';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, tap } from 'rxjs';
 
-// === El tipado que ya tenías ===
+
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -44,7 +44,7 @@ export class TopDriversChart {
 
   private analyticsService = inject(AnalyticsService);
   private filterService = inject(DashboardFilter);
-  private cdr = inject(ChangeDetectorRef);
+
 
   // Configuración base del gráfico
   private baseChartConfig = {
@@ -91,14 +91,14 @@ export class TopDriversChart {
   // Computed signal para las opciones del gráfico
   public chartOptions: Signal<Partial<ChartOptions>> = computed(() => {
     const data = this.driversData();
-    
+
     console.log('TopDriversChart - Computed ejecutándose, data:', data);
 
     // Estado inicial mientras carga
     if (!data) {
       console.log('TopDriversChart - No hay datos, mostrando estado inicial');
       return {
-        ...this.baseChartConfig,
+        ...this.baseChartConfig, // Copia la configuración base
         series: [{ name: 'Alertas', data: [0] }],
         xaxis: {
           categories: ['Cargando...'],
@@ -128,8 +128,8 @@ export class TopDriversChart {
       seriesData = [0];
     }
 
-    const maxValue = seriesData.length > 0 && Math.max(...seriesData) > 0 
-      ? Math.ceil(Math.max(...seriesData) / 5) * 5 
+    const maxValue = seriesData.length > 0 && Math.max(...seriesData) > 0
+      ? Math.ceil(Math.max(...seriesData) / 5) * 5
       : 5;
 
     console.log('TopDriversChart - Series procesadas:', seriesData);
@@ -155,7 +155,7 @@ export class TopDriversChart {
     };
 
     console.log('TopDriversChart - Opciones finales del gráfico:', options);
-    
+
     return options;
   });
 }

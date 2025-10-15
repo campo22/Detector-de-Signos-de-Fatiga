@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { AlertDistributionResponse, AnalyticsFilterRequest, TopDriver } from '../../../core/models/analytics.models';
+import { AlertDistributionResponse, AnalyticsFilterRequest, TimelineDataPoint, TopDriver } from '../../../core/models/analytics.models';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,24 @@ export class AnalyticsService {
     }
     return this.http.get<TopDriver[]>(`${this.apiUrl}/top-drivers`, { params });
 
+  }
+
+  /**
+   * Obtiene la línea de tiempo de eventos críticos por día.
+   * @param filters - Filtros de fecha, etc. (opcional).
+   * @returns Un Observable que emite una lista de puntos de datos para la línea de tiempo.
+   */
+  getCriticalEventsTimeline(filters: AnalyticsFilterRequest = {}): Observable<TimelineDataPoint[]> {
+    let params = new HttpParams();
+
+    if (filters.startDate) {
+      params = params.set('startDate', filters.startDate);
+    }
+    if (filters.endDate) {
+      params = params.set('endDate', filters.endDate);
+    }
+
+    return this.http.get<TimelineDataPoint[]>(`${this.apiUrl}/critical-events-timeline`, { params });
   }
 
 
