@@ -1,5 +1,6 @@
 package com.safetrack.controller;
 
+import com.safetrack.domain.dto.response.FleetSummaryDataPoint;
 import com.safetrack.domain.dto.response.TimelineDataPoint;
 import com.safetrack.domain.dto.response.TopDriverResponse;
 import com.safetrack.domain.enums.FatigueType;
@@ -9,6 +10,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -70,5 +75,21 @@ public class AnalyticsController {
 
         List<TimelineDataPoint> timeline = analyticsService.getCriticalEventsTimeline(startDate, endDate);
         return ResponseEntity.ok(timeline);
+    }
+
+    @GetMapping("/fleet-summary")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')")
+    @Operation(summary = "Obtiene un resumen paginado del estado de la flota, agrupado por conductor")
+    public ResponseEntity<Page<FleetSummaryDataPoint>> getFleetSummary(
+            @Parameter(description = "Fecha de inicio del filtro (formato YYYY-MM-DD)", example = "2025-01-01")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+
+            @Parameter(description = "Fecha de fin del filtro (formato YYYY-MM-DD)", example = "2025-01-31")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+
+            @PageableDefault(size = 10, sort = "alertCount", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<FleetSummaryDataPoint> summaryPage = analyticsService.getFleetSummary(startDate, endDate, pageable);
+        return ResponseEntity.ok(summaryPage);
     }
 }

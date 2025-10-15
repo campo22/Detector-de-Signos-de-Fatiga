@@ -62,8 +62,19 @@ export class Dashboard implements OnInit, OnDestroy {
   }
   private subscribeToLiveEvents(): void {
     this.wsSubscription = this.webSocketService.fatigueEvent$.subscribe({
-      next: (newEvent) => {
-        this.recentEvents.update((currentEvents) => [newEvent, ...currentEvents]);
+      next: (eventNotification) => {
+        // El evento del WebSocket es una notificación mínima.
+        // Usamos el servicio para obtener el evento completo más reciente para ese conductor/vehículo.
+        this.eventService.searchEvents({ driverId: eventNotification.driverId, vehicleId: eventNotification.vehicleId }, 0, 1)
+          .subscribe({
+            next: (page) => {
+              if (page.content.length > 0) {
+                const fullEvent = page.content[0];
+                this.recentEvents.update((currentEvents) => [fullEvent, ...currentEvents]);
+              }
+            },
+            error: (err) => console.error('Error al buscar el evento completo', err)
+          });
       },
       error: (error) => console.error('Error con la subscripción de los  eventos', error)
     });

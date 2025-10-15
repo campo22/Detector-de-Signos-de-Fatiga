@@ -5,7 +5,6 @@
     <app-filter-bar></app-filter-bar>
   </div>
 
-  <!-- 3. Tu código HTML existente, ahora dentro del contenedor principal y con flex-1 -->
   <div class="grid grid-cols-1 xl:grid-cols-4 gap-6 flex-1">
     <!-- Columna Izquierda -->
     <div class="xl:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -41,13 +40,8 @@
         </div>
       </div>
 
-      <!-- Próximamente: Widget Línea de Tiempo -->
-      <div
-        class="bg-card p-6 rounded-lg border border-border lg:col-span-3 relative overflow-hidden"
-      >
-        <h3 class="font-bold text-xl text-foreground">Línea de Tiempo (Próximamente)</h3>
-        <app-critical-events-timeline></app-critical-events-timeline>
-      </div>
+      <!-- Widget Línea de Tiempo -->
+      <app-critical-events-timeline class="lg:col-span-3"></app-critical-events-timeline>
     </div>
 
     <!-- Columna Derecha -->

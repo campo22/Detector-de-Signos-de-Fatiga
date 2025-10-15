@@ -32,4 +32,14 @@ export interface TimelineDataPoint {
   count: number;
 }
 
+export interface FleetSummaryDataPoint {
+  driverId: string;
+  driverName: string;
+  vehicleIdentifier: string;
+  fatigueCount: number;
+  distractionCount: number;
+  criticalEventsCount: number;
+  riskScore: 'Alto' | 'Medio' | 'Bajo' | string;
+}
+
 

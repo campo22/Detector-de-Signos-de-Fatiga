@@ -2,7 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { AlertDistributionResponse, AnalyticsFilterRequest, TimelineDataPoint, TopDriver } from '../../../core/models/analytics.models';
+import { AlertDistributionResponse, AnalyticsFilterRequest, FleetSummaryDataPoint, TimelineDataPoint, TopDriver } from '../../../core/models/analytics.models';
+import { Page } from '../../../core/models/event.models';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,33 @@ export class AnalyticsService {
     return this.http.get<TimelineDataPoint[]>(`${this.apiUrl}/critical-events-timeline`, { params });
   }
 
+  /**
+   * Obtiene un resumen paginado del estado de la flota.
+   * @param filters - Filtros de fecha, etc. (opcional).
+   * @param page - El número de página a solicitar.
+   * @param size - El tamaño de la página.
+   * @returns Un Observable que emite una respuesta paginada del resumen de la flota.
+   */
+  getFleetSummary(
+    filters: AnalyticsFilterRequest = {},
+    page: number = 0,
+    size: number = 10
+  ): Observable<Page<FleetSummaryDataPoint>> {
+
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sort', 'alertCount,desc'); // Orden por defecto
+
+    if (filters.startDate) {
+      params = params.set('startDate', filters.startDate);
+    }
+    if (filters.endDate) {
+      params = params.set('endDate', filters.endDate);
+    }
+
+    return this.http.get<Page<FleetSummaryDataPoint>>(`${this.apiUrl}/fleet-summary`, { params });
+  }
 
 
 }

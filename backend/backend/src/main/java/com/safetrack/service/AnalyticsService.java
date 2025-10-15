@@ -1,8 +1,12 @@
 package com.safetrack.service;
 
+import com.safetrack.domain.dto.response.FleetSummaryDataPoint;
 import com.safetrack.domain.dto.response.TimelineDataPoint;
 import com.safetrack.domain.dto.response.TopDriverResponse;
 import com.safetrack.domain.enums.FatigueType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -33,4 +37,13 @@ public interface AnalyticsService {
      */
     List<TimelineDataPoint> getCriticalEventsTimeline(LocalDate startDate, LocalDate endDate);
 
+    /**
+     * Calcula un resumen paginado del estado de la flota, agrupado por conductor.
+     * @param startDate Fecha de inicio del filtro (opcional).
+     * @param endDate Fecha de fin del filtro (opcional).
+     * @param pageable Objeto con la información de paginación.
+     * @return Una Página de DTOs FleetSummaryDataPoint.
+     */
+    Page<FleetSummaryDataPoint> getFleetSummary(LocalDate startDate, LocalDate endDate, Pageable pageable);
 }
+
