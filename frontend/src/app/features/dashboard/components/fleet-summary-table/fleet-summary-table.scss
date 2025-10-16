@@ -1,0 +1,23 @@
+.title-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.table-row-hover {
+  @apply hover:bg-muted/30 transition-colors duration-300;
+}
+
+.risk-badge {
+  @apply px-3 py-1 text-sm rounded-full font-semibold border;
+}
+
+.risk-alto {
+  @apply bg-destructive/20 text-destructive border-destructive/50 shadow-glow-destructive;
+}
+
+.risk-medio {
+  @apply bg-warning/20 text-warning border-warning/50 shadow-glow-warning;
+}
+
+.risk-bajo {
+  @apply bg-success/20 text-success border-success/50 shadow-glow-success;
+}

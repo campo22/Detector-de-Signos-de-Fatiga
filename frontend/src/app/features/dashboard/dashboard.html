@@ -1,14 +1,10 @@
-<!-- 1. Contenedor principal vertical -->
 <div class="flex flex-col h-full gap-6">
-  <!-- 2. Barra de Filtros en la parte superior -->
   <div>
     <app-filter-bar></app-filter-bar>
   </div>
 
-  <div class="grid grid-cols-1 xl:grid-cols-4 gap-6 flex-1">
-    <!-- Columna Izquierda -->
+  <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
     <div class="xl:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Widget: Distribución de Alertas -->
       <div
         class="lg:col-span-1 bg-card p-6 rounded-lg border border-border relative overflow-hidden"
       >
@@ -24,7 +20,6 @@
         </div>
       </div>
 
-      <!-- Widget: Top 5 Conductores -->
       <div
         class="bg-card p-6 rounded-lg border border-border lg:col-span-2 relative overflow-hidden"
       >
@@ -40,13 +35,23 @@
         </div>
       </div>
 
-      <!-- Widget Línea de Tiempo -->
-      <app-critical-events-timeline class="lg:col-span-3"></app-critical-events-timeline>
+      <div
+        class="bg-card p-6 rounded-lg border border-border lg:col-span-3 relative overflow-hidden"
+      >
+        <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/20 opacity-50"></div>
+        <div class="relative z-10">
+          <h3
+            class="font-bold text-xl mb-4 text-foreground"
+            style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
+          >
+            Línea de Tiempo de Eventos Críticos
+          </h3>
+          <app-critical-events-timeline></app-critical-events-timeline>
+        </div>
+      </div>
     </div>
 
-    <!-- Columna Derecha -->
     <div class="xl:col-span-1">
-      <!-- Widget de Eventos Recientes -->
       <div
         class="bg-card rounded-lg border border-border overflow-hidden relative flex flex-col h-full"
       >
@@ -107,5 +112,9 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div>
+    <app-fleet-summary-table></app-fleet-summary-table>
   </div>
 </div>

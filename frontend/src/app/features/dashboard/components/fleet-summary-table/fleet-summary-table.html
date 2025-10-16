@@ -1,1 +1,100 @@
-<p>fleet-summary-table works!</p>
+<div class="bg-card rounded-lg border border-border overflow-hidden relative flex flex-col h-full">
+  <div class="absolute inset-0 bg-gradient-to-b from-secondary/10 to-card"></div>
+
+  <div class="relative z-10 p-6">
+    <h3 class="font-bold text-xl text-foreground title-shadow">Resultados de la Flota</h3>
+  </div>
+
+  <div class="overflow-x-auto flex-1">
+    @if (fleetSummaryPage(); as page) { @if (page.content.length) {
+    <table class="w-full text-left">
+      <thead class="bg-secondary/30 backdrop-blur-sm sticky top-0">
+        <tr class="border-b border-border">
+          <th class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider">
+            Conductor
+          </th>
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center"
+          >
+            Eventos Críticos
+          </th>
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center"
+          >
+            Puntuación de Riesgo
+          </th>
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center"
+          >
+            Acciones
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-border">
+        @for (row of page.content; track row.driverId) {
+        <tr class="table-row-hover">
+          <td class="p-4">
+            <p class="font-medium text-foreground">{{ row.driverName }}</p>
+            <p class="text-sm text-muted-foreground">{{ row.vehicleIdentifier }}</p>
+          </td>
+
+          <td class="p-4 text-center font-mono text-destructive font-bold text-lg">
+            {{ row.criticalEventsCount }}
+          </td>
+
+          <td class="p-4 text-center">
+            <span
+              class="risk-badge"
+              [ngClass]="{
+                'risk-alto': row.riskScore === 'Alto',
+                'risk-medio': row.riskScore === 'Medio',
+                'risk-bajo': row.riskScore === 'Bajo'
+              }"
+            >
+              {{ row.riskScore }}
+            </span>
+          </td>
+
+          <td class="p-4 text-center">
+            <button class="text-primary hover:text-primary/80 font-semibold transition-colors">
+              Ver Detalles
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    } @else {
+    <div class="text-center text-muted-foreground py-10">
+      <p>No hay datos para los filtros seleccionados.</p>
+    </div>
+    } }
+  </div>
+
+  @if (fleetSummaryPage(); as page) {
+  <div class="relative z-10 p-4 mt-auto border-t border-border flex justify-between items-center">
+    <span class="text-sm text-muted-foreground">
+      Página {{ page.number + 1 }} de {{ page.totalPages }}
+    </span>
+
+    <div class="flex items-center space-x-2">
+      <button
+        (click)="previousPage()"
+        [disabled]="page.first"
+        class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Anterior
+      </button>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="page.last"
+        class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+  }
+</div>

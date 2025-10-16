@@ -10,6 +10,7 @@ import { AlertDistributionChart } from './components/alert-distribution-chart/al
 import { TopDriversChart } from './components/top-drivers-chart/top-drivers-chart';
 import { FilterBar } from './components/filter-bar/filter-bar';
 import { CriticalEventsTimeline } from './components/critical-events-timeline/critical-events-timeline';
+import { FleetSummaryTable } from './components/fleet-summary-table/fleet-summary-table';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,8 +21,7 @@ import { CriticalEventsTimeline } from './components/critical-events-timeline/cr
     TopDriversChart,
     FilterBar,
     CriticalEventsTimeline,
-
-
+    FleetSummaryTable
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'

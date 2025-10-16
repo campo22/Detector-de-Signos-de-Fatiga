@@ -1,17 +1,21 @@
-import { Component, computed, inject, signal, effect } from '@angular/core';
+import { Component, computed, inject, signal, effect, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { AnalyticsService } from '../../../shared/services/analytics.service';
 import { DashboardFilter } from '../../services/dashboard-filter.service';
 import { switchMap, startWith, catchError } from 'rxjs';
 import { Page } from '../../../../core/models/event.models';
 import { FleetSummaryDataPoint } from '../../../../core/models/analytics.models';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-fleet-summary-table',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule
+  ],
   templateUrl: './fleet-summary-table.html',
-  styleUrl: './fleet-summary-table.scss'
+  styleUrl: './fleet-summary-table.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FleetSummaryTable {
   private analyticsService = inject(AnalyticsService);
@@ -26,8 +30,8 @@ export class FleetSummaryTable {
     page: this.currentPage()
   }));
 
-  // ✅ 3. Datos de la tabla — reactividad completa usando signals + RxJS
-  public fleetSummaryPage = toSignal(
+  // ✅ 3. Estado derivado — combina filtros + página
+  public fleetSummaryPage = toSignal<Page<FleetSummaryDataPoint> | null>(
     toObservable(this.queryParams).pipe(
       switchMap(({ filters, page }) =>
         this.analyticsService.getFleetSummary(filters, page, 5)
@@ -50,13 +54,18 @@ export class FleetSummaryTable {
     if (data) console.log('✅ Página de flota actualizada:', data);
   });
 
-  // ✅ 6. Métodos de navegación simples y seguros
+
+  /**
+   * Pasa a la página siguiente si no es la última.
+   */
   nextPage(): void {
     if (!this.fleetSummaryPage()?.last) {
       this.currentPage.update((page) => page + 1);
     }
   }
-
+  /**
+   * Pasa a la página anterior si no es la primera.
+   */
   previousPage(): void {
     if (!this.fleetSummaryPage()?.first) {
       this.currentPage.update((page) => page - 1);
