@@ -28,8 +28,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)
       },
       {
-        path: 'monitoring/individual',
-        loadComponent: () => import('./features/monitoring/individual-monitoring/individual-monitoring').then(m => m.IndividualMonitoring)
+        path: 'monitoring/:driverId', // Ruta con parámetro dinámico
+        loadComponent: () => import('./features/monitoring/individual-monitoring/individual-monitoring').then(m => m.IndividualMonitoring),
+        canActivate: [roleGuard], // Autorización por rol
+        data: { requiredRole: [Role.GESTOR, Role.ADMINISTRADOR] } // Permitir GESTOR y ADMINISTRADOR
       },
       {
         path: 'monitoring/live-events',

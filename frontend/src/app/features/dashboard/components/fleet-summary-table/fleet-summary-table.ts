@@ -75,10 +75,13 @@ export class FleetSummaryTable {
   }
 
   /**
-   * Navega a la página de eventos en vivo para un conductor específico.
-   * @param driverId El ID del conductor.
+   * Navega a la página de monitoreo individual para un conductor específico.
+   * @param driverId El ID del conductor a monitorear.
    */
   viewDriverDetails(driverId: string): void {
-    this.router.navigate(['/monitoring/live-events'], { queryParams: { driverId } });
+    if (driverId) {
+      // 3. Usamos el router para navegar a la ruta dinámica.
+      this.router.navigate(['/monitoring', driverId]);
+    }
   }
 }

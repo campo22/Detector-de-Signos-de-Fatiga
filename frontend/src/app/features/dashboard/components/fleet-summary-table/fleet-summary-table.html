@@ -31,9 +31,7 @@
           >
             Puntuación de Riesgo
           </th>
-          <th class="p-4 text-center">
-            Acciones
-          </th>
+          <th class="p-4 text-center">Acciones</th>
         </tr>
       </thead>
 
@@ -91,9 +89,12 @@
           </td>
 
           <td class="p-4 text-center">
-            <a href="/monitoring/individual?driverId={{ row.driverId }}" class="text-primary hover:text-primary/80 font-semibold transition-colors">
+            <button
+              (click)="viewDriverDetails(row.driverId)"
+              class="text-primary hover:text-primary/80 font-semibold transition-colors"
+            >
               Ver Detalles
-            </a>
+            </button>
           </td>
         </tr>
         }

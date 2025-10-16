@@ -1,1 +1,167 @@
-<p>individual-monitoring works!</p>
+@if (!driver()) {
+<div class="text-center p-20 text-muted-foreground">
+  <span class="material-symbols-outlined text-6xl animate-spin">progress_activity</span>
+  <p class="mt-4 text-lg">Cargando datos del conductor...</p>
+</div>
+} @else {
+<div class="flex flex-col h-full gap-6">
+  <div class="bg-card p-6 rounded-lg border border-border">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+      <div>
+        <h2 class="text-3xl font-bold text-primary mb-2">{{ driver()!.nombre }}</h2>
+        <div class="flex items-center flex-wrap gap-x-6 gap-y-2 text-muted-foreground">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">badge</span>
+            Licencia: {{ driver()!.licencia }}
+          </span>
+        </div>
+      </div>
+      <div class="text-left md:text-right flex-shrink-0">
+        <p class="text-sm text-muted-foreground">Estado</p>
+        <div class="flex items-center gap-2 mt-1">
+          <span
+            class="w-3 h-3 rounded-full"
+            [ngClass]="driver()!.activo ? 'bg-success' : 'bg-destructive'"
+          ></span>
+          <p
+            class="font-semibold text-lg"
+            [ngClass]="driver()!.activo ? 'text-success' : 'text-destructive'"
+          >
+            {{ driver()!.activo ? 'Activo' : 'Inactivo' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if(eventsPage(); as page) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-card p-5 rounded-lg border border-border">
+      <p class="text-sm text-muted-foreground">Eventos Totales (Período)</p>
+      <p class="text-3xl font-bold font-mono">{{ page.totalElements }}</p>
+    </div>
+    <div class="bg-card p-5 rounded-lg border border-border">
+      <p class="text-sm text-muted-foreground">Puntuación de Riesgo</p>
+      <p class="text-3xl font-bold font-mono text-destructive">Alto</p>
+    </div>
+    <div class="bg-card p-5 rounded-lg border border-border">
+      <p class="text-sm text-muted-foreground">Vehículo Asignado</p>
+      <p class="text-2xl font-semibold">RTX-3090</p>
+    </div>
+    <div class="bg-card p-5 rounded-lg border border-border">
+      <p class="text-sm text-muted-foreground">Último Evento</p>
+      <p class="text-2xl font-semibold">
+        {{ (page.content[0]?.fatigueType | titlecase) || 'N/A' }}
+      </p>
+    </div>
+  </div>
+  }
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
+    <div class="lg:col-span-2 bg-card rounded-lg border border-border flex flex-col">
+      <h3 class="p-6 font-bold text-xl text-foreground border-b border-border">
+        Historial Detallado de Eventos
+      </h3>
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left">
+          <thead class="bg-secondary/30">
+            <tr class="border-b border-border">
+              <th class="p-4 text-muted-foreground font-semibold uppercase text-sm">
+                Fecha y Hora
+              </th>
+              <th class="p-4 text-muted-foreground font-semibold uppercase text-sm">
+                Tipo de Evento
+              </th>
+              <th class="p-4 text-muted-foreground font-semibold uppercase text-sm text-center">
+                Nivel
+              </th>
+            </tr>
+          </thead>
+          @if (eventsPage(); as page) {
+          <tbody class="divide-y divide-border">
+            @for (event of page.content; track event.id) {
+            <tr class="hover:bg-muted/30 transition-colors">
+              <td class="p-4 text-foreground whitespace-nowrap">
+                {{ event.timestamp | date : 'dd/MM/yyyy h:mm a' }}
+              </td>
+              <td class="p-4 text-muted-foreground">{{ event.fatigueType | titlecase }}</td>
+              <td class="p-4 text-center">
+                <span
+                  class="px-3 py-1 text-sm rounded-full font-semibold border"
+                  [ngClass]="{
+                    'bg-destructive/20 text-destructive border-destructive/50':
+                      event.fatigueLevel?.toString() === 'ALTO',
+                    'bg-warning/20 text-warning border-warning/50':
+                      event.fatigueLevel?.toString() === 'MEDIO',
+                    'bg-success/20 text-success border-success/50':
+                      event.fatigueLevel?.toString() === 'BAJO'
+                  }"
+                >
+                  {{ event.fatigueLevel | titlecase }}
+                </span>
+              </td>
+            </tr>
+            }
+          </tbody>
+          }
+        </table>
+        @if (!eventsPage()?.content?.length) {
+        <div class="text-center text-muted-foreground p-10">
+          No hay eventos para mostrar en este período.
+        </div>
+        }
+      </div>
+      @if (eventsPage(); as page) {
+      <div class="p-4 mt-auto border-t border-border flex justify-between items-center">
+        <span class="text-sm text-muted-foreground"
+          >Página {{ page.number + 1 }} de {{ page.totalPages }}</span
+        >
+        <div class="flex items-center space-x-2">
+          <button
+            (click)="previousPage()"
+            [disabled]="page.first"
+            class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Anterior
+          </button>
+          <button
+            (click)="nextPage()"
+            [disabled]="page.last"
+            class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="lg:col-span-1 bg-card rounded-lg border border-border flex flex-col">
+      <h3 class="p-6 font-bold text-xl text-foreground border-b border-border">
+        Actividad en Vivo
+      </h3>
+      <div class="p-6 flex-1 flex flex-col justify-center">
+        @if (liveEvent(); as event) {
+        <div
+          class="bg-primary/10 border border-primary/50 rounded-lg p-4 flex items-start gap-4 animate-pulse"
+        >
+          <span class="material-symbols-outlined text-primary text-4xl mt-1">rss_feed</span>
+          <div>
+            <p class="font-semibold text-primary text-lg">¡Evento en Tiempo Real!</p>
+            <p class="text-base text-foreground">
+              Tipo: <span class="font-bold">{{ event.fatigueType }}</span>
+            </p>
+            <p class="text-sm text-muted-foreground">{{ event.timestamp | date : 'shortTime' }}</p>
+          </div>
+        </div>
+        } @else {
+        <div class="text-center text-muted-foreground">
+          <span class="material-symbols-outlined text-5xl">radar</span>
+          <p class="mt-2">Esperando actividad en vivo...</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+}
