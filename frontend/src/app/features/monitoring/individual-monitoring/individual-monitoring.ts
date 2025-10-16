@@ -6,11 +6,13 @@ import { WebSocketService } from '../../auth/services/web-socket.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, filter, map, startWith, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { TimeAgoPipe } from '../../shared/pipes/time-ago-pipe';
 
 @Component({
   selector: 'app-individual-monitoring',
   imports: [
-    CommonModule
+    CommonModule,
+    TimeAgoPipe
   ],
   templateUrl: './individual-monitoring.html',
   styleUrl: './individual-monitoring.scss'
