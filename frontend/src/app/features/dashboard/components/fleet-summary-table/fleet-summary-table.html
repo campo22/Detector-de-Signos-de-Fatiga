@@ -1,6 +1,4 @@
 <div class="bg-card rounded-lg border border-border overflow-hidden relative flex flex-col h-full">
-  <div class="absolute inset-0 bg-gradient-to-b from-secondary/10 to-card"></div>
-
   <div class="relative z-10 p-6">
     <h3 class="font-bold text-xl text-foreground title-shadow">Resultados de la Flota</h3>
   </div>
@@ -16,6 +14,16 @@
           <th
             class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center"
           >
+            Fatiga
+          </th>
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center"
+          >
+            Distracción
+          </th>
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center"
+          >
             Eventos Críticos
           </th>
           <th
@@ -23,9 +31,7 @@
           >
             Puntuación de Riesgo
           </th>
-          <th
-            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center"
-          >
+          <th class="p-4 text-center">
             Acciones
           </th>
         </tr>
@@ -39,7 +45,35 @@
             <p class="text-sm text-muted-foreground">{{ row.vehicleIdentifier }}</p>
           </td>
 
-          <td class="p-4 text-center font-mono text-destructive font-bold text-lg">
+          <td
+            class="p-4 text-center font-mono font-bold text-lg"
+            [ngClass]="{
+              'text-destructive text-glow-destructive': row.riskScore === 'Alto',
+              'text-warning text-glow-warning': row.riskScore === 'Medio',
+              'text-success text-glow-success': row.riskScore === 'Bajo'
+            }"
+          >
+            {{ row.fatigueCount }}
+          </td>
+
+          <td
+            class="p-4 text-center font-mono font-bold text-lg"
+            [ngClass]="{
+              'text-destructive text-glow-destructive': row.riskScore === 'Alto',
+              'text-warning text-glow-warning': row.riskScore === 'Medio',
+              'text-success text-glow-success': row.riskScore === 'Bajo'
+            }"
+          >
+            {{ row.distractionCount }}
+          </td>
+
+          <td
+            class="p-4 text-center font-mono font-bold text-lg"
+            [ngClass]="{
+              'text-destructive text-glow-destructive-strong': row.criticalEventsCount > 0,
+              'text-success text-glow-success': row.criticalEventsCount === 0
+            }"
+          >
             {{ row.criticalEventsCount }}
           </td>
 
@@ -57,9 +91,9 @@
           </td>
 
           <td class="p-4 text-center">
-            <button class="text-primary hover:text-primary/80 font-semibold transition-colors">
+            <a href="/monitoring/individual?driverId={{ row.driverId }}" class="text-primary hover:text-primary/80 font-semibold transition-colors">
               Ver Detalles
-            </button>
+            </a>
           </td>
         </tr>
         }

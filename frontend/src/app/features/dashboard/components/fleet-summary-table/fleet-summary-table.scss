@@ -21,3 +21,19 @@
 .risk-bajo {
   @apply bg-success/20 text-success border-success/50 shadow-glow-success;
 }
+
+.text-glow-destructive {
+  text-shadow: 0 0 10px hsl(var(--destructive-glow) / 0.6);
+}
+
+.text-glow-warning {
+  text-shadow: 0 0 10px hsl(var(--warning-glow) / 0.6);
+}
+
+.text-glow-success {
+  text-shadow: 0 0 10px hsl(var(--success-glow) / 0.6);
+}
+
+.text-glow-destructive-strong {
+  text-shadow: 0 0 10px hsl(var(--destructive-glow) / 0.8);
+}

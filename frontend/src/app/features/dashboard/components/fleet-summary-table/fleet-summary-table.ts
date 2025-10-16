@@ -6,6 +6,7 @@ import { switchMap, startWith, catchError } from 'rxjs';
 import { Page } from '../../../../core/models/event.models';
 import { FleetSummaryDataPoint } from '../../../../core/models/analytics.models';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fleet-summary-table',
@@ -20,6 +21,7 @@ import { CommonModule } from '@angular/common';
 export class FleetSummaryTable {
   private analyticsService = inject(AnalyticsService);
   private filterService = inject(DashboardFilter);
+  private router = inject(Router);
 
   // ✅ 1. Estado local — señal pura y reactiva
   public currentPage = signal(0);
@@ -70,5 +72,13 @@ export class FleetSummaryTable {
     if (!this.fleetSummaryPage()?.first) {
       this.currentPage.update((page) => page - 1);
     }
+  }
+
+  /**
+   * Navega a la página de eventos en vivo para un conductor específico.
+   * @param driverId El ID del conductor.
+   */
+  viewDriverDetails(driverId: string): void {
+    this.router.navigate(['/monitoring/live-events'], { queryParams: { driverId } });
   }
 }
