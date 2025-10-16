@@ -58,133 +58,181 @@
   }
 
   <div class="grid grid-cols-1 gap-6 flex-1">
-    <div class="bg-card rounded-lg border border-border flex flex-col overflow-hidden shadow-2xl shadow-primary/10">
-        <div class="p-6 border-b border-border">
-            <h3 class="font-bold text-2xl text-foreground flex items-center" style="text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
-                <span class="material-symbols-outlined text-primary mr-3 text-3xl" style="text-shadow: 0 0 10px hsl(var(--primary-glow) / 0.7);">rss_feed</span>
-                Eventos
-            </h3>
-            <p class="text-muted-foreground text-sm mt-1">Alertas de fatiga y distracción detectadas para este conductor.</p>
+    <div
+      class="bg-card rounded-lg border border-border flex flex-col overflow-hidden shadow-2xl shadow-primary/10"
+    >
+      <div class="p-6 border-b border-border">
+        <h3
+          class="font-bold text-2xl text-foreground flex items-center"
+          style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
+        >
+          <span
+            class="material-symbols-outlined text-primary mr-3 text-3xl"
+            style="text-shadow: 0 0 10px hsl(var(--primary-glow) / 0.7)"
+            >rss_feed</span
+          >
+          Eventos
+        </h3>
+        <p class="text-muted-foreground text-sm mt-1">
+          Alertas de fatiga y distracción detectadas para este conductor.
+        </p>
+      </div>
+
+      @if (eventsPage(); as page) {
+      <div class="flex-1 overflow-y-auto p-4" style="max-height: 700px">
+        <div class="space-y-4">
+          <!-- Live Event First -->
+          @if(liveEvent(); as event) {
+          <div
+            [ngClass]="{
+              'bg-destructive/10 border-destructive': event.fatigueLevel?.toString() === 'ALTO',
+              'bg-warning/10 border-warning': event.fatigueLevel?.toString() === 'MEDIO',
+              'bg-success/10 border-success': event.fatigueLevel?.toString() === 'BAJO'
+            }"
+            class="border-l-4 p-4 rounded-lg shadow-lg hover:bg-opacity-20 transition-all duration-300 cursor-pointer relative overflow-hidden group animate-pulse"
+          >
+            <div
+              [ngClass]="{
+                'bg-destructive/20': event.fatigueLevel?.toString() === 'ALTO',
+                'bg-warning/20': event.fatigueLevel?.toString() === 'MEDIO',
+                'bg-success/20': event.fatigueLevel?.toString() === 'BAJO'
+              }"
+              class="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-50 group-hover:opacity-80 transition-opacity"
+            ></div>
+
+            <div class="relative z-10">
+              <div class="flex justify-between items-start mb-2">
+                <div class="flex items-center">
+                  <span
+                    [ngClass]="{
+                      'bg-destructive text-destructive-foreground shadow-glow-destructive':
+                        event.fatigueLevel?.toString() === 'ALTO',
+                      'bg-warning text-black shadow-glow-warning':
+                        event.fatigueLevel?.toString() === 'MEDIO',
+                      'bg-success text-success-foreground':
+                        event.fatigueLevel?.toString() === 'BAJO'
+                    }"
+                    class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider"
+                  >
+                    {{ event.fatigueLevel | titlecase }}
+                  </span>
+                  <p
+                    class="ml-3 text-sm font-semibold"
+                    [ngClass]="{
+                      'text-destructive': event.fatigueLevel?.toString() === 'ALTO',
+                      'text-warning': event.fatigueLevel?.toString() === 'MEDIO',
+                      'text-success': event.fatigueLevel?.toString() === 'BAJO'
+                    }"
+                  >
+                    {{ event.fatigueType | titlecase }}
+                  </p>
+                </div>
+                <div class="flex items-center">
+                  <p class="text-sm font-mono text-muted-foreground flex-shrink-0">
+                    {{ event.timestamp | timeAgo }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center text-sm mb-3">
+                <span class="material-symbols-outlined mr-2 text-muted-foreground">person</span>
+                <p class="text-foreground font-semibold">{{ driver()?.nombre }}</p>
+              </div>
+            </div>
+          </div>
+          }
+
+          <!-- Historical Events -->
+          @for (event of page.content; track event.id) { @if (event.id !== liveEvent()?.id) {
+          <div
+            [ngClass]="{
+              'bg-destructive/10 border-destructive': event.fatigueLevel?.toString() === 'ALTO',
+              'bg-warning/10 border-warning': event.fatigueLevel?.toString() === 'MEDIO',
+              'bg-success/10 border-success': event.fatigueLevel?.toString() === 'BAJO'
+            }"
+            class="border-l-4 p-4 rounded-lg shadow-lg hover:bg-opacity-20 transition-all duration-300 cursor-pointer relative overflow-hidden group"
+          >
+            <div
+              [ngClass]="{
+                'bg-destructive/20': event.fatigueLevel?.toString() === 'ALTO',
+                'bg-warning/20': event.fatigueLevel?.toString() === 'MEDIO',
+                'bg-success/20': event.fatigueLevel?.toString() === 'BAJO'
+              }"
+              class="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-50 group-hover:opacity-80 transition-opacity"
+            ></div>
+
+            <div class="relative z-10">
+              <div class="flex justify-between items-start mb-2">
+                <div class="flex items-center">
+                  <span
+                    [ngClass]="{
+                      'bg-destructive text-destructive-foreground shadow-glow-destructive':
+                        event.fatigueLevel?.toString() === 'ALTO',
+                      'bg-warning text-black shadow-glow-warning':
+                        event.fatigueLevel?.toString() === 'MEDIO',
+                      'bg-success text-success-foreground':
+                        event.fatigueLevel?.toString() === 'BAJO'
+                    }"
+                    class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider"
+                  >
+                    {{ event.fatigueLevel | titlecase }}
+                  </span>
+                  <p
+                    class="ml-3 text-sm font-semibold"
+                    [ngClass]="{
+                      'text-destructive': event.fatigueLevel?.toString() === 'ALTO',
+                      'text-warning': event.fatigueLevel?.toString() === 'MEDIO',
+                      'text-success': event.fatigueLevel?.toString() === 'BAJO'
+                    }"
+                  >
+                    {{ event.fatigueType | titlecase }}
+                  </p>
+                </div>
+                <div class="flex items-center">
+                  <p class="text-sm font-mono text-muted-foreground flex-shrink-0">
+                    {{ event.timestamp | timeAgo }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center text-sm mb-3">
+                <span class="material-symbols-outlined mr-2 text-muted-foreground">person</span>
+                <p class="text-foreground font-semibold">{{ driver()?.nombre }}</p>
+              </div>
+            </div>
+          </div>
+          } } @if (!page.content?.length && !liveEvent()) {
+          <div class="text-center text-muted-foreground p-10">No hay eventos para mostrar.</div>
+          }
         </div>
+      </div>
 
-        @if (eventsPage(); as page) {
-            <div class="flex-1 overflow-y-auto p-4" style="max-height: 700px;">
-                <div class="space-y-4">
-                    <!-- Live Event First -->
-                    @if(liveEvent(); as event) {
-                        <div [ngClass]="{
-                            'bg-destructive/10 border-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                            'bg-warning/10 border-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                            'bg-success/10 border-success': event.fatigueLevel?.toString() === 'BAJO'
-                        }" class="border-l-4 p-4 rounded-lg shadow-lg hover:bg-opacity-20 transition-all duration-300 cursor-pointer relative overflow-hidden group animate-pulse">
-                            
-                            <div [ngClass]="{
-                                'bg-destructive/20': event.fatigueLevel?.toString() === 'ALTO',
-                                'bg-warning/20': event.fatigueLevel?.toString() === 'MEDIO',
-                                'bg-success/20': event.fatigueLevel?.toString() === 'BAJO'
-                            }" class="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
-
-                            <div class="relative z-10">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div class="flex items-center">
-                                        <span [ngClass]="{
-                                            'bg-destructive text-destructive-foreground shadow-glow-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                                            'bg-warning text-black shadow-glow-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                                            'bg-success text-success-foreground': event.fatigueLevel?.toString() === 'BAJO'
-                                        }" class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider">
-                                            {{ event.fatigueLevel | titlecase }}
-                                        </span>
-                                        <p class="ml-3 text-sm font-semibold" [ngClass]="{
-                                            'text-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                                            'text-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                                            'text-success': event.fatigueLevel?.toString() === 'BAJO'
-                                        }">
-                                            {{ event.fatigueType | titlecase }}
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <p class="text-sm font-mono text-muted-foreground flex-shrink-0">{{ event.timestamp | timeAgo }}</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center text-sm mb-3">
-                                    <span class="material-symbols-outlined mr-2 text-muted-foreground">person</span>
-                                    <p class="text-foreground font-semibold">{{ driver()?.nombre }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-                    <!-- Historical Events -->
-                    @for (event of page.content; track event.id) {
-                        @if (event.id !== liveEvent()?.id) { // Don't show the live event twice
-                            <div [ngClass]="{
-                                'bg-destructive/10 border-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                                'bg-warning/10 border-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                                'bg-success/10 border-success': event.fatigueLevel?.toString() === 'BAJO'
-                            }" class="border-l-4 p-4 rounded-lg shadow-lg hover:bg-opacity-20 transition-all duration-300 cursor-pointer relative overflow-hidden group">
-                                
-                                <div [ngClass]="{
-                                    'bg-destructive/20': event.fatigueLevel?.toString() === 'ALTO',
-                                    'bg-warning/20': event.fatigueLevel?.toString() === 'MEDIO',
-                                    'bg-success/20': event.fatigueLevel?.toString() === 'BAJO'
-                                }" class="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
-
-                                <div class="relative z-10">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div class="flex items-center">
-                                            <span [ngClass]="{
-                                                'bg-destructive text-destructive-foreground shadow-glow-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                                                'bg-warning text-black shadow-glow-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                                                'bg-success text-success-foreground': event.fatigueLevel?.toString() === 'BAJO'
-                                            }" class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider">
-                                                {{ event.fatigueLevel | titlecase }}
-                                            </span>
-                                            <p class="ml-3 text-sm font-semibold" [ngClass]="{
-                                                'text-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                                                'text-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                                                'text-success': event.fatigueLevel?.toString() === 'BAJO'
-                                            }">
-                                                {{ event.fatigueType | titlecase }}
-                                            </p>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <p class="text-sm font-mono text-muted-foreground flex-shrink-0">{{ event.timestamp | timeAgo }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center text-sm mb-3">
-                                        <span class="material-symbols-outlined mr-2 text-muted-foreground">person</span>
-                                        <p class="text-foreground font-semibold">{{ driver()?.nombre }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                    @if (!page.content?.length && !liveEvent()) {
-                        <div class="text-center text-muted-foreground p-10">
-                          No hay eventos para mostrar.
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <div class="p-4 mt-auto border-t border-border flex justify-between items-center">
-                <span class="text-sm text-muted-foreground">Página {{ page.number + 1 }} de {{ page.totalPages }}</span>
-                <div class="flex items-center space-x-2">
-                    <button (click)="previousPage()" [disabled]="page.first" class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
-                        Anterior
-                    </button>
-                    <button (click)="nextPage()" [disabled]="page.last" class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
-                        Siguiente
-                    </button>
-                </div>
-            </div>
-        } @else {
-            <div class="flex-1 flex items-center justify-center text-muted-foreground">
-                <span class="material-symbols-outlined text-6xl animate-spin">progress_activity</span>
-                <p class="mt-4 text-lg">Cargando eventos...</p>
-            </div>
-        }
+      <div class="p-4 mt-auto border-t border-border flex justify-between items-center">
+        <span class="text-sm text-muted-foreground"
+          >Página {{ page.number + 1 }} de {{ page.totalPages }}</span
+        >
+        <div class="flex items-center space-x-2">
+          <button
+            (click)="previousPage()"
+            [disabled]="page.first"
+            class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Anterior
+          </button>
+          <button
+            (click)="nextPage()"
+            [disabled]="page.last"
+            class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+      } @else {
+      <div class="flex-1 flex items-center justify-center text-muted-foreground">
+        <span class="material-symbols-outlined text-6xl animate-spin">progress_activity</span>
+        <p class="mt-4 text-lg">Cargando eventos...</p>
+      </div>
+      }
     </div>
-</div>
+  </div>
 </div>
 }
