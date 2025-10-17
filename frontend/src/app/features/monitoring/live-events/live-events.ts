@@ -139,10 +139,10 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
     const lng = -3.703790 + (Math.random() - 0.5) * 8;
     const location: L.LatLngTuple = [lat, lng];
 
-    const icon = this.getIconForLevel(event.fatigueLevel);
+    const icon = this.getIconForLevel(event.fatigueLevel, event.isNewCritical);
 
     const marker = L.marker(location, { icon }).addTo(this.map)
-      .bindPopup(`<b>${event.fatigueLevel}</b><br>${event.driver?.nombre || 'Conductor'}<br>${new Date(event.timestamp).toLocaleTimeString()}`);
+      .bindPopup(`<b>Nivel:</b> ${event.fatigueLevel}<br><b>Tipo:</b> ${event.fatigueType}<br><b>Conductor:</b> ${event.driver?.nombre || 'Desconocido'}<br><b>Hora:</b> ${new Date(event.timestamp).toLocaleTimeString()}`);
 
     // Guardar marcador para gestionarlo más tarde
     this.markers.set(event.id, marker);
@@ -151,17 +151,29 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
     this.map.panTo(location);
   }
 
-  private getIconForLevel(level: FatigueLevel): L.Icon {
+  private getIconForLevel(level: FatigueLevel, isNewCritical = false): L.Icon {
+    let iconUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png';
     switch (level) {
       case FatigueLevel.ALTO:
-        return L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] });
+        iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png';
+        break;
       case FatigueLevel.MEDIO:
-        return L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png', shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] });
+        iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png';
+        break;
       case FatigueLevel.BAJO:
-        return L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png', shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] });
-      default:
-        return L.icon({ iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png', shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] });
+        iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png';
+        break;
     }
+
+    return L.icon({
+      iconUrl,
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+      className: isNewCritical ? 'blinking-marker' : ''
+    });
   }
 
   private updateMarkersVisibility(events: LiveFatigueEvent[], filter: FatigueLevel | 'ALL'): void {
