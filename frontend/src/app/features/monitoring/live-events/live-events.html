@@ -1,1 +1,50 @@
-<p>live-events works!</p>
+<div class="live-events-page">
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <button (click)="setFilter($any('ALL'))" [class.active]="$any(selectedFilter()) === 'ALL'">
+      Todos
+    </button>
+    <button (click)="setFilter($any('HIGH'))" [class.active]="$any(selectedFilter()) === 'HIGH'">
+      Nivel Alto
+    </button>
+    <button
+      (click)="setFilter($any('MEDIUM'))"
+      [class.active]="$any(selectedFilter()) === 'MEDIUM'"
+    >
+      Nivel Medio
+    </button>
+    <button (click)="setFilter($any('LOW'))" [class.active]="$any(selectedFilter()) === 'LOW'">
+      Nivel Bajo
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Map Section -->
+    <div class="map-container">
+      <div class="map" id="live-map"></div>
+    </div>
+    <!-- Events Feed Section -->
+    <div class="events-feed">
+      <h3 class="feed-title">Feed de Eventos en Vivo</h3>
+      <div class="event-list">
+        @for (event of filteredEvents(); track event.id) {
+        <div class="event-card" [ngClass]="'level-' + event.fatigueLevel.toLowerCase()">
+          <div class="event-header">
+            <span class="font-bold">{{ event.fatigueLevel }}</span>
+            <span>{{ event.timestamp | timeAgo }}</span>
+          </div>
+          <div class="event-body">
+            <p><strong>Conductor:</strong> {{ event.driver?.nombre || 'Cargando...' }}</p>
+            <p><strong>Vehículo:</strong> {{ event.vehicleId }}</p>
+          </div>
+        </div>
+        } @empty {
+        <div class="empty-feed">
+          <p>Esperando nuevos eventos...</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

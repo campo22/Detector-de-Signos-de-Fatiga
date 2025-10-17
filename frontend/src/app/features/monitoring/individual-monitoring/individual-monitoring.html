@@ -85,17 +85,17 @@
           @if(liveEvent(); as event) {
           <div
             [ngClass]="{
-              'bg-destructive/10 border-destructive': event.fatigueLevel?.toString() === 'ALTO',
-              'bg-warning/10 border-warning': event.fatigueLevel?.toString() === 'MEDIO',
-              'bg-success/10 border-success': event.fatigueLevel?.toString() === 'BAJO'
+              'bg-destructive/10 border-destructive': event.fatigueLevel.toString() === 'ALTO',
+              'bg-warning/10 border-warning': event.fatigueLevel.toString() === 'MEDIO',
+              'bg-success/10 border-success': event.fatigueLevel.toString() === 'BAJO'
             }"
             class="border-l-4 p-4 rounded-lg shadow-lg hover:bg-opacity-20 transition-all duration-300 cursor-pointer relative overflow-hidden group animate-pulse"
           >
             <div
               [ngClass]="{
-                'bg-destructive/20': event.fatigueLevel?.toString() === 'ALTO',
-                'bg-warning/20': event.fatigueLevel?.toString() === 'MEDIO',
-                'bg-success/20': event.fatigueLevel?.toString() === 'BAJO'
+                'bg-destructive/20': event.fatigueLevel.toString() === 'ALTO',
+                'bg-warning/20': event.fatigueLevel.toString() === 'MEDIO',
+                'bg-success/20': event.fatigueLevel.toString() === 'BAJO'
               }"
               class="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-50 group-hover:opacity-80 transition-opacity"
             ></div>
@@ -106,11 +106,11 @@
                   <span
                     [ngClass]="{
                       'bg-destructive text-destructive-foreground shadow-glow-destructive':
-                        event.fatigueLevel?.toString() === 'ALTO',
+                        event.fatigueLevel.toString() === 'ALTO',
                       'bg-warning text-black shadow-glow-warning':
-                        event.fatigueLevel?.toString() === 'MEDIO',
+                        event.fatigueLevel.toString() === 'MEDIO',
                       'bg-success text-success-foreground':
-                        event.fatigueLevel?.toString() === 'BAJO'
+                        event.fatigueLevel.toString() === 'BAJO'
                     }"
                     class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider"
                   >
@@ -119,9 +119,9 @@
                   <p
                     class="ml-3 text-sm font-semibold"
                     [ngClass]="{
-                      'text-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                      'text-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                      'text-success': event.fatigueLevel?.toString() === 'BAJO'
+                      'text-destructive': event.fatigueLevel.toString() === 'ALTO',
+                      'text-warning': event.fatigueLevel.toString() === 'MEDIO',
+                      'text-success': event.fatigueLevel.toString() === 'BAJO'
                     }"
                   >
                     {{ event.fatigueType | titlecase }}
@@ -145,17 +145,17 @@
           @for (event of page.content; track event.id) { @if (event.id !== liveEvent()?.id) {
           <div
             [ngClass]="{
-              'bg-destructive/10 border-destructive': event.fatigueLevel?.toString() === 'ALTO',
-              'bg-warning/10 border-warning': event.fatigueLevel?.toString() === 'MEDIO',
-              'bg-success/10 border-success': event.fatigueLevel?.toString() === 'BAJO'
+              'bg-destructive/10 border-destructive': event.fatigueLevel.toString() === 'ALTO',
+              'bg-warning/10 border-warning': event.fatigueLevel.toString() === 'MEDIO',
+              'bg-success/10 border-success': event.fatigueLevel.toString() === 'BAJO'
             }"
             class="border-l-4 p-4 rounded-lg shadow-lg hover:bg-opacity-20 transition-all duration-300 cursor-pointer relative overflow-hidden group"
           >
             <div
               [ngClass]="{
-                'bg-destructive/20': event.fatigueLevel?.toString() === 'ALTO',
-                'bg-warning/20': event.fatigueLevel?.toString() === 'MEDIO',
-                'bg-success/20': event.fatigueLevel?.toString() === 'BAJO'
+                'bg-destructive/20': event.fatigueLevel.toString() === 'ALTO',
+                'bg-warning/20': event.fatigueLevel.toString() === 'MEDIO',
+                'bg-success/20': event.fatigueLevel.toString() === 'BAJO'
               }"
               class="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-50 group-hover:opacity-80 transition-opacity"
             ></div>
@@ -166,11 +166,11 @@
                   <span
                     [ngClass]="{
                       'bg-destructive text-destructive-foreground shadow-glow-destructive':
-                        event.fatigueLevel?.toString() === 'ALTO',
+                        event.fatigueLevel.toString() === 'ALTO',
                       'bg-warning text-black shadow-glow-warning':
-                        event.fatigueLevel?.toString() === 'MEDIO',
+                        event.fatigueLevel.toString() === 'MEDIO',
                       'bg-success text-success-foreground':
-                        event.fatigueLevel?.toString() === 'BAJO'
+                        event.fatigueLevel.toString() === 'BAJO'
                     }"
                     class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider"
                   >
@@ -179,9 +179,9 @@
                   <p
                     class="ml-3 text-sm font-semibold"
                     [ngClass]="{
-                      'text-destructive': event.fatigueLevel?.toString() === 'ALTO',
-                      'text-warning': event.fatigueLevel?.toString() === 'MEDIO',
-                      'text-success': event.fatigueLevel?.toString() === 'BAJO'
+                      'text-destructive': event.fatigueLevel.toString() === 'ALTO',
+                      'text-warning': event.fatigueLevel.toString() === 'MEDIO',
+                      'text-success': event.fatigueLevel.toString() === 'BAJO'
                     }"
                   >
                     {{ event.fatigueType | titlecase }}
@@ -199,7 +199,7 @@
               </div>
             </div>
           </div>
-          } } @if (!page.content?.length && !liveEvent()) {
+          } } @if (!page.content.length && !liveEvent()) {
           <div class="text-center text-muted-foreground p-10">No hay eventos para mostrar.</div>
           }
         </div>

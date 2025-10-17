@@ -28,14 +28,20 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)
       },
       {
-        path: 'monitoring/:driverId', // Ruta con parámetro dinámico
-        loadComponent: () => import('./features/monitoring/individual-monitoring/individual-monitoring').then(m => m.IndividualMonitoring),
+        path: 'monitoring/individual',
+        loadComponent: () => import('./features/monitoring/individual-landing/individual-landing').then(m => m.IndividualLandingComponent),
         canActivate: [roleGuard], // Autorización por rol
         data: { requiredRole: [Role.GESTOR, Role.ADMINISTRADOR] } // Permitir GESTOR y ADMINISTRADOR
       },
       {
         path: 'monitoring/live-events',
         loadComponent: () => import('./features/monitoring/live-events/live-events').then(m => m.LiveEvents)
+      },
+      {
+        path: 'monitoring/:driverId', // Ruta con parámetro dinámico
+        loadComponent: () => import('./features/monitoring/individual-monitoring/individual-monitoring').then(m => m.IndividualMonitoring),
+        canActivate: [roleGuard], // Autorización por rol
+        data: { requiredRole: [Role.GESTOR, Role.ADMINISTRADOR] } // Permitir GESTOR y ADMINISTRADOR
       },
       // {
       //   path: 'analytics/reports',

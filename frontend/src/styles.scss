@@ -41,3 +41,19 @@
 body {
   @apply bg-background font-display text-foreground;
 }
+
+
+/* Leaflet Overrides */
+.leaflet-popup-content-wrapper {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: var(--radius);
+}
+
+.leaflet-popup-tip {
+  background-color: hsl(var(--card));
+}
+
+.leaflet-popup-content b {
+  color: hsl(var(--primary));
+}
