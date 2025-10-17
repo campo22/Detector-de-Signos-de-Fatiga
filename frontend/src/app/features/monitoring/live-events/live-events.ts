@@ -28,18 +28,23 @@ export class LiveEvents implements OnDestroy, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
   private eventsSubscription: Subscription | undefined;
 
+  // el cache de conductores
   private driversCache = new Map<string, Driver>();
+  // el mapa
   private map!: L.Map;
+  // los marcadores de los eventos en vivo
   private markers = new Map<string, L.Marker>();
 
+  public FatigueLevel = FatigueLevel;
   public events = signal<LiveFatigueEvent[]>([]);
+
   public selectedFilter = signal<FatigueLevel | 'ALL'>('ALL');
 
   public filteredEvents = computed(() => {
     const events = this.events();
     const filter = this.selectedFilter();
 
-    // Update markers visibility when filter changes
+    // actualizar la visibilidad de los marcadores
     this.updateMarkersVisibility(events, filter);
 
     if (filter === 'ALL') {

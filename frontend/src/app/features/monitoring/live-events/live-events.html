@@ -1,19 +1,16 @@
 <div class="live-events-page">
   <!-- Filter Bar -->
   <div class="filter-bar">
-    <button (click)="setFilter($any('ALL'))" [class.active]="$any(selectedFilter()) === 'ALL'">
+    <button (click)="setFilter('ALL')" [class.active]="selectedFilter() === 'ALL'">
       Todos
     </button>
-    <button (click)="setFilter($any('HIGH'))" [class.active]="$any(selectedFilter()) === 'HIGH'">
+    <button (click)="setFilter(FatigueLevel.ALTO)" [class.active]="selectedFilter() === FatigueLevel.ALTO">
       Nivel Alto
     </button>
-    <button
-      (click)="setFilter($any('MEDIUM'))"
-      [class.active]="$any(selectedFilter()) === 'MEDIUM'"
-    >
+    <button (click)="setFilter(FatigueLevel.MEDIO)" [class.active]="selectedFilter() === FatigueLevel.MEDIO">
       Nivel Medio
     </button>
-    <button (click)="setFilter($any('LOW'))" [class.active]="$any(selectedFilter()) === 'LOW'">
+    <button (click)="setFilter(FatigueLevel.BAJO)" [class.active]="selectedFilter() === FatigueLevel.BAJO">
       Nivel Bajo
     </button>
   </div>
