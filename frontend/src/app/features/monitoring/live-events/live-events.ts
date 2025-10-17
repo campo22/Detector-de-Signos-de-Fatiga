@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, OnDestroy, signal, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, OnDestroy, OnInit, signal, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
 import * as L from 'leaflet';
@@ -9,8 +9,9 @@ import { FatigueLevel } from '../../../core/models/enums';
 import { TimeAgoPipe } from '../../shared/pipes/time-ago-pipe';
 import { Driver } from '../../../core/models/driver.models';
 import { DriverService } from '../../shared/services/driver.service';
+import { EventService } from '../../shared/services/event.service';
 
-// We'll augment the FatigueEvent with optional driver details for the template
+// Aumentamos FatigueEvent con detalles opcionales del conductor para la plantilla
 interface LiveFatigueEvent extends FatigueEvent {
   driver?: Driver;
 }
@@ -22,9 +23,10 @@ interface LiveFatigueEvent extends FatigueEvent {
   templateUrl: './live-events.html',
   styleUrl: './live-events.scss'
 })
-export class LiveEvents implements OnDestroy, AfterViewInit {
+export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   private webSocketService = inject(WebSocketService);
   private driverService = inject(DriverService);
+  private eventService = inject(EventService);
   private platformId = inject(PLATFORM_ID);
   private eventsSubscription: Subscription | undefined;
 
@@ -54,18 +56,24 @@ export class LiveEvents implements OnDestroy, AfterViewInit {
   });
 
   constructor() {
-    // Don't subscribe to WebSocket events on the server
+    // No suscribirse a eventos de WebSocket en el servidor
     if (isPlatformBrowser(this.platformId)) {
       this.eventsSubscription = this.webSocketService.fatigueEvent$.subscribe(newEvent => {
         if (newEvent) {
-          this.addEventWithDriver(newEvent);
+          this.addEventWithDriver(newEvent, true);
         }
       });
     }
   }
 
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadInitialEvents();
+    }
+  }
+
   ngAfterViewInit(): void {
-    // Initialize the map only on the browser
+    // Inicializar el mapa solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
       this.initMap();
     }
@@ -77,7 +85,7 @@ export class LiveEvents implements OnDestroy, AfterViewInit {
   }
 
   private initMap(): void {
-    this.map = L.map('live-map').setView([40.416775, -3.703790], 6); // Centered on Spain
+    this.map = L.map('live-map').setView([40.416775, -3.703790], 6); // Centrado en España
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -85,12 +93,26 @@ export class LiveEvents implements OnDestroy, AfterViewInit {
     }).addTo(this.map);
   }
 
-  private addEventWithDriver(event: FatigueEvent): void {
+  private loadInitialEvents(): void {
+    this.eventService.searchEvents({}, 0, 20).subscribe(page => {
+      const initialEvents = page.content;
+      // Revertir para procesar los más antiguos primero y mantener el orden al agregar
+      initialEvents.reverse().forEach(event => this.addEventWithDriver(event, false));
+    });
+  }
+
+  private addEventWithDriver(event: FatigueEvent, prepend = true): void {
     const driverId = event.driverId;
 
     const processEvent = (driver?: Driver) => {
       const liveEvent: LiveFatigueEvent = { ...event, driver };
-      this.events.update(currentEvents => [liveEvent, ...currentEvents].slice(0, 50));
+
+      if (prepend) {
+        this.events.update(currentEvents => [liveEvent, ...currentEvents].slice(0, 50));
+      } else {
+        this.events.update(currentEvents => [...currentEvents, liveEvent]);
+      }
+
       this.addEventMarker(liveEvent);
     };
 
@@ -107,7 +129,7 @@ export class LiveEvents implements OnDestroy, AfterViewInit {
   private addEventMarker(event: LiveFatigueEvent): void {
     if (!this.map) return;
 
-    // For demonstration, we'll use random coordinates around Spain
+    // Para demostración, usamos coordenadas aleatorias alrededor de España
     const lat = 40.416775 + (Math.random() - 0.5) * 4;
     const lng = -3.703790 + (Math.random() - 0.5) * 8;
     const location: L.LatLngTuple = [lat, lng];
@@ -117,10 +139,10 @@ export class LiveEvents implements OnDestroy, AfterViewInit {
     const marker = L.marker(location, { icon }).addTo(this.map)
       .bindPopup(`<b>${event.fatigueLevel}</b><br>${event.driver?.nombre || 'Conductor'}<br>${new Date(event.timestamp).toLocaleTimeString()}`);
 
-    // Store marker to manage it later
+    // Guardar marcador para gestionarlo más tarde
     this.markers.set(event.id, marker);
 
-    // Center map on the new event
+    // Centrar el mapa en el nuevo evento
     this.map.panTo(location);
   }
 
