@@ -141,23 +141,3 @@
 .critical-event-new {
   animation: blinking-background 1s ease-in-out 3;
 }
-
-@keyframes blinking-marker {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.blinking-marker {
-  transform-origin: center;
-  animation: blinking-marker 1s ease-in-out 3;
-}

@@ -87,7 +87,7 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   }
 
   private initMap(): void {
-    this.map = L.map('live-map').setView([40.416775, -3.703790], 6); // Centrado en España
+    this.map = L.map('live-map').setView([4.5709, -74.2973], 6); // Centrado en Colombia
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -134,21 +134,23 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   private addEventMarker(event: LiveFatigueEvent): void {
     if (!this.map) return;
 
-    // Para demostración, usamos coordenadas aleatorias alrededor de España
-    const lat = 40.416775 + (Math.random() - 0.5) * 4;
-    const lng = -3.703790 + (Math.random() - 0.5) * 8;
+    // Para demostración, usamos coordenadas aleatorias alrededor de Colombia
+    const lat = 4.5709 + (Math.random() - 0.5) * 4;
+    const lng = -74.2973 + (Math.random() - 0.5) * 8;
     const location: L.LatLngTuple = [lat, lng];
 
     const icon = this.getIconForLevel(event.fatigueLevel, event.isNewCritical);
 
     const marker = L.marker(location, { icon }).addTo(this.map)
-      .bindPopup(`<b>Nivel:</b> ${event.fatigueLevel}<br><b>Tipo:</b> ${event.fatigueType}<br><b>Conductor:</b> ${event.driver?.nombre || 'Desconocido'}<br><b>Hora:</b> ${new Date(event.timestamp).toLocaleTimeString()}`);
+      .bindPopup(`<b>Nivel:</b> ${event.fatigueLevel}<br><b>Tipo:</b> ${event.fatigueType}<br><b>Conductor:</b> ${event.driver?.nombre || 'Desconocido'}<br><b>Hora:</b> ${new Date(event.timestamp).toLocaleTimeString()}`, {
+        className: 'custom-popup'
+      });
 
     // Guardar marcador para gestionarlo más tarde
     this.markers.set(event.id, marker);
 
-    // Centrar el mapa en el nuevo evento
-    this.map.panTo(location);
+    // Centrar el mapa en el nuevo evento con una animación suave
+    this.map.flyTo(location, 10);
   }
 
   private getIconForLevel(level: FatigueLevel, isNewCritical = false): L.Icon {
