@@ -125,3 +125,19 @@
   height: 100%;
   color: hsl(var(--muted-foreground));
 }
+
+@keyframes blinking-background {
+  0% {
+    background-color: hsl(var(--destructive));
+  }
+  50% {
+    background-color: hsl(var(--card));
+  }
+  100% {
+    background-color: hsl(var(--destructive));
+  }
+}
+
+.critical-event-new {
+  animation: blinking-background 1s ease-in-out 3;
+}

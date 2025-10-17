@@ -26,7 +26,10 @@
       <h3 class="feed-title">Feed de Eventos en Vivo</h3>
       <div class="event-list">
         @for (event of filteredEvents(); track event.id) {
-        <div class="event-card" [ngClass]="'level-' + event.fatigueLevel.toLowerCase()">
+        <div
+          class="event-card"
+          [class]="'event-card level-' + event.fatigueLevel.toLowerCase() + (event.isNewCritical ? ' critical-event-new' : '')"
+        >
           <div class="event-header">
             <span class="font-bold">{{ event.fatigueLevel }}</span>
             <span>{{ event.timestamp | timeAgo }}</span>
@@ -34,6 +37,7 @@
           <div class="event-body">
             <p><strong>Conductor:</strong> {{ event.driver?.nombre || 'Cargando...' }}</p>
             <p><strong>Vehículo:</strong> {{ event.vehicleId }}</p>
+            <p><strong>Tipo:</strong> {{ event.fatigueType }}</p>
           </div>
         </div>
         } @empty {

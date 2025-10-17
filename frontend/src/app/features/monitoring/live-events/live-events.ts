@@ -5,7 +5,7 @@ import * as L from 'leaflet';
 
 import { WebSocketService } from '../../auth/services/web-socket.service';
 import { FatigueEvent } from '../../../core/models/event.models';
-import { FatigueLevel } from '../../../core/models/enums';
+import { FatigueLevel, FatigueType } from '../../../core/models/enums';
 import { TimeAgoPipe } from '../../shared/pipes/time-ago-pipe';
 import { Driver } from '../../../core/models/driver.models';
 import { DriverService } from '../../shared/services/driver.service';
@@ -14,6 +14,7 @@ import { EventService } from '../../shared/services/event.service';
 // Aumentamos FatigueEvent con detalles opcionales del conductor para la plantilla
 interface LiveFatigueEvent extends FatigueEvent {
   driver?: Driver;
+  isNewCritical?: boolean;
 }
 
 @Component({
@@ -38,6 +39,7 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   private markers = new Map<string, L.Marker>();
 
   public FatigueLevel = FatigueLevel;
+  public FatigueType = FatigueType;
   public events = signal<LiveFatigueEvent[]>([]);
 
   public selectedFilter = signal<FatigueLevel | 'ALL'>('ALL');
@@ -108,6 +110,9 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
       const liveEvent: LiveFatigueEvent = { ...event, driver };
 
       if (prepend) {
+        if (event.fatigueType === FatigueType.MICROSUEÑO) {
+          liveEvent.isNewCritical = true;
+        }
         this.events.update(currentEvents => [liveEvent, ...currentEvents].slice(0, 50));
       } else {
         this.events.update(currentEvents => [...currentEvents, liveEvent]);
