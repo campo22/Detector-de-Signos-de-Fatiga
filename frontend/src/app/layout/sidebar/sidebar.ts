@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../features/auth/services/auth.service';
+import { SidebarService } from './sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,6 +17,14 @@ import { AuthService } from '../../features/auth/services/auth.service';
 export class Sidebar {
 
   private authService = inject(AuthService);
+  public sidebarService = inject(SidebarService);
+  private router = inject(Router);
+
+  constructor() {
+    this.router.events.subscribe(() => {
+      this.sidebarService.closeSidebar();
+    });
+  }
 
   logout(): void {
     this.authService.logout();

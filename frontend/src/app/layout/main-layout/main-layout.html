@@ -1,5 +1,18 @@
-<div class="flex h-screen">
-  <app-sidebar class="w-64 flex-shrink-0"></app-sidebar>
+<div class="flex h-screen bg-background">
+  <!-- Sidebar -->
+  <app-sidebar
+    class="absolute z-30 h-full w-64 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0"
+    [ngClass]="{
+      '-translate-x-full': !sidebarService.isSidebarOpen()
+    }"
+  ></app-sidebar>
+
+  <!-- Overlay for mobile -->
+  <div
+    *ngIf="sidebarService.isSidebarOpen()"
+    (click)="sidebarService.closeSidebar()"
+    class="fixed inset-0 z-20 bg-black/50 lg:hidden"
+  ></div>
 
   <div class="flex flex-1 flex-col">
     <app-header class="h-20 flex-shrink-0"></app-header>
