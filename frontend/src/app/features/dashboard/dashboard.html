@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div class="xl:col-span-1">
+    <div class="xl:col-span-1" style="height: 600px;">
       <div
         class="bg-card rounded-lg border border-border overflow-hidden relative flex flex-col h-full"
       >
@@ -64,7 +64,7 @@
             Eventos Recientes
           </h3>
         </div>
-        <div class="relative z-10 flex-1 overflow-y-auto px-6 pb-6 space-y-4">
+        <div class="relative z-10 flex-1 overflow-y-auto px-6 pb-6 space-y-4 min-h-0">
           @for (event of recentEvents(); track event.id) {
           <div class="flex items-start space-x-4">
             <div
@@ -105,6 +105,7 @@
         </div>
         <div class="relative z-10 p-6 mt-auto border-t border-border">
           <button
+            [routerLink]="['/monitoring/live']"
             class="w-full text-center text-primary hover:text-primary/80 font-semibold transition-colors"
           >
             Ver todas las alertas

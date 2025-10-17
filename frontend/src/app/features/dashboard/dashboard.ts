@@ -11,6 +11,7 @@ import { TopDriversChart } from './components/top-drivers-chart/top-drivers-char
 import { FilterBar } from './components/filter-bar/filter-bar';
 import { CriticalEventsTimeline } from './components/critical-events-timeline/critical-events-timeline';
 import { FleetSummaryTable } from './components/fleet-summary-table/fleet-summary-table';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +22,8 @@ import { FleetSummaryTable } from './components/fleet-summary-table/fleet-summar
     TopDriversChart,
     FilterBar,
     CriticalEventsTimeline,
-    FleetSummaryTable
+    FleetSummaryTable,
+    RouterModule
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
