@@ -91,13 +91,13 @@
     transform: translateY(-2px);
   }
 
-  &.level-high {
+  &.level-alto {
     border-left-color: hsl(var(--destructive));
   }
-  &.level-medium {
+  &.level-medio {
     border-left-color: hsl(var(--warning));
   }
-  &.level-low {
+  &.level-bajo {
     border-left-color: hsl(var(--success));
   }
 }
