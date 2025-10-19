@@ -8,101 +8,86 @@ Base URL: `http://localhost:8080`
 
 La especificación completa de la API está disponible en Swagger/OpenAPI (ver sección "Documentación de API (Swagger)").
 
-### 3.5. Ejemplos de Paginación (Eventos)
+### 3.6. Ejemplos adicionales
 
-#### GET `/api/v1/events/search`
+#### GET `/api/v1/analytics/fleet-summary`
+- Parámetros (query):
+  - `startDate` (YYYY-MM-DD, opcional)
+  - `endDate` (YYYY-MM-DD, opcional)
+  - `pageable.page` (0..N)
+  - `pageable.size` (1..100)
+  - `pageable.sort` (campo,orden) — ej: `fatigueCount,desc`
 
-- Parámetros de consulta (query):
-  - `filter.startDate` (YYYY-MM-DD)
-  - `filter.endDate` (YYYY-MM-DD)
-  - `filter.driverId` (UUID)
-  - `filter.vehicleId` (UUID)
-  - `filter.fatigueLevel` (NINGUNO|BAJO|MEDIO|ALTO)
-  - `pageable.page` (0..N), `pageable.size` (1..100), `pageable.sort` (ej: `timestamp,desc`)
+- Ejemplo de petición:
+```
+GET /api/v1/analytics/fleet-summary?startDate=2025-10-01&endDate=2025-10-31&pageable.page=0&pageable.size=10&pageable.sort=fatigueCount,desc
+```
 
-- Ejemplo de respuesta paginada (200 OK):
-
+- Ejemplo de respuesta (200 OK):
 ```json
 {
   "content": [
     {
-      "id": "fa79e284-13b0-4753-b12e-037e44880b9c",
       "driverId": "ac666564-57a9-435b-a0b4-d6c753be74ae",
-      "vehicleId": "b736f732-b7ca-4515-b2c4-d1ad9ee01084",
-      "timestamp": "2025-10-13T22:11:10.834101Z",
-      "fatigueLevel": "ALTO",
-      "fatigueType": "MICROSUEÑO",
-      "eyeClosureDuration": 1.5,
-      "yawnCount": 0,
-      "blinkRate": 0.2,
       "driverName": "Carlos Vargas",
-      "vehicleIdentifier": "RTX-3090"
+      "vehicleIdentifier": "RTX-3090",
+      "fatigueCount": 42,
+      "distractionCount": 7,
+      "criticalEventsCount": 5,
+      "riskScore": "ALTO"
     },
     {
-      "id": "2a45fc68-488f-4d7b-963b-79b0d6f575d8",
-      "driverId": "ac666564-57a9-435b-a0b4-d6c753be74ae",
-      "vehicleId": "b736f732-b7ca-4515-b2c4-d1ad9ee01084",
-      "timestamp": "2025-10-13T23:11:10.834212Z",
-      "fatigueLevel": "MEDIO",
-      "fatigueType": "BOSTEZO",
-      "eyeClosureDuration": 0.0,
-      "yawnCount": 3,
-      "blinkRate": 0.5,
-      "driverName": "Carlos Vargas",
-      "vehicleIdentifier": "RTX-3090"
+      "driverId": "7866307e-a910-4b90-8421-f1a60777ea29",
+      "driverName": "Sofía Rodríguez",
+      "vehicleIdentifier": "RX-7900",
+      "fatigueCount": 31,
+      "distractionCount": 4,
+      "criticalEventsCount": 2,
+      "riskScore": "MEDIO"
     }
-    
-    /* ...items omitidos por brevedad... */
   ],
   "pageable": {
     "pageNumber": 0,
-    "pageSize": 20,
-    "sort": {
-      "empty": false,
-      "unsorted": false,
-      "sorted": true
-    },
-    "offset": 0,
-    "unpaged": false,
-    "paged": true
+    "pageSize": 10,
+    "sort": { "empty": false, "unsorted": false, "sorted": true },
+    "offset": 0, "unpaged": false, "paged": true
   },
-  "totalPages": 4,
-  "totalElements": 68,
+  "totalPages": 3,
+  "totalElements": 25,
   "last": false,
-  "size": 20,
+  "size": 10,
   "number": 0,
-  "sort": {
-    "empty": false,
-    "unsorted": false,
-    "sorted": true
-  },
-  "numberOfElements": 20,
+  "sort": { "empty": false, "unsorted": false, "sorted": true },
+  "numberOfElements": 10,
   "first": true,
   "empty": false
 }
 ```
 
-- Ejemplos de uso (query strings):
-  - `GET /api/v1/events/search?filter.startDate=2025-10-01&filter.endDate=2025-10-31&pageable.page=0&pageable.size=20&pageable.sort=timestamp,desc`
-  - `GET /api/v1/events/search?filter.driverId=ac666564-57a9-435b-a0b4-d6c753be74ae&pageable.page=1&pageable.size=10`
+- Variantes de consulta:
+  - `GET /api/v1/analytics/fleet-summary?pageable.page=1&pageable.size=20`
+  - `GET /api/v1/analytics/fleet-summary?startDate=2025-10-10&endDate=2025-10-20&pageable.sort=criticalEventsCount,desc`
 
-### 3.6. Ejemplos adicionales
+#### GET `/api/v1/analytics/critical-events-timeline`
+- Parámetros (query):
+  - `startDate` (YYYY-MM-DD, opcional)
+  - `endDate` (YYYY-MM-DD, opcional)
 
-#### GET `/api/v1/analytics/top-drivers`
-- `?startDate=2025-01-01&endDate=2025-01-31`
-- Respuesta (200 OK):
-```json
-[
-  { "driverId": "ac666564-57a9-435b-a0b4-d6c753be74ae", "driverName": "Carlos Vargas", "alertCount": 42 },
-  { "driverId": "7866307e-a910-4b90-8421-f1a60777ea29", "driverName": "Sofía Rodríguez", "alertCount": 31 }
-]
+- Ejemplo de petición:
+```
+GET /api/v1/analytics/critical-events-timeline?startDate=2025-10-01&endDate=2025-10-07
 ```
 
-#### GET `/api/v1/vehicles?filter.placa=RTX-3090&pageable.page=0&pageable.size=5`
-- Respuesta (200 OK):
+- Ejemplo de respuesta (200 OK):
 ```json
 [
-  { "id": "b736f732-b7ca-4515-b2c4-d1ad9ee01084", "placa": "RTX-3090", "marca": "MarcaX", "modelo": "ModeloY", "anio": 2024, "activo": true }
+  { "date": "2025-10-01", "count": 3 },
+  { "date": "2025-10-02", "count": 5 },
+  { "date": "2025-10-03", "count": 2 },
+  { "date": "2025-10-04", "count": 6 },
+  { "date": "2025-10-05", "count": 4 },
+  { "date": "2025-10-06", "count": 7 },
+  { "date": "2025-10-07", "count": 3 }
 ]
 ```
 
