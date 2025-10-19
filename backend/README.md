@@ -7,6 +7,13 @@ API central para la gestión de eventos de fatiga, conductores y vehículos, con
 - Maven Wrapper (`./mvnw` incluido)
 - PostgreSQL 13+
 
+## Documentación de API (Swagger / OpenAPI)
+- UI: `http://localhost:8080/swagger-ui/index.html`
+- JSON: `http://localhost:8080/v3/api-docs`
+- YAML: `http://localhost:8080/v3/api-docs.yaml`
+
+> Si usas perfiles, asegúrate de habilitar Swagger en `dev` y configurar su exposición en `prod` según políticas internas.
+
 ## Configuración
 
 ### Variables de entorno
