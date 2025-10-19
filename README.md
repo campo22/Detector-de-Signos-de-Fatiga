@@ -13,7 +13,7 @@ Sistema integral para la detección y monitoreo de signos de fatiga en conductor
 ├── backend/             # API y Servidor (Spring Boot)
 │   ├── src/            # Código fuente del backend
 │   └── pom.xml        # Configuración Maven
-└── frontend/          # Panel de Control (React)
+└── frontend/          # Panel de Control (Angular)
     ├── src/          # Código fuente del frontend
     └── package.json  # Dependencias Node.js
 ```
@@ -38,14 +38,17 @@ Sistema integral para la detección y monitoreo de signos de fatiga en conductor
   - Autenticación y autorización
   - Análisis y estadísticas
 
-### Frontend (React)
+### Frontend (Angular)
 - Interfaz web para monitoreo y administración
-- Características:
-  - Dashboard en tiempo real
-  - Visualización de estadísticas
-  - Gestión de conductores y vehículos
-  - Configuración del sistema
-  - Reportes y análisis
+- Stack:
+  - Angular 20.3.x + TypeScript 5.9
+  - PrimeNG, Tailwind CSS
+  - ApexCharts (ng-apexcharts), Leaflet
+  - WebSockets con @stomp/stompjs
+- Scripts:
+  - `npm start` (dev)
+  - `npm run build` (build prod)
+  - `npm run serve:ssr:frontend` (SSR opcional)
 
 ## Configuración del Proyecto
 
@@ -54,6 +57,7 @@ Sistema integral para la detección y monitoreo de signos de fatiga en conductor
 - Java 17+
 - Node.js 18+
 - PostgreSQL 13+
+- Angular CLI 20.3.2
 
 ### Instalación
 
@@ -77,10 +81,11 @@ cd backend
 ./mvnw install
 ```
 
-4. Configurar el Frontend:
+4. Configurar el Frontend (Angular):
 ```bash
 cd frontend
 npm install
+npm start
 ```
 
 ## Ejecución
@@ -98,17 +103,18 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-3. Iniciar el Frontend:
+3. Iniciar el Frontend (Angular):
 ```bash
 cd frontend
-npm run dev
+npm start
 ```
 
 ## Documentación Adicional
 
-- [Documentación del Edge](./sanchez_polo_drowsy/README.md)
-- [Documentación del Backend](./backend/README.md)
-- [Documentación del Frontend](./frontend/README.md)
+- Documentación del Edge: ./sanchez_polo_drowsy/README.md
+- Documentación del Backend: ./backend/README.md
+- Documentación del Frontend: ./frontend/README.md
+- Documentación General: ./DOCUMENTACION.md
 
 ## Contribución
 
@@ -119,4 +125,4 @@ npm run dev
 
 ## Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
