@@ -74,6 +74,8 @@ Interfaz para operadores y administradores del sistema.
 
 Base URL: `http://localhost:8080`
 
+La especificación completa de la API está disponible en Swagger/OpenAPI (ver sección "Documentación de API (Swagger)").
+
 ### 3.1. Autenticación (`/api/auth`)
 
 - POST `/api/auth/login`
@@ -174,8 +176,11 @@ cd backend
 ```bash
 cd frontend
 npm install
-npm start  # http://localhost:4200
+ng serve --proxy-config proxy.conf.json  # http://localhost:4200
 ```
+
+### 6.4. WebSocket en Frontend (Angular)
+- Servicio `RealtimeService` con `@stomp/stompjs` para conectarse a `ws://localhost:8080/ws` y suscribirse a `/topic/fatigue-events` (ver ejemplo en frontend/README.md).
 
 ## 7. Ejecución
 
@@ -185,7 +190,7 @@ npm start  # http://localhost:4200
 cd backend && ./mvnw spring-boot:run
 
 # Frontend
-cd frontend && npm start
+cd frontend && ng serve --proxy-config proxy.conf.json
 
 # Edge
 cd sanchez_polo_drowsy && source venv/bin/activate && python main.py
@@ -223,6 +228,7 @@ cd backend && ./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
 - JWT con expiración configurable (por defecto 24h)
 - Roles: ADMIN, OPERATOR, VIEWER
 - HTTPS/WSS en producción; CORS restringido
+- El esquema Bearer JWT está documentado en la especificación OpenAPI y puede probarse desde Swagger UI usando el botón "Authorize".
 
 ## 10. Observabilidad
 
@@ -235,6 +241,25 @@ cd backend && ./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
 - Docker por componente; Docker Compose para desarrollo
 - Kubernetes para escalado en producción
 - CI/CD con GitHub Actions, pruebas unitarias/integración y quality gates (SonarQube)
+
+## 12. Documentación de API (Swagger)
+
+- UI: http://localhost:8080/swagger-ui/index.html
+- JSON: http://localhost:8080/v3/api-docs
+- YAML: http://localhost:8080/v3/api-docs.yaml
+
+Guía rápida JWT en Swagger UI:
+- Pulsar "Authorize"
+- Seleccionar esquema "Bearer"
+- Ingresar: `Bearer <token>`
+- Probar endpoints protegidos
+
+## 13. Documentación Específica
+- README principal: ./README.md
+- Documentación general: ./DOCUMENTACION.md
+- Backend: ./backend/README.md
+- Frontend: ./frontend/README.md
+- Edge (Python): ./sanchez_polo_drowsy/README.md
 
 ---
 
