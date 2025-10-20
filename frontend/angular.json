@@ -10,6 +10,10 @@
           "style": "scss",
           "skipTests": true,
           "flat": false
+        },
+        "@schematics/angular:service": {
+          "skipTests": true,
+          "type": "service"
         }
       },
       "root": "",
