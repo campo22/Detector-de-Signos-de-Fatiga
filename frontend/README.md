@@ -1,26 +1,75 @@
 # Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.2.
+This project was generated using Angular CLI 20.3.2.
 
 ## Development server
 
-To start a local development server, run:
+To start a local development server:
 
 ```bash
-ng serve
+ng serve --proxy-config proxy.conf.json
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Then open `http://localhost:4200/`.
+
+## WebSocket (STOMP) quick start
+
+Example service snippet to subscribe to fatigue events in real time:
+
+```ts
+// app/core/services/realtime.service.ts
+import { Injectable, inject } from '@angular/core';
+import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
+
+@Injectable({ providedIn: 'root' })
+export class RealtimeService {
+  private client = new Client({ brokerURL: 'ws://localhost:8080/ws' });
+  private sub?: StompSubscription;
+
+  connect(onEvent: (msg: any) => void) {
+    this.client.onConnect = () => {
+      this.sub = this.client.subscribe('/topic/fatigue-events', (message: IMessage) => {
+        onEvent(JSON.parse(message.body));
+      });
+    };
+    this.client.activate();
+  }
+
+  disconnect() {
+    this.sub?.unsubscribe();
+    this.client.deactivate();
+  }
+}
+```
+
+Use it from a component:
+
+```ts
+// app/features/dashboard/dashboard.component.ts
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RealtimeService } from '../../core/services/realtime.service';
+
+@Component({
+  selector: 'app-dashboard',
+  template: `<div>Eventos: {{ events.length }}</div>`
+})
+export class DashboardComponent implements OnInit, OnDestroy {
+  events: any[] = [];
+  constructor(private rt: RealtimeService) {}
+  ngOnInit() { this.rt.connect(e => this.events = [e, ...this.events]); }
+  ngOnDestroy() { this.rt.disconnect(); }
+}
+```
 
 ## Code scaffolding
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Generate a new component:
 
 ```bash
 ng generate component component-name
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+For a list of schematics:
 
 ```bash
 ng generate --help
@@ -28,32 +77,18 @@ ng generate --help
 
 ## Building
 
-To build the project run:
-
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
 ## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+## End-to-end tests
 
 ```bash
 ng e2e
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
