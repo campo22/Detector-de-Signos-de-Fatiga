@@ -1,4 +1,4 @@
-import { FatigueType } from './enums';
+import { FatigueLevel, FatigueType } from './enums';
 
 /**
  * Representa el objeto de filtros para las consultas de analítica.
@@ -8,6 +8,7 @@ export interface AnalyticsFilterRequest {
   endDate?: string;   // Formato YYYY-MM-DD
   driverId?: string;
   vehicleId?: string;
+  fatigueLevel?: FatigueLevel;
 }
 
 /**

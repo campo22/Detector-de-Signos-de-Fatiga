@@ -19,7 +19,7 @@ export class DashboardFilter {
   public readonly filter$ = this.filters.asReadonly();
 
   constructor() {
-    this.updateFiltersWithDateRange('last30days');
+    this.updateFiltersWithDateRange('last7days');
 
   }
 

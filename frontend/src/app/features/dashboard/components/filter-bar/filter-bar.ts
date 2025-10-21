@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { DashboardFilter, DateRangeOption } from '../../services/dashboard-filter.service';
 import { CommonModule } from '@angular/common';
+import { AnalyticsFilterRequest } from '../../../../core/models/analytics.models';
 
 @Component({
   selector: 'app-filter-bar',
@@ -20,7 +21,8 @@ export class FilterBar {
   // 1. Creamos un formulario para manejar los controles de la barra de filtros.
   // El valor inicial 'last30days' coincide con el filtro por defecto en nuestro servicio.
   filterForm = this.fb.group({
-    dateRange: ['last30days']
+    startDate: [this.getDefaultStartDate()],
+    endDate: [this.getCurrentDate()]
   });
 
   /**
@@ -28,12 +30,25 @@ export class FilterBar {
    */
   applyFilters(): void {
     // 2. Leemos el valor seleccionado en el selector de rango de fechas.
-    const selectedRange = this.filterForm.value.dateRange as DateRangeOption;
+    const filtersValue = this.filterForm.value;
+    const filter: AnalyticsFilterRequest = {
+      startDate: filtersValue.startDate || undefined,
+      endDate: filtersValue.endDate || undefined,
+    };
 
-    if (selectedRange) {
-      // 3. Llamamos al servicio para que actualice los filtros globales.
-      this.filterService.updateFiltersWithDateRange(selectedRange);
-    }
+    // 3. Actualizamos los filtros en nuestro servicio.
+    this.filterService.updateFilters(filter);
+  }
+
+
+  private getCurrentDate(): string {
+    return new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+  }
+
+  private getDefaultStartDate(): string {
+    const date = new Date();
+    date.setDate(date.getDate() - 29); // Hace 30 días (incluyendo hoy)
+    return date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
   }
 
 }

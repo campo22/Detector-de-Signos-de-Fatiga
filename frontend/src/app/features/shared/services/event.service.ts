@@ -9,8 +9,8 @@ import { Observable } from 'rxjs';
 })
 export class EventService {
 
-  private http = inject(HttpClient); // Inyección moderna de HttpClient
-  private apiUrl = `${environment.apiUrl}/events`; // URL base para los endpoints de eventos
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/events`;
 
   /**
    * Busca y pagina eventos históricos desde el backend, aplicando filtros y ordenamiento.
@@ -22,11 +22,11 @@ export class EventService {
    * @returns Un Observable que emite una respuesta paginada (`Page<FatigueEvent>`).
    */
   searchEvents(
-    filters: EventFilterRequest = {}, // Objeto vacío por defecto si no hay filtros
-    page: number = 0,               // Página 0 por defecto
-    size: number = 10,              // 10 items por página por defecto
-    sortColumn: string = 'timestamp',      // Ordenar por fecha por defecto
-    sortDirection: 'asc' | 'desc' = 'desc' // Orden descendente por defecto (más recientes primero)
+    filters: EventFilterRequest = {},
+    page: number = 0,
+    size: number = 10,
+    sortColumn: string = 'timestamp',
+    sortDirection: 'asc' | 'desc' = 'desc'
   ): Observable<Page<FatigueEvent>> {
 
     // 1. Crear HttpParams para construir los query parameters de la URL

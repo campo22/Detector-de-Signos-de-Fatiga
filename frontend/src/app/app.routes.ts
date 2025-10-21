@@ -43,10 +43,12 @@ export const routes: Routes = [
         canActivate: [roleGuard], // Autorización por rol
         data: { requiredRole: [Role.GESTOR, Role.ADMINISTRADOR] } // Permitir GESTOR y ADMINISTRADOR
       },
-      // {
-      //   path: 'analytics/reports',
-      //   loadComponent: () => import('./features/analytics/reports/reports').then(m => m.Reports)
-      // },
+      {
+        path: 'reports', // La URL será /reports
+        loadComponent: () => import('./features/analytics/reports/reports').then(m => m.Reports),
+        canActivate: [roleGuard], // Proteger con RoleGuard
+        data: { requiredRole: [Role.ADMINISTRADOR] } // Requerir rol ADMINISTRADOR
+      },
       {
         path: 'management/drivers',
         loadComponent: () => import('./features/management/drivers/drivers').then(m => m.Drivers)
