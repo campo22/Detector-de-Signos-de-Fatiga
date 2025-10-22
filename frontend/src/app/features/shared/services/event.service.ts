@@ -52,6 +52,15 @@ export class EventService {
     if (filters.fatigueLevel) {
       params = params.set('fatigueLevel', filters.fatigueLevel); // Valor del enum
     }
+    if (filters.driverName) {
+      params = params.set('driverName', filters.driverName);
+    }
+    if (filters.vehiclePlate) {
+      params = params.set('vehiclePlate', filters.vehiclePlate);
+    }
+    if (filters.fatigueType) {
+      params = params.set('fatigueType', filters.fatigueType);
+    }
 
     // 3. Realizar la petición GET a la URL de búsqueda
     //    Especificamos el tipo de respuesta esperado: Page<FatigueEvent>

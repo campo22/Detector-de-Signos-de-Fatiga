@@ -12,6 +12,8 @@ import com.safetrack.repository.specification.DriverSpecification;
 import com.safetrack.service.DriverService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,12 +62,11 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DriverResponse> getAllDrivers(DriverFilterRequest filter) {
+    public Page<DriverResponse> getAllDrivers(DriverFilterRequest filter, Pageable pageable) {
         log.info("Obteniendo la lista de todos los conductores con filtros: {}", filter);
         Specification<Driver> spec= driverSpecification.getSpecification( filter);
-        return  driverRepository.findAll(spec).stream()
-                .map(driverMapper::toDriverResponse)
-                .collect(Collectors.toList());
+        Page<Driver> driverPage = driverRepository.findAll(spec, pageable);
+        return driverPage.map( driverMapper::toDriverResponse);
     }
 
     @Override

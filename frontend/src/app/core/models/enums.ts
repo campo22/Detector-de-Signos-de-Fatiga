@@ -6,7 +6,7 @@
 export enum FatigueLevel {
   NINGUNO = 'NINGUNO',
   BAJO = 'BAJO', // Nivel de fatiga bajo
-  MEDIO = 'MEDIUM',
+  MEDIO = 'MEDIO',
   ALTO = 'ALTO',
 }
 

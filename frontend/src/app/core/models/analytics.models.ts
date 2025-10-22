@@ -9,6 +9,9 @@ export interface AnalyticsFilterRequest {
   driverId?: string;
   vehicleId?: string;
   fatigueLevel?: FatigueLevel;
+  fatigueType?: FatigueType;
+  driverName?: string;
+  vehiclePlate?: string;
 }
 
 /**

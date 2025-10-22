@@ -3,6 +3,8 @@ package com.safetrack.service;
 import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.dto.request.DriverRequest;
 import com.safetrack.domain.dto.response.DriverResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +30,7 @@ public interface DriverService {
      * @return Lista de DTOs de todos los conductores.
      * @param filter DTO con los criterios de filtro.
      */
-    List<DriverResponse> getAllDrivers( DriverFilterRequest filter);
+    Page<DriverResponse> getAllDrivers(DriverFilterRequest filter, Pageable pageable);
 
     /**
      * Actualiza la información de un conductor existente.
