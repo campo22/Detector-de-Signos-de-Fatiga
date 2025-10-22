@@ -27,11 +27,24 @@ public class VehicleEvent {
     /**
      * El ID del conductor asociado al evento.
      */
+    @Column(name = "driver_id")
     private UUID driverId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "driver_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Driver driver;
+
     /**
      * El ID del vehículo en el que ocurrió el evento.
      */
+    @Column(name = "vehicle_id")
     private UUID vehicleId;
+
+    // el Fetch.LAZY es para que no se cargue el vehículo al cargar el evento
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Vehicle vehicle;
+
     /**
      * La marca de tiempo del evento.
      */

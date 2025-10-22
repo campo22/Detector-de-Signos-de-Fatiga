@@ -28,6 +28,9 @@ export interface EventFilterRequest {
   driverId?: string;
   vehicleId?: string;
   fatigueLevel?: FatigueLevel;
+  driverName?: string;
+  vehiclePlate?: string;
+  fatigueType?: FatigueType;
 }
 
 

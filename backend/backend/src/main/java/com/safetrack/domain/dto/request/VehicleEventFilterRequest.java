@@ -1,6 +1,7 @@
 package com.safetrack.domain.dto.request;
 
 import com.safetrack.domain.enums.FatigueLevel;
+import com.safetrack.domain.enums.FatigueType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -25,6 +26,9 @@ public record VehicleEventFilterRequest(
 
         UUID driverId,
         UUID vehicleId,
-        FatigueLevel fatigueLevel
+        FatigueLevel fatigueLevel,
+        FatigueType fatigueType,
+        String driverName,
+        String vehiclePlate
 ) {
 }
