@@ -37,6 +37,7 @@ export class ReportFiltersSidebar implements OnInit {
 
 
   ngOnInit(): void {
+    // 3. Inicializar la lista de tipos de fatiga
     this.fatigueTypes = Object.entries(FatigueType) as [string, string][];
   }
 
@@ -46,6 +47,8 @@ export class ReportFiltersSidebar implements OnInit {
 
     const filters: Partial<AnalyticsFilterRequest> = Object.entries(formValues)
       .reduce((acc, [key, value]) => {
+        // Verificar si el valor no es null o una cadena vacia
+        // y agregarlo al objeto de filtros si es necesario
         if (value !== null && value !== '') {
           acc[key as keyof AnalyticsFilterRequest] = value as any;
         }
