@@ -3,11 +3,14 @@ package com.safetrack.service.Impl;
 import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.dto.request.DriverRequest;
 import com.safetrack.domain.dto.response.DriverResponse;
+import com.safetrack.domain.dto.response.VehicleResponse;
 import com.safetrack.domain.entity.Driver;
 import com.safetrack.exception.DuplicateResourceException;
 import com.safetrack.exception.ResourceNotFoundException;
 import com.safetrack.mapper.DriverMapper;
+import com.safetrack.mapper.VehicleMapper;
 import com.safetrack.repository.DriverRepository;
+import com.safetrack.repository.VehicleRepository;
 import com.safetrack.repository.specification.DriverSpecification;
 import com.safetrack.service.DriverService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,8 @@ public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
     private final DriverMapper driverMapper;
     private final DriverSpecification driverSpecification;
+    private final VehicleRepository vehicleRepository;
+    private final VehicleMapper vehicleMapper;
 
     @Override
     @Transactional
@@ -98,5 +103,17 @@ public class DriverServiceImpl implements DriverService {
         }
         driverRepository.deleteById(id);
         log.info("Conductor con ID: {} eliminado exitosamente", id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VehicleResponse> getAssignedVehicles(UUID driverId) {
+        log.info("Buscando vehículos asignados al conductor con ID: {}", driverId);
+        if (!driverRepository.existsById(driverId)) {
+            throw new ResourceNotFoundException("Conductor no encontrado con ID: " + driverId);
+        }
+        return vehicleRepository.findAllByDriverId(driverId).stream()
+                .map(vehicleMapper::toVehicleResponse)
+                .collect(Collectors.toList());
     }
 }

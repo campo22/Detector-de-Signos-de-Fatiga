@@ -47,6 +47,10 @@ export class DriverService {
     if (filters.activo !== undefined && filters.activo !== null) {
       params = params.set('activo', filters.activo.toString());
     }
+    // Manejo cuidadoso para el booleano 'asignado'
+    if (filters.asignado !== undefined && filters.asignado !== null) {
+      params = params.set('asignado', filters.asignado.toString());
+    }
 
     // Realiza la petición GET esperando una Page<Driver>
     return this.http.get<Page<Driver>>(this.apiUrl, { params });

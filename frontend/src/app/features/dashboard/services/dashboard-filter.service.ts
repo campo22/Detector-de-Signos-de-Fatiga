@@ -34,10 +34,23 @@ export class DashboardFilter {
    * @param newFilters Objeto con los nuevos filtros a aplicar.
    */
   public updateFilters(newFilters: Partial<AnalyticsFilterRequest>): void {
-    this.filters.set({
-      ...initialState,
-      ...newFilters
-    });
+    // Obtenemos el estado actual
+    const currentFilters = this.filters();
+
+    // Creamos el estado actualizado, priorizando las nuevas fechas si existen,
+    // o manteniendo las actuales si no. Sobrescribimos el resto de filtros.
+    const updatedFilters: AnalyticsFilterRequest = {
+      startDate: newFilters.startDate !== undefined ? newFilters.startDate : currentFilters.startDate,
+      endDate: newFilters.endDate !== undefined ? newFilters.endDate : currentFilters.endDate,
+      driverName: newFilters.driverName,
+      vehiclePlate: newFilters.vehiclePlate,
+      fatigueLevel: newFilters.fatigueLevel,
+      fatigueType: newFilters.fatigueType,
+      driverId: newFilters.driverId,
+      vehicleId: newFilters.vehicleId
+    };
+
+    this.filters.set(updatedFilters);
     console.log('Filtros globales actualizados:', this.filters());
   }
 

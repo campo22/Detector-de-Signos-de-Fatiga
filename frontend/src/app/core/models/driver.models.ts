@@ -25,4 +25,5 @@ export interface DriverFilterRequest {
   nombre?: string;
   licencia?: string;
   activo?: boolean;
+  asignado?: boolean;
 }

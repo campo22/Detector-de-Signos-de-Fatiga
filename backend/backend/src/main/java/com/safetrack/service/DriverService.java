@@ -3,6 +3,7 @@ package com.safetrack.service;
 import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.dto.request.DriverRequest;
 import com.safetrack.domain.dto.response.DriverResponse;
+import com.safetrack.domain.dto.response.VehicleResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -45,4 +46,11 @@ public interface DriverService {
      * @param id El UUID del conductor a eliminar.
      */
     void deleteDriver(UUID id);
+
+    /**
+     * Obtiene la lista de vehículos asignados a un conductor específico.
+     * @param driverId El UUID del conductor.
+     * @return Lista de DTOs de vehículos asignados.
+     */
+    List<VehicleResponse> getAssignedVehicles(UUID driverId);
 }

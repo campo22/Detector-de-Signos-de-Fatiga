@@ -2,7 +2,9 @@ package com.safetrack.repository.specification;
 
 import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.entity.Driver;
+import com.safetrack.domain.entity.Vehicle;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Subquery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -26,12 +28,8 @@ public class DriverSpecification {
      *               - nombre: Búsqueda parcial e insensible a mayúsculas/minúsculas
      *               - licencia: Búsqueda exacta del número de licencia
      *               - activo: Estado del conductor (true/false)
+     *               - asignado: Si el conductor tiene vehículos asignados (true/false)
      * @return Specification<Driver> que puede ser utilizada para filtrar conductores en consultas JPA
-     * <p>
-     * Ejemplos de consultas SQL generadas:
-     * - Por nombre: SELECT * FROM drivers WHERE LOWER(nombre) LIKE '%juan%'
-     * - Por licencia: SELECT * FROM drivers WHERE licencia = '12345678'
-     * - Por estado: SELECT * FROM drivers WHERE activo = true
      */
     public Specification<Driver> getSpecification(DriverFilterRequest filter) {
 
@@ -61,6 +59,19 @@ public class DriverSpecification {
                         root.get("activo"),
                         filter.activo()
                 ));
+            }
+
+            // Filtro por asignación de vehículo
+            if (filter.asignado() != null) {
+                Subquery<Long> subquery = query.subquery(Long.class);
+                subquery.select(criteriaBuilder.literal(1L));
+                subquery.where(criteriaBuilder.equal(subquery.from(Vehicle.class).get("driver"), root));
+
+                if (filter.asignado()) {
+                    predicates.add(criteriaBuilder.exists(subquery)); // Conductores con al menos un vehículo
+                } else {
+                    predicates.add(criteriaBuilder.not(criteriaBuilder.exists(subquery))); // Conductores sin vehículos
+                }
             }
 
             // Combina todos los predicados usando AND

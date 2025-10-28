@@ -1,56 +1,76 @@
+<!-- Contenedor principal con estilos de tarjeta para la tabla de conductores -->
 <div class="bg-card rounded-xl shadow-lg overflow-hidden border border-border flex flex-col h-full">
+  <!-- Contenedor que permite el desplazamiento horizontal de la tabla si el contenido es demasiado ancho -->
   <div class="overflow-x-auto flex-1">
+    <!-- Tabla principal que muestra la lista de conductores -->
     <table class="w-full text-sm text-left text-muted-foreground">
+      <!-- Encabezado de la tabla, se mantiene fijo en la parte superior al hacer scroll -->
       <thead
         class="text-xs text-muted-foreground uppercase bg-secondary/30 backdrop-blur-sm sticky top-0 z-10"
       >
         <tr>
+          <!-- Columna: Nombre. Permite ordenar los datos al hacer clic. -->
           <th
             scope="col"
             class="px-6 py-3 cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('nombre')"
           >
-            Nombre @if(sortState().column === 'nombre'){
+            Nombre
+            <!-- Muestra un ícono de flecha para indicar el orden si esta columna está activa -->
+            @if(sortState().column === 'nombre'){
             <span class="material-symbols-outlined text-sm align-middle ml-1">
               {{ sortState().direction === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
             </span>
             }
           </th>
+          <!-- Columna: Licencia. Permite ordenar los datos al hacer clic. -->
           <th
             scope="col"
             class="px-6 py-3 cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('licencia')"
           >
-            Licencia @if(sortState().column === 'licencia'){
+            Licencia
+            <!-- Muestra un ícono de flecha para indicar el orden si esta columna está activa -->
+            @if(sortState().column === 'licencia'){
             <span class="material-symbols-outlined text-sm align-middle ml-1">
               {{ sortState().direction === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
             </span>
             }
           </th>
+          <!-- Columna: Estado. Permite ordenar los datos al hacer clic. -->
           <th
             scope="col"
             class="px-6 py-3 cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('activo')"
           >
-            Estado @if(sortState().column === 'activo'){
+            Estado
+            <!-- Muestra un ícono de flecha para indicar el orden si esta columna está activa -->
+            @if(sortState().column === 'activo'){
             <span class="material-symbols-outlined text-sm align-middle ml-1">
               {{ sortState().direction === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
             </span>
             }
           </th>
-          <th scope="col" class="px-6 py-3">Vehículo Asignado</th>
+          <!-- Columna: Vehículo Asignado -->
+          <!-- <th scope="col" class="px-6 py-3">Vehículo Asignado</th> -->
+          <!-- Columna: Acciones -->
           <th scope="col" class="px-6 py-3 text-center">Acciones</th>
         </tr>
       </thead>
 
+      <!-- Cuerpo de la tabla: se muestra solo si hay datos de conductores disponibles -->
       @if (driversPage(); as page) {
       <tbody>
+        <!-- Itera sobre cada conductor en la página actual para crear una fila -->
         @for (driver of page.content; track driver.id) {
         <tr class="bg-card border-b border-border hover:bg-muted/30 transition-colors">
+          <!-- Celda: Nombre del conductor -->
           <td class="px-6 py-4 font-medium text-foreground whitespace-nowrap">
             {{ driver.nombre }}
           </td>
+          <!-- Celda: Licencia del conductor -->
           <td class="px-6 py-4">{{ driver.licencia }}</td>
+          <!-- Celda: Estado del conductor (Activo/Inactivo) -->
           <td class="px-6 py-4">
             <span
               class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
@@ -60,16 +80,21 @@
                   : 'status-inactive bg-destructive/10 text-destructive'
               "
             >
+              <!-- Indicador visual de estado (punto de color) -->
               <span
                 class="w-2 h-2 mr-1.5 rounded-full"
                 [ngClass]="driver.activo ? 'bg-success' : 'bg-destructive'"
               ></span>
+              <!-- Texto del estado -->
               {{ driver.activo ? 'Activo' : 'Inactivo' }}
             </span>
           </td>
-          <td class="px-6 py-4">N/A</td>
+          <!-- Celda: Vehículo Asignado (actualmente un valor estático) -->
+          <!-- <td class="px-6 py-4">N/A</td> -->
+          <!-- Celda: Botones de acción -->
           <td class="px-6 py-4 text-center">
             <div class="flex items-center justify-center gap-2">
+              <!-- Botón para editar el conductor -->
               <button
                 (click)="editDriver(driver.id)"
                 title="Editar"
@@ -77,6 +102,7 @@
               >
                 <span class="material-symbols-outlined">edit</span>
               </button>
+              <!-- Botón para ver los detalles del conductor -->
               <button
                 (click)="viewDriverDetails(driver.id)"
                 title="Ver Detalles"
@@ -84,6 +110,7 @@
               >
                 <span class="material-symbols-outlined">visibility</span>
               </button>
+              <!-- Botón para eliminar el conductor -->
               <button
                 (click)="deleteDriver(driver.id, driver.nombre)"
                 title="Eliminar"
@@ -99,12 +126,15 @@
       }
     </table>
 
+    <!-- Mensaje que se muestra si no se encontraron conductores después de aplicar filtros -->
     @if (driversPage() !== null && driversPage()?.content?.length === 0) {
     <div class="text-center text-muted-foreground p-10">
       <span class="material-symbols-outlined text-4xl mb-2">person_search</span>
       <p>No se encontraron conductores con los filtros aplicados.</p>
     </div>
-    } @if (driversPage() === null) {
+    }
+    <!-- Indicador de carga que se muestra mientras se obtienen los datos -->
+    @if (driversPage() === null) {
     <div class="flex items-center justify-center text-muted-foreground p-10">
       <span class="material-symbols-outlined text-4xl animate-spin mr-2">progress_activity</span>
       Cargando conductores...
@@ -112,17 +142,21 @@
     }
   </div>
 
+  <!-- Navegación de paginación: se muestra solo si hay datos de conductores -->
   @if (driversPage(); as page) {
   <nav
     aria-label="Table navigation"
     class="flex flex-col sm:flex-row items-center justify-between p-4 border-t border-border gap-3"
   >
+    <!-- Muestra el recuento de elementos actuales y totales -->
     <span class="text-sm font-normal text-muted-foreground">
       Mostrando <span class="font-semibold text-foreground">{{ page.numberOfElements }}</span> de
       <span class="font-semibold text-foreground">{{ page.totalElements }}</span>
     </span>
+    <!-- Lista de controles de paginación -->
     <ul class="inline-flex items-center -space-x-px text-sm h-8">
       <li>
+        <!-- Botón para ir a la página anterior -->
         <button
           (click)="previousPage()"
           [disabled]="page.first"
@@ -131,10 +165,12 @@
           <span class="material-symbols-outlined text-base">chevron_left</span>
         </button>
       </li>
+      <!-- Muestra el número de página actual y el total de páginas -->
       <li class="px-3 h-8 flex items-center text-muted-foreground bg-card border-y border-border">
         Pág {{ page.number + 1 }} de {{ page.totalPages }}
       </li>
       <li>
+        <!-- Botón para ir a la página siguiente -->
         <button
           (click)="nextPage()"
           [disabled]="page.last"

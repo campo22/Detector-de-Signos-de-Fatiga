@@ -29,7 +29,7 @@ public class Driver {
 
     private LocalDate fechaNacimiento;
 
-    @Builder.Default
+    @Builder.Default // Activo por defecto
     private boolean activo = true;
 
     // Podríamos añadir más campos como 'empresa', 'fechaContratacion', etc.

@@ -3,6 +3,7 @@ package com.safetrack.controller;
 import com.safetrack.domain.dto.request.DriverFilterRequest;
 import com.safetrack.domain.dto.request.DriverRequest;
 import com.safetrack.domain.dto.response.DriverResponse;
+import com.safetrack.domain.dto.response.VehicleResponse;
 import com.safetrack.service.DriverService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -38,7 +39,7 @@ public class DriverController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')") // Roles que pueden ver detalles
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'GESTOR', 'AUDITOR')") // Roles que pueden ver detalles
     @Operation(summary = "Obtener un conductor por su ID")
     public ResponseEntity<DriverResponse> getDriverById(@PathVariable UUID id) {
         return ResponseEntity.ok(driverService.getDriverById(id));
@@ -71,5 +72,10 @@ public class DriverController {
         return ResponseEntity.noContent().build();
     }
 
-
+    @GetMapping("/{driverId}/vehicles")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')")
+    @Operation(summary = "Obtener los vehículos asignados a un conductor")
+    public ResponseEntity<List<VehicleResponse>> getAssignedVehicles(@PathVariable UUID driverId) {
+        return ResponseEntity.ok(driverService.getAssignedVehicles(driverId));
+    }
 }

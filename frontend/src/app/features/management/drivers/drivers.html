@@ -1,1 +1,63 @@
-<app-drivers-table></app-drivers-table>
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+  <h2 class="text-2xl font-bold text-foreground">Gestión de Conductores</h2>
+  <div class="flex items-center gap-4">
+    <button
+      class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-md border border-primary/20 hover:bg-primary/20 transition-colors"
+    >
+      <span class="material-symbols-outlined text-base">ios_share</span>
+      <span>Exportar</span>
+    </button>
+    <button
+      class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
+    >
+      <span class="material-symbols-outlined text-base">add</span>
+      <span>Añadir Conductor</span>
+    </button>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+  <div class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6">
+    <div
+      class="p-3 bg-primary/10 rounded-full flex items-center justify-center text-primary shadow-glow-primary"
+    >
+      <span class="material-symbols-outlined text-3xl">group</span>
+    </div>
+    <div>
+      <p class="text-sm text-muted-foreground">Conductores Totales</p>
+      <p class="text-3xl font-bold text-foreground">{{ totalDrivers() }}</p>
+    </div>
+  </div>
+  <div class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6">
+    <div
+      class="p-3 bg-success/10 rounded-full flex items-center justify-center text-success shadow-glow-success"
+    >
+      <span class="material-symbols-outlined text-3xl">person_check</span>
+    </div>
+    <div>
+      <p class="text-sm text-muted-foreground">Conductores Activos</p>
+      <p class="text-3xl font-bold text-foreground">{{ activeDrivers() }}</p>
+    </div>
+  </div>
+  <div class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6">
+    <div
+      class="p-3 bg-destructive/10 rounded-full flex items-center justify-center text-destructive shadow-glow-destructive"
+    >
+      <span class="material-symbols-outlined text-3xl">person_off</span>
+    </div>
+    <div>
+      <p class="text-sm text-muted-foreground">Conductores Inactivos</p>
+      <p class="text-3xl font-bold text-foreground">{{ inactiveDrivers() }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="bg-card rounded-lg shadow-lg border border-border flex flex-col">
+  <div class="p-6 border-b border-border">
+    <h3 class="text-lg font-semibold text-foreground mb-4">Lista de Conductores</h3>
+    <app-driver-filters></app-driver-filters>
+  </div>
+
+  <app-drivers-table></app-drivers-table>
+</div>
+```

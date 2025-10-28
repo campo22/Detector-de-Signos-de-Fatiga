@@ -1,0 +1,73 @@
+<form
+  class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end"
+  [formGroup]="filterForm"
+>
+  <div>
+    <label for="filter-name" class="block text-sm font-medium text-muted-foreground mb-1">
+      Buscar por nombre...
+    </label>
+    <input
+      type="text"
+      id="filter-name"
+      formControlName="nombre"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
+      placeholder="Ej. John Doe"
+    />
+  </div>
+
+  <div>
+    <label for="filter-license" class="block text-sm font-medium text-muted-foreground mb-1">
+      Buscar por licencia...
+    </label>
+    <input
+      type="text"
+      id="filter-license"
+      formControlName="licencia"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
+      placeholder="Ej. A1234567"
+    />
+  </div>
+
+  <div>
+    <label for="filter-status" class="block text-sm font-medium text-muted-foreground mb-1">
+      Estado
+    </label>
+    <select
+      id="filter-status"
+      formControlName="activo"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary"
+    >
+      <option [ngValue]="null">Todos</option>
+      <option [ngValue]="true">Activo</option>
+      <option [ngValue]="false">Inactivo</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="filter-assignment" class="block text-sm font-medium text-muted-foreground mb-1">
+      Asignación
+    </label>
+    <select
+      id="filter-assignment"
+      formControlName="asignado"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary"
+    >
+      <option [ngValue]="null">Todos</option>
+      <option [ngValue]="true">Asignado</option>
+      <option [ngValue]="false">No Asignado</option>
+    </select>
+  </div>
+
+  <div>
+    <button
+      type="button"
+      (click)="clearFilters()"
+      [disabled]="!hasActiveFilters()"
+      class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-secondary border border-border text-muted-foreground rounded-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      title="Limpiar filtros aplicados"
+    >
+      <span class="material-symbols-outlined text-base">filter_alt_off</span>
+      <span>Limpiar</span>
+    </button>
+  </div>
+</form>

@@ -4,6 +4,11 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Driver, DriverFilterRequest, DriverRequest } from '../../core/models/driver.models';
 import { Page } from '../../core/models/event.models';
+import { Vehicle } from '../../core/models/vehicle.models';
+
+
+
+
 
 
 @Injectable({
@@ -38,6 +43,9 @@ export class DriverService {
     if (filters.activo !== undefined && filters.activo !== null) {
       params = params.set('activo', filters.activo.toString());
     }
+    if (filters.asignado !== undefined && filters.asignado !== null) {
+      params = params.set('asignado', filters.asignado.toString());
+    }
 
     return this.http.get<Page<Driver>>(`${this.apiUrl}`, { params });
   }
@@ -70,5 +78,15 @@ export class DriverService {
   deleteDriver(id: string): Observable<void> {
     // DELETE no suele devolver contenido, por eso Observable<void>
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // --- NUEVO MÉTODO PARA OBTENER VEHÍCULOS ASIGNADOS ---
+  /**
+   * Obtiene la lista de vehículos asignados a un conductor específico.
+   * @param driverId El ID del conductor.
+   * @returns Observable con un array de objetos Vehicle (necesitarás definir Vehicle).
+   */
+  getAssignedVehicles(driverId: string): Observable<Vehicle[]> {
+    return this.http.get<Vehicle[]>(`${this.apiUrl}/${driverId}/vehicles`);
   }
 }
