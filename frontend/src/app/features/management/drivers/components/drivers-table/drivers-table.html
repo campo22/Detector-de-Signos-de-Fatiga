@@ -1,7 +1,9 @@
 <!-- Contenedor principal con estilos de tarjeta para la tabla de conductores -->
-<div class="bg-card rounded-xl shadow-lg overflow-hidden border border-border flex flex-col h-full">
+<div
+  class="bg-card rounded-xl shadow-2xl overflow-hidden border border-border flex flex-col h-full"
+>
   <!-- Contenedor que permite el desplazamiento horizontal de la tabla si el contenido es demasiado ancho -->
-  <div class="overflow-x-auto flex-1">
+  <div class="overflow-x-auto flex-1 custom-scrollbar">
     <!-- Tabla principal que muestra la lista de conductores -->
     <table class="w-full text-sm text-left text-muted-foreground">
       <!-- Encabezado de la tabla, se mantiene fijo en la parte superior al hacer scroll -->
@@ -62,8 +64,11 @@
       @if (driversPage(); as page) {
       <tbody>
         <!-- Itera sobre cada conductor en la página actual para crear una fila -->
-        @for (driver of page.content; track driver.id) {
-        <tr class="bg-card border-b border-border hover:bg-muted/30 transition-colors">
+        @for (driver of page.content; track driver.id; let i = $index) {
+        <tr
+          class="bg-card border-b border-border even:bg-secondary/20 hover:bg-muted/40 transition-colors driver-row"
+          [style.animation-delay]="i * 40 + 'ms'"
+        >
           <!-- Celda: Nombre del conductor -->
           <td class="px-6 py-4 font-medium text-foreground whitespace-nowrap">
             {{ driver.nombre }}
@@ -92,32 +97,53 @@
           <!-- Celda: Vehículo Asignado (actualmente un valor estático) -->
           <!-- <td class="px-6 py-4">N/A</td> -->
           <!-- Celda: Botones de acción -->
-          <td class="px-6 py-4 text-center">
-            <div class="flex items-center justify-center gap-2">
+          <td class="px-6 py-4 text-center" style="overflow: visible">
+            <div class="flex items-center justify-center gap-4">
               <!-- Botón para editar el conductor -->
-              <button
-                (click)="editDriver(driver.id)"
-                title="Editar"
-                class="p-1 text-muted-foreground hover:text-primary transition-colors"
-              >
-                <span class="material-symbols-outlined">edit</span>
-              </button>
+              <div class="group relative flex items-center">
+                <button
+                  (click)="onEditDriver(driver)"
+                  title="Editar"
+                  class="p-3 rounded-full text-primary hover:bg-primary/10 transition-all duration-200"
+                >
+                  <span class="material-symbols-outlined text-xl">edit</span>
+                </button>
+                <div
+                  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nowrap z-50"
+                >
+                  Editar Conductor
+                </div>
+              </div>
               <!-- Botón para ver los detalles del conductor -->
-              <button
-                (click)="viewDriverDetails(driver.id)"
-                title="Ver Detalles"
-                class="p-1 text-muted-foreground hover:text-primary transition-colors"
-              >
-                <span class="material-symbols-outlined">visibility</span>
-              </button>
+              <div class="group relative flex items-center">
+                <button
+                  (click)="viewDriverDetails(driver.id)"
+                  title="Ver Detalles"
+                  class="p-3 rounded-full text-success hover:bg-success/10 transition-all duration-200"
+                >
+                  <span class="material-symbols-outlined text-xl">visibility</span>
+                </button>
+                <div
+                  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nowrap z-50"
+                >
+                  Ver Detalles
+                </div>
+              </div>
               <!-- Botón para eliminar el conductor -->
-              <button
-                (click)="deleteDriver(driver.id, driver.nombre)"
-                title="Eliminar"
-                class="p-1 text-muted-foreground hover:text-red-500 transition-colors"
-              >
-                <span class="material-symbols-outlined">delete</span>
-              </button>
+              <div class="group relative flex items-center">
+                <button
+                  (click)="onDeleteDriver(driver)"
+                  title=" Eliminar"
+                  class="p-3 rounded-full text-destructive hover:bg-destructive/10 transition-all duration-200"
+                >
+                  <span class="material-symbols-outlined text-xl">delete</span>
+                </button>
+                <div
+                  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nowrap z-50"
+                >
+                  Eliminar
+                </div>
+              </div>
             </div>
           </td>
         </tr>
@@ -128,21 +154,26 @@
 
     <!-- Mensaje que se muestra si no se encontraron conductores después de aplicar filtros -->
     @if (driversPage() !== null && driversPage()?.content?.length === 0) {
-    <div class="text-center text-muted-foreground p-10">
-      <span class="material-symbols-outlined text-4xl mb-2">person_search</span>
-      <p>No se encontraron conductores con los filtros aplicados.</p>
+    <div class="text-center text-muted-foreground p-20">
+      <div class="flex flex-col items-center justify-center gap-4">
+        <span class="material-symbols-outlined text-6xl text-primary">person_search</span>
+        <h3 class="text-xl font-semibold">No se encontraron conductores</h3>
+        <p>Intenta ajustar los filtros para encontrar lo que buscas.</p>
+      </div>
     </div>
     }
     <!-- Indicador de carga que se muestra mientras se obtienen los datos -->
     @if (driversPage() === null) {
-    <div class="flex items-center justify-center text-muted-foreground p-10">
-      <span class="material-symbols-outlined text-4xl animate-spin mr-2">progress_activity</span>
-      Cargando conductores...
+    <div class="flex flex-col items-center justify-center text-muted-foreground p-20 gap-4">
+      <span class="material-symbols-outlined text-6xl animate-spin text-primary"
+        >progress_activity</span
+      >
+      <p class="text-lg">Cargando conductores...</p>
     </div>
     }
   </div>
 
-  <!-- Navegación de paginación: se muestra solo si hay datos de conductores -->
+  <!-- Navegación de paginación: se muestra solo si hay datos de conductores disponibles -->
   @if (driversPage(); as page) {
   <nav
     aria-label="Table navigation"

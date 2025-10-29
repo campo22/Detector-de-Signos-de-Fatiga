@@ -17,7 +17,9 @@
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-  <div class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6">
+  <div
+    class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+  >
     <div
       class="p-3 bg-primary/10 rounded-full flex items-center justify-center text-primary shadow-glow-primary"
     >
@@ -28,7 +30,9 @@
       <p class="text-3xl font-bold text-foreground">{{ totalDrivers() }}</p>
     </div>
   </div>
-  <div class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6">
+  <div
+    class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+  >
     <div
       class="p-3 bg-success/10 rounded-full flex items-center justify-center text-success shadow-glow-success"
     >
@@ -39,7 +43,9 @@
       <p class="text-3xl font-bold text-foreground">{{ activeDrivers() }}</p>
     </div>
   </div>
-  <div class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6">
+  <div
+    class="bg-card p-6 rounded-lg border border-border shadow-lg flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+  >
     <div
       class="p-3 bg-destructive/10 rounded-full flex items-center justify-center text-destructive shadow-glow-destructive"
     >
@@ -60,4 +66,3 @@
 
   <app-drivers-table></app-drivers-table>
 </div>
-```
