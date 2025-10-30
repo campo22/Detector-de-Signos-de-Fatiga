@@ -1,3 +1,6 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
   <h2 class="text-2xl font-bold text-foreground">Gestión de Conductores</h2>
   <div class="flex items-center gap-4">
@@ -8,6 +11,7 @@
       <span>Exportar</span>
     </button>
     <button
+      (click)="openAddDialog()"
       class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
     >
       <span class="material-symbols-outlined text-base">add</span>
@@ -64,5 +68,27 @@
     <app-driver-filters></app-driver-filters>
   </div>
 
-  <app-drivers-table></app-drivers-table>
+  <app-drivers-table
+    (editDriver)="openEditDialog($event)"
+    (deleteDriver)="confirmDeleteDriver($event)"
+  ></app-drivers-table>
 </div>
+
+<!-- Diálogo para Añadir/Editar Conductor -->
+<p-dialog
+  [(visible)]="isDialogVisible"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [header]="dialogHeader()"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="handleCancel()"
+>
+  <app-driver-form
+    [driverData]="selectedDriver()"
+    [isEditMode]="isEditMode()"
+    (save)="handleSave($event)"
+    (cancel)="handleCancel()"
+  ></app-driver-form>
+</p-dialog>
+

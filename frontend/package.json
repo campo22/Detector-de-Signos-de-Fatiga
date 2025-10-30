@@ -41,6 +41,7 @@
     "core-js": "^3.46.0",
     "dropdown": "^0.2.0",
     "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "jspdf": "^3.0.3",
     "jspdf-autotable": "^5.0.2",
     "leaflet": "^1.9.4",

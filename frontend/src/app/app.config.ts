@@ -13,8 +13,8 @@ import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 export function initializeApp(authService: AuthService) {
   return (): Promise<any> => {
-    // Convertimos el Observable a una Promesa, como requiere APP_INITIALIZER.
-    return firstValueFrom(authService.silentRefresh());
+    return firstValueFrom(authService.silentRefresh()).then(() => {
+    });
   };
 }
 export const appConfig: ApplicationConfig = {

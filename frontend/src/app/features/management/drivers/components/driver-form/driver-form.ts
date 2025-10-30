@@ -1,13 +1,15 @@
 // Ruta: src/app/features/management/drivers/components/driver-form/driver-form.ts
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, Output, EventEmitter, signal, effect, computed, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { startWith, map } from 'rxjs/operators';
 
 // Importaciones PrimeNG (Asegúrate de tener los módulos correctos)
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DatePickerModule } from 'primeng/datepicker'; // Para fechaNacimiento
-import { SelectModule } from 'primeng/select';       // Para estado activo
+import { CalendarModule } from 'primeng/calendar'; // Importar CalendarModule
+import { DropdownModule } from 'primeng/dropdown';       // Importar DropdownModule
 
 // Modelos y Servicios
 import { Driver, DriverRequest } from '../../../../../core/models/driver.models'; // Asumiendo DriverRequest existe y coincide con el backend
@@ -24,11 +26,12 @@ interface StatusOption {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    // Módulos PrimeNG necesarios
+    FormsModule, // Añadido por si acaso
+    // Módulos/Componentes PrimeNG necesarios
     ButtonModule,
     InputTextModule,
-    DatePickerModule,
-    SelectModule
+    CalendarModule, // Usar CalendarModule
+    DropdownModule // Usar DropdownModule
   ],
   templateUrl: './driver-form.html',
   styleUrl: './driver-form.scss',
@@ -65,10 +68,16 @@ export class DriverFormComponent {
   });
 
 
-  isFormValid = computed(() => this.driverForm.valid);
-  isFormPristine = computed(() => this.driverForm.pristine);
+  // --- Señales para la reactividad del formulario ---
+  private formStatusSignal = toSignal(this.driverForm.statusChanges.pipe(startWith(this.driverForm.status)));
+  private formPristineSignal = toSignal(this.driverForm.valueChanges.pipe(
+    startWith(this.driverForm.pristine), // Valor inicial
+    map(() => this.driverForm.pristine) // Mapear a la propiedad pristine actual
+  ));
 
-  // Habilitación del botón guardar
+  isFormValid = computed(() => this.formStatusSignal() === 'VALID');
+  isFormPristine = computed(() => this.formPristineSignal());
+
   canSubmit = computed(() =>
     this.isFormValid() && !this.isLoading() && !this.isFormPristine()
   );
@@ -82,7 +91,7 @@ export class DriverFormComponent {
   });
 
 
-  // --- Efecto para rellenar/resetear el formulario ---
+  // --- Efecto para rellenar el formulario en modo edición ---
   constructor() {
     effect(() => {
       const driver = this.driverData(); // Reacciona a cambios en la entrada driverData
@@ -101,12 +110,41 @@ export class DriverFormComponent {
         this.errorMessage.set(null); // Limpia errores previos
         this.driverForm.markAsPristine();
       } else {
-        this.driverForm.reset({
-          activo: null
-        }, { emitEvent: false });
+        // En modo creación, el formulario se resetea desde el componente padre (Drivers)
+        // o se inicializa vacío. No resetear aquí para evitar borrar datos mientras se escribe.
         this.errorMessage.set(null);
       }
     });
+
+    // --- Debugging logs para el formulario ---
+    this.driverForm.valueChanges.subscribe(value => {
+      console.log('DriverForm - valueChanges:', value);
+      console.log('DriverForm - valid:', this.driverForm.valid);
+      console.log('DriverForm - pristine:', this.driverForm.pristine);
+      console.log('DriverForm - dirty:', this.driverForm.dirty);
+      console.log('DriverForm - touched:', this.driverForm.touched);
+      console.log('DriverForm - fechaNacimiento valid:', this.driverForm.get('fechaNacimiento')?.valid);
+    });
+
+    this.driverForm.statusChanges.subscribe(status => {
+      console.log('DriverForm - statusChanges:', status);
+    });
+
+    // --- Debugging canSubmit signal ---
+    effect(() => {
+      console.log('DriverForm - canSubmit value:', this.canSubmit());
+    });
+  }
+
+  // --- Método público para resetear el formulario (llamado desde el padre) ---
+  resetForm(): void {
+    this.driverForm.reset({
+      activo: null // Valor por defecto para 'activo' al resetear
+    });
+    this.driverForm.markAsPristine();
+    this.driverForm.markAsUntouched();
+    this.errorMessage.set(null);
+    this.isLoading.set(false);
   }
 
   // --- Método de Envío ---

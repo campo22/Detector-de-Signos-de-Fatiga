@@ -10,7 +10,7 @@ export interface Driver {
 export interface DriverRequest {
   nombre: string;
   licencia: string;
-  fechaNacimiento: Date;
+  fechaNacimiento: string; // Cambiado de Date a string
   activo: boolean;
 }
 

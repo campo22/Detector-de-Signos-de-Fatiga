@@ -24,7 +24,7 @@ public class CookieUtils {
                 .secure(false)      // 🔒 Solo se envía sobre HTTPS
                 .path("/api/v1/auth") // Ruta específica para los endpoints de autenticación
                 .maxAge(refreshTokenExpiration / 1000) // Duración en segundos
-                .sameSite("Lax")   // ✅ Previene ataques CSRF
+                .sameSite("None")   // ✅ Previene ataques CSRF
                 .build()
                 .toString();
     }
@@ -40,7 +40,7 @@ public class CookieUtils {
                 .secure(true)
                 .path("/api/v1/auth")
                 .maxAge(0) // Expira inmediatamente
-                .sameSite("Lax")
+                .sameSite("None")
                 .build()
                 .toString();
     }

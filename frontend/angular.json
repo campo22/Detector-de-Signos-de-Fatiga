@@ -23,22 +23,17 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "src/main.ts",
-            "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/leaflet/dist/leaflet.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+                        "browser": "src/main.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "inlineStyleLanguage": "scss",
+                        "assets": [
+                          "src/assets"
+                        ],
+                        "styles": [
+                          "src/styles.scss",
+                          "node_modules/primeicons/primeicons.css",
+                          "node_modules/leaflet/dist/leaflet.css"
+                        ]
           },
           "configurations": {
             "production": {

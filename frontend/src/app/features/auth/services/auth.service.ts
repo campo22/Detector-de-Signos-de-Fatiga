@@ -33,9 +33,16 @@ export class AuthService {
     }
     this.isRefreshing.set(true);
 
-    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh-token`, {}, { withCredentials: true }).pipe(
-      tap(response => this.setAuthData(response)),
-      map(() => true),
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh-token`, {}, { withCredentials: true, observe: 'response' }).pipe(
+      tap(response => {
+        if (response.ok && response.body) {
+          this.setAuthData(response.body);
+        } else {
+          // Forzar logout si la respuesta no es exitosa aunque no sea un error HTTP
+          this.logout();
+        }
+      }),
+      map(response => response.ok && !!response.body),
       catchError(() => {
         this.logout();
         return of(false);
@@ -45,6 +52,7 @@ export class AuthService {
   }
 
   logout(): void {
+    console.log('AuthService: Ejecutando logout...');
     this.http.post(`${this.apiUrl}/logout`, {}, { responseType: 'text' })
       .pipe(
         // el fialize se ejecuta cuando se completa el observable

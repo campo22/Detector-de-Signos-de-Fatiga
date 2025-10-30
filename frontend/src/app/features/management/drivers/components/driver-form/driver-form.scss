@@ -1,0 +1,7 @@
+.input-field:focus-within label {
+  color: hsl(var(--primary));
+}
+.input-field:focus-within .material-symbols-outlined {
+  color: hsl(var(--primary));
+  text-shadow: 0 0 12px hsl(var(--primary) / 0.5);
+}

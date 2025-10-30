@@ -1,4 +1,4 @@
-<form [formGroup]="driverForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="driverForm" (ngSubmit)="onSubmit()" class="space-y-6">
   @if (errorMessage(); as msg) {
   <div
     class="mb-4 p-3 bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-md"
@@ -7,92 +7,97 @@
   </div>
   }
 
-  <div class="p-fluid grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-    <div class="flex flex-col gap-1">
-      <label htmlFor="nombre" class="text-sm font-medium text-muted-foreground"
-        >Nombre Completo</label
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+    <div class="space-y-2 input-field">
+      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="nombre"
+        ><span class="material-symbols-outlined text-lg transition-all duration-300">person</span>Nombre Completo</label
       >
       <input
         pInputText
         id="nombre"
         formControlName="nombre"
-        placeholder="Ej. Juan Pérez"
-        class="w-full"
+        placeholder="Ej: Juan Pérez"
+        class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
         [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('nombre') }"
         aria-describedby="nombre-error"
       />
       @if (isInvalid('nombre')) {
-      <small id="nombre-error" class="text-destructive text-xs">
+      <small id="nombre-error" class="text-destructive text-xs mt-1">
         @if (driverForm.controls['nombre'].errors?.['required']) { Nombre es requerido. } @if
-        (driverForm.controls['nombre'].errors?.['minlength']) { Debe tener al menos 3 caracteres. }
+        (driverForm.controls['nombre'].errors?.['minlength']) { Debe tener al menos 3 caracteres. } @if
+        (driverForm.controls['nombre'].errors?.['maxlength']) { No debe exceder los 50 caracteres. }
       </small>
       }
     </div>
 
-    <div class="flex flex-col gap-1">
-      <label htmlFor="licencia" class="text-sm font-medium text-muted-foreground"
-        >Número de Licencia</label
+    <div class="space-y-2 input-field">
+      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="licencia"
+        ><span class="material-symbols-outlined text-lg transition-all duration-300">pin</span>Número de Licencia</label
       >
       <input
         pInputText
         id="licencia"
         formControlName="licencia"
-        placeholder="Ej. L1234567"
-        class="w-full"
+        placeholder="Ej: X123-456-789"
+        class="font-mono flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
         [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('licencia') }"
         aria-describedby="licencia-error"
       />
       @if (isInvalid('licencia')) {
-      <small id="licencia-error" class="text-destructive text-xs">Licencia es requerida.</small>
+      <small id="licencia-error" class="text-destructive text-xs mt-1">Licencia es requerida.</small>
       }
     </div>
 
-    <div class="flex flex-col gap-1">
-      <label htmlFor="fechaNacimiento" class="text-sm font-medium text-muted-foreground"
-        >Fecha de Nacimiento</label
+    <div class="space-y-2 input-field">
+      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="fechaNacimiento"
+        ><span class="material-symbols-outlined text-lg transition-all duration-300">calendar_month</span>Fecha de Nacimiento</label
       >
-      <p-datePicker
+      <p-calendar
         id="fechaNacimiento"
         formControlName="fechaNacimiento"
         styleClass="w-full"
         dateFormat="yy-mm-dd"
         [showIcon]="true"
-        [inputStyleClass]="'w-full'"
+        [inputStyleClass]="'font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background'"
         [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('fechaNacimiento') }"
         aria-describedby="fechaNacimiento-error"
       />
       @if (isInvalid('fechaNacimiento')) {
-      <small id="fechaNacimiento-error" class="text-destructive text-xs"
+      <small id="fechaNacimiento-error" class="text-destructive text-xs mt-1"
         >Fecha de nacimiento es requerida.</small
       >
       }
     </div>
 
-    <div class="flex flex-col gap-1 md:col-span-2">
-      <label htmlFor="activo" class="text-sm font-medium text-muted-foreground">Estado</label>
-      <p-select
+    <div class="space-y-2 input-field md:col-span-2">
+      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="activo"
+        ><span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>Estado</label
+      >
+      <p-dropdown
         id="activo"
         formControlName="activo"
         [options]="statusOptions"
         optionLabel="label"
         optionValue="value"
         placeholder="Seleccione un estado"
-        styleClass="w-full"
+        styleClass="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
         [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('activo') }"
         aria-describedby="activo-error"
+        [panelStyleClass]="'p-dropdown-panel-overlay-panel bg-card border border-border rounded-md shadow-lg'"
       />
       @if (isInvalid('activo')) {
-      <small id="activo-error" class="text-destructive text-xs">Estado es requerido.</small>
+      <small id="activo-error" class="text-destructive text-xs mt-1">Estado es requerido.</small>
       }
     </div>
   </div>
-  <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-border">
+  <div class="flex items-center justify-end gap-4 pt-6 border-t border-border">
     <p-button
       label="Cancelar"
       severity="secondary"
       (click)="onCancel()"
       [outlined]="true"
       [disabled]="isLoading()"
+      styleClass="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-accent-foreground hover:bg-accent h-11 px-6 py-2"
     />
     <p-button
       label="{{ submitButtonLabel() }}"
@@ -100,6 +105,7 @@
       type="submit"
       [loading]="isLoading()"
       [disabled]="!canSubmit()"
+      styleClass="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-semibold tracking-wide ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-11 px-8 py-2 bg-primary hover:bg-primary/90 active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-glow-primary-lg"
     />
   </div>
 </form>

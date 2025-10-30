@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { take } from 'rxjs';
 
@@ -6,10 +6,11 @@ import { DriversTable } from './components/drivers-table/drivers-table';
 import { DriverFiltersComponent } from './components/driver-filters/driver-filters';
 import { DriverService } from '../../shared/services/driver.service';
 import { DriverFormComponent } from './components/driver-form/driver-form';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api'; // Importar ConfirmationService
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog'; // Importar ConfirmDialogModule
 import { DriverFilterService } from './services/driver-filter.service';
 import { Driver } from '../../../core/models/driver.models';
 
@@ -24,15 +25,19 @@ import { Driver } from '../../../core/models/driver.models';
     DriverFormComponent,
     DialogModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
+    ConfirmDialogModule // Añadir ConfirmDialogModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService], // Añadir ConfirmationService
   templateUrl: './drivers.html',
   styleUrls: ['./drivers.scss'],
 })
 export class Drivers {
+  @ViewChild(DriverFormComponent) driverFormRef!: DriverFormComponent; // Referencia al componente del formulario
+
   private driverService = inject(DriverService);
   private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService); // Inyectar ConfirmationService
   private driverFilterService = inject(DriverFilterService);
 
 
@@ -49,6 +54,10 @@ export class Drivers {
     this.isEditMode.set(false);
     this.selectedDriver.set(null);
     this.isDialogVisible.set(true);
+    // Asegurarse de que el formulario se resetee cuando se abre para añadir
+    if (this.driverFormRef) {
+      this.driverFormRef.resetForm();
+    }
   }
 
   openEditDialog(driver: Driver): void {
@@ -76,6 +85,7 @@ export class Drivers {
       detail: detail,
       life: 3000 // Duración del mensaje en ms
     });
+    this.loadDriverStats(); // Actualizar estadísticas
   }
 
   /**
@@ -85,6 +95,37 @@ export class Drivers {
     this.isDialogVisible.set(false);
     // Opcional: Limpiar selectedDriver si es necesario al cancelar
     // this.selectedDriver.set(null);
+  }
+
+  // --- Métodos para eliminar conductor ---
+  confirmDeleteDriver(driver: Driver): void {
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de que quieres eliminar al conductor ${driver.nombre}? Esta acción no se puede deshacer.`,
+      header: 'Confirmar Eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        if (driver.id) {
+          this.deleteDriver(driver.id);
+        }
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada' });
+      }
+    });
+  }
+
+  private deleteDriver(id: string): void {
+    this.driverService.deleteDriver(id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Conductor eliminado correctamente' });
+        this.driverFilterService.triggerRefresh(); // Refrescar la tabla
+        this.loadDriverStats(); // Actualizar estadísticas
+      },
+      error: (err) => {
+        console.error('Error al eliminar conductor:', err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el conductor' });
+      }
+    });
   }
 
   public totalDrivers = signal<number | string>('--');
