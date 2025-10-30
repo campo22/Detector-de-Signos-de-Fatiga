@@ -5,3 +5,72 @@
   color: hsl(var(--primary));
   text-shadow: 0 0 12px hsl(var(--primary) / 0.5);
 }
+
+:host ::ng-deep {
+  .p-inputtext,
+  .p-datepicker .p-inputtext,
+  .p-select .p-select-label {
+    font-family: inherit;
+    height: 3rem; /* h-12 */
+    width: 100%;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background-color: hsl(var(--input));
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: hsl(var(--foreground));
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+  }
+
+  .p-select {
+    height: 3rem;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background-color: hsl(var(--input));
+  }
+
+  .p-select .p-select-label {
+    border: none;
+  }
+
+  .p-inputtext::placeholder,
+  .p-select .p-select-label.p-placeholder {
+    color: hsl(var(--muted-foreground) / 0.6);
+  }
+
+  .p-inputtext:focus,
+  .p-datepicker .p-inputtext:focus,
+  .p-select:not(.p-select-disabled).p-focus {
+    border-color: hsl(var(--primary) / 0.6);
+    background-color: hsl(var(--background));
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--ring) / 0.5), 0 0 0 2px hsl(var(--background)) inset;
+  }
+
+  .p-datepicker-panel {
+    z-index: 1001 !important;
+  }
+
+  /* Invalid state */
+  .ng-invalid.ng-dirty .p-inputtext,
+  .ng-invalid.ng-dirty .p-datepicker .p-inputtext,
+  .ng-invalid.ng-dirty .p-select {
+    border-color: #ef4444; /* red-500 */
+  }
+
+  .ng-invalid.ng-dirty .p-inputtext:focus,
+  .ng-invalid.ng-dirty .p-datepicker .p-inputtext:focus,
+  .ng-invalid.ng-dirty .p-select:not(.p-select-disabled).p-focus {
+    border-color: #ef4444; /* red-500 */
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5), 0 0 0 2px hsl(var(--background)) inset;
+  }
+
+  /* Valid state */
+  .ng-valid.ng-dirty .p-inputtext,
+  .ng-valid.ng-dirty .p-datepicker .p-inputtext,
+  .ng-valid.ng-dirty .p-select {
+    border-color: #22c55e; /* green-500 */
+  }
+}

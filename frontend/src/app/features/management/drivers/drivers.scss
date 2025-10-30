@@ -1,0 +1,24 @@
+.custom-driver-dialog .p-dialog-header {
+  background-color: hsl(var(--card)); /* Fondo de la cabecera */
+  color: hsl(var(--primary)); /* Color del texto azul */
+  font-size: 1.5rem; /* Texto más grande */
+  font-weight: bold; /* Negrita */
+  border-bottom: 1px solid hsl(var(--border)); /* Borde inferior */
+  padding: 1.5rem; /* Espaciado */
+}
+
+.custom-driver-dialog .p-dialog-header-icon {
+  color: hsl(var(--muted-foreground)); /* Color de los iconos de cerrar */
+}
+
+.custom-driver-dialog .p-dialog-content {
+  background-color: hsl(var(--card)); /* Fondo del contenido */
+  color: hsl(var(--foreground));
+  padding: 1.5rem;
+}
+
+.custom-driver-dialog .p-dialog-footer {
+  background-color: hsl(var(--card)); /* Fondo del pie de página */
+  border-top: 1px solid hsl(var(--border));
+  padding: 1rem 1.5rem;
+}

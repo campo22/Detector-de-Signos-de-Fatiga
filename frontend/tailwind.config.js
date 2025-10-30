@@ -57,10 +57,26 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)',
       },
       boxShadow: {
-        'glow-primary': '0 0 20px -2px hsl(var(--primary-glow) / 0.4)',
+        'glow-primary': '0 0 16px -4px hsl(var(--primary) / 0.7)',
+        'glow-primary-lg': '0 0 24px -2px hsl(var(--primary) / 0.6)',
         'glow-destructive': '0 0 20px -2px hsl(var(--destructive-glow) / 0.4)',
         'glow-warning': '0 0 20px -2px hsl(var(--warning-glow) / 0.4)',
         'glow-success': '0 0 20px -2px hsl(var(--success-glow) / 0.4)',
+      },
+      animation: {
+        'glow-border': 'glow-border 4s ease-in-out infinite',
+      },
+      keyframes: {
+        'glow-border': {
+          '0%, 100%': {
+            'box-shadow': '0 0 10px -8px hsl(var(--primary))',
+            'border-color': 'hsl(var(--border))',
+          },
+          '50%': {
+            'box-shadow': '0 0 20px -4px hsl(var(--primary) / 0.6)',
+            'border-color': 'hsl(var(--primary) / 0.6)',
+          },
+        },
       },
     },
   },

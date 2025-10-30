@@ -105,3 +105,48 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--accent));
 }
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.85rem; /* Aumentar el padding */
+  text-align: left;
+  font-size: 1.1rem; /* Aumentar el tamaño de la fuente */
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+th {
+  font-weight: 600;
+  color: hsl(var(--primary));
+}
+
+/* Button Styles */
+.btn {
+  padding: 0.8rem 1.5rem; /* Aumentar el padding */
+  font-size: 1.2rem; /* Aumentar el tamaño de la fuente */
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.btn-primary:hover {
+  background-color: hsl(var(--primary-glow));
+}
+
+.btn-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.btn-secondary:hover {
+  background-color: hsl(var(--accent));
+}

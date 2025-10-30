@@ -1,15 +1,15 @@
 // Ruta: src/app/features/management/drivers/components/driver-form/driver-form.ts
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, Output, EventEmitter, signal, effect, computed, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { startWith, map } from 'rxjs/operators';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop'; // Importar toSignal
+import { startWith, map } from 'rxjs/operators'; // Importar startWith y map desde rxjs/operators
 
 // Importaciones PrimeNG (Asegúrate de tener los módulos correctos)
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { CalendarModule } from 'primeng/calendar'; // Importar CalendarModule
-import { DropdownModule } from 'primeng/dropdown';       // Importar DropdownModule
+import { DatePickerModule } from 'primeng/datepicker'; // Para fechaNacimiento
+import { SelectModule } from 'primeng/select';       // Para estado activo
 
 // Modelos y Servicios
 import { Driver, DriverRequest } from '../../../../../core/models/driver.models'; // Asumiendo DriverRequest existe y coincide con el backend
@@ -26,12 +26,11 @@ interface StatusOption {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule, // Añadido por si acaso
-    // Módulos/Componentes PrimeNG necesarios
+    // Módulos PrimeNG necesarios
     ButtonModule,
     InputTextModule,
-    CalendarModule, // Usar CalendarModule
-    DropdownModule // Usar DropdownModule
+    DatePickerModule,
+    SelectModule
   ],
   templateUrl: './driver-form.html',
   styleUrl: './driver-form.scss',
@@ -42,98 +41,179 @@ export class DriverFormComponent {
   private driverService = inject(DriverService);
 
   // --- Entradas como Signals ---
+
   driverData = input<Driver | null>(null); // Datos del conductor para edición
+
   isEditMode = input<boolean>(false);       // Flag para modo edición
 
+
+
   // --- Salidas ---
+
   @Output() save = new EventEmitter<Driver>();   // Emite el conductor guardado
+
   @Output() cancel = new EventEmitter<void>(); // Emite al cancelar
 
+
+
   // --- Estado Interno ---
+
   isLoading = signal<boolean>(false);        // Estado de carga para el botón
+
   errorMessage = signal<string | null>(null); // Mensaje de error
 
+
+
   // Opciones para el <p-select> de estado
+
   statusOptions: StatusOption[] = [
+
     { label: 'Activo', value: true },
+
     { label: 'Inactivo', value: false }
+
   ];
 
+
+
   // --- FormGroup con validaciones ---
+
   driverForm: FormGroup = this.fb.group({
+
     nombre: ['', [Validators.required, Validators.minLength(3)]],
+
     licencia: ['', Validators.required],
+
     fechaNacimiento: [null as Date | null, Validators.required],
+
     activo: [null as boolean | null, Validators.required]
+
   });
+
 
 
   // --- Señales para la reactividad del formulario ---
+
   private formStatusSignal = toSignal(this.driverForm.statusChanges.pipe(startWith(this.driverForm.status)));
+
   private formPristineSignal = toSignal(this.driverForm.valueChanges.pipe(
+
     startWith(this.driverForm.pristine), // Valor inicial
+
     map(() => this.driverForm.pristine) // Mapear a la propiedad pristine actual
+
   ));
 
+
+
   isFormValid = computed(() => this.formStatusSignal() === 'VALID');
+
   isFormPristine = computed(() => this.formPristineSignal());
 
+
+
   canSubmit = computed(() =>
+
     this.isFormValid() && !this.isLoading() && !this.isFormPristine()
+
   );
 
+
+
   // Etiqueta dinámica del botón guardar
+
   submitButtonLabel = computed(() => {
+
     if (this.isLoading()) { return 'Guardando...'; }
+
     if (!this.isFormValid()) { return 'Complete campos requeridos'; }
+
     if (this.isFormPristine() && this.isEditMode()) { return 'Sin cambios'; }
+
     return this.isEditMode() ? 'Actualizar Conductor' : 'Crear Conductor';
+
   });
 
 
+
+
+
   // --- Efecto para rellenar el formulario en modo edición ---
+
   constructor() {
+
     effect(() => {
+
       const driver = this.driverData(); // Reacciona a cambios en la entrada driverData
 
+
+
       if (driver) { // Modo Edición: Rellena el formulario
+
         const fechaNac = driver.fechaNacimiento
+
           ? new Date(driver.fechaNacimiento) // Convierte string/timestamp a Date para DatePicker
+
           : null;
 
+
+
         this.driverForm.patchValue({
+
           nombre: driver.nombre,
+
           licencia: driver.licencia,
+
           fechaNacimiento: fechaNac,
+
           activo: driver.activo
+
         }, { emitEvent: false }); // Evita disparar valueChanges innecesariamente
+
         this.errorMessage.set(null); // Limpia errores previos
+
         this.driverForm.markAsPristine();
+
       } else {
+
         // En modo creación, el formulario se resetea desde el componente padre (Drivers)
+
         // o se inicializa vacío. No resetear aquí para evitar borrar datos mientras se escribe.
+
         this.errorMessage.set(null);
+
       }
+
     });
+
+
 
     // --- Debugging logs para el formulario ---
+
     this.driverForm.valueChanges.subscribe(value => {
+
       console.log('DriverForm - valueChanges:', value);
+
       console.log('DriverForm - valid:', this.driverForm.valid);
+
       console.log('DriverForm - pristine:', this.driverForm.pristine);
+
       console.log('DriverForm - dirty:', this.driverForm.dirty);
+
       console.log('DriverForm - touched:', this.driverForm.touched);
+
       console.log('DriverForm - fechaNacimiento valid:', this.driverForm.get('fechaNacimiento')?.valid);
+
     });
+
+
 
     this.driverForm.statusChanges.subscribe(status => {
+
       console.log('DriverForm - statusChanges:', status);
+
     });
 
-    // --- Debugging canSubmit signal ---
-    effect(() => {
-      console.log('DriverForm - canSubmit value:', this.canSubmit());
-    });
   }
 
   // --- Método público para resetear el formulario (llamado desde el padre) ---
@@ -169,7 +249,7 @@ export class DriverFormComponent {
     operation$.subscribe({
       next: (savedDriver) => this.handleSuccess(savedDriver),
       error: (err) => this.handleError(err),
-      complete: () => this.isLoading.set(false) // Desactiva el loading al completar
+      complete: () => this.isLoading.set(false)
     });
   }
 
@@ -199,15 +279,15 @@ export class DriverFormComponent {
     return {
       nombre: formValue.nombre,
       licencia: formValue.licencia,
-      fechaNacimiento: fechaNacimientoISO!, // Usar '!' si estás seguro que no será null por Validators.required
-      activo: formValue.activo! // Usar '!' si estás seguro que no será null por Validators.required
+      fechaNacimiento: fechaNacimientoISO!,
+      activo: formValue.activo!
     };
   }
 
   // --- Manejador de Éxito ---
   private handleSuccess(result: Driver): void {
     console.log('✅ Operación exitosa:', result);
-    this.save.emit(result); // Notifica al padre con el conductor guardado
+    this.save.emit(result);
     // No reseteamos aquí, el padre cerrará el diálogo y podría querer resetear después
   }
 
@@ -217,6 +297,6 @@ export class DriverFormComponent {
     // Extrae un mensaje de error más útil si es posible (depende de cómo tu API devuelve errores)
     const apiErrorMessage = error?.error?.message || error?.message || 'Ocurrió un error desconocido.';
     this.errorMessage.set(`Error al guardar: ${apiErrorMessage}. Intenta de nuevo.`);
-    this.isLoading.set(false); // Asegúrate de desactivar el loading en caso de error
+    this.isLoading.set(false);
   }
 }

@@ -1,111 +1,132 @@
-<form [formGroup]="driverForm" (ngSubmit)="onSubmit()" class="space-y-6">
-  @if (errorMessage(); as msg) {
-  <div
-    class="mb-4 p-3 bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-md"
-  >
-    {{ msg }}
-  </div>
-  }
+<div class="p-6 sm:p-8">
+  <form [formGroup]="driverForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    @if (errorMessage(); as msg) {
+    <div
+      class="mb-4 p-3 bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-md"
+    >
+      {{ msg }}
+    </div>
+    }
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
-    <div class="space-y-2 input-field">
-      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="nombre"
-        ><span class="material-symbols-outlined text-lg transition-all duration-300">person</span>Nombre Completo</label
-      >
-      <input
-        pInputText
-        id="nombre"
-        formControlName="nombre"
-        placeholder="Ej: Juan Pérez"
-        class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
-        [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('nombre') }"
-        aria-describedby="nombre-error"
-      />
-      @if (isInvalid('nombre')) {
-      <small id="nombre-error" class="text-destructive text-xs mt-1">
-        @if (driverForm.controls['nombre'].errors?.['required']) { Nombre es requerido. } @if
-        (driverForm.controls['nombre'].errors?.['minlength']) { Debe tener al menos 3 caracteres. } @if
-        (driverForm.controls['nombre'].errors?.['maxlength']) { No debe exceder los 50 caracteres. }
-      </small>
-      }
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+      <!-- Nombre Completo -->
+      <div class="space-y-2 input-field">
+        <label
+          for="nombre"
+          class="flex items-center gap-2 font-display text-base font-medium leading-none text-muted-foreground transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined text-xl transition-all duration-300">person</span>
+          Nombre Completo
+        </label>
+        <input
+          id="nombre"
+          type="text"
+          pInputText
+          formControlName="nombre"
+          placeholder="Ej: Juan Pérez"
+          class="font-display flex h-12 w-full rounded-md border bg-input px-4 py-2 text-base placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
+        />
+        @if (isInvalid('nombre')) {
+        <div class="flex items-center gap-2 text-red-600 text-sm mt-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          @if (driverForm.controls['nombre'].errors?.['required']) {
+          <span>Nombre es requerido.</span> } @if
+          (driverForm.controls['nombre'].errors?.['minlength']) {
+          <span>Debe tener al menos 3 caracteres.</span> }
+        </div>
+        }
+      </div>
+
+      <!-- Número de Licencia -->
+      <div class="space-y-2 input-field">
+        <label
+          for="licencia"
+          class="flex items-center gap-2 font-display text-base font-medium leading-none text-muted-foreground transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined text-xl transition-all duration-300">pin</span>
+          Número de Licencia
+        </label>
+        <input
+          id="licencia"
+          type="text"
+          pInputText
+          formControlName="licencia"
+          placeholder="X123-456-789"
+          class="font-mono flex h-12 w-full rounded-md border bg-input px-4 py-2 text-base placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
+        />
+        @if (isInvalid('licencia')) {
+        <div class="flex items-center gap-2 text-red-600 text-sm mt-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          <span>Licencia es requerida.</span>
+        </div>
+        }
+      </div>
+
+      <!-- Fecha de Nacimiento -->
+      <div class="space-y-2 input-field">
+        <label
+          for="fechaNacimiento"
+          class="flex items-center gap-2 font-display text-base font-medium leading-none text-muted-foreground transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined text-xl transition-all duration-300"
+            >calendar_month</span
+          >
+          Fecha de Nacimiento
+        </label>
+        <p-datePicker
+          id="fechaNacimiento"
+          formControlName="fechaNacimiento"
+          styleClass="w-full"
+          dateFormat="yy-mm-dd"
+          [showIcon]="true"
+          [appendTo]="'body'"
+          inputStyleClass="font-display flex h-12 w-full rounded-md border bg-input px-4 py-2 text-base placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
+        />
+        @if (isInvalid('fechaNacimiento')) {
+        <div class="flex items-center gap-2 text-red-600 text-sm mt-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          <span>Fecha de nacimiento es requerida.</span>
+        </div>
+        }
+      </div>
+
+      <!-- Estado -->
+      <div class="space-y-2 input-field">
+        <label
+          for="activo"
+          class="flex items-center gap-2 font-display text-base font-medium leading-none text-muted-foreground transition-colors duration-300"
+        >
+          <span class="material-symbols-outlined text-xl transition-all duration-300"
+            >toggle_on</span
+          >
+          Estado
+        </label>
+        <p-select
+          id="activo"
+          formControlName="activo"
+          [options]="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccione un estado"
+          styleClass="w-full h-12"
+        />
+        @if (isInvalid('activo')) {
+        <div class="flex items-center gap-2 text-red-600 text-sm mt-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          <span>Estado es requerido.</span>
+        </div>
+        }
+      </div>
     </div>
 
-    <div class="space-y-2 input-field">
-      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="licencia"
-        ><span class="material-symbols-outlined text-lg transition-all duration-300">pin</span>Número de Licencia</label
-      >
-      <input
-        pInputText
-        id="licencia"
-        formControlName="licencia"
-        placeholder="Ej: X123-456-789"
-        class="font-mono flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
-        [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('licencia') }"
-        aria-describedby="licencia-error"
-      />
-      @if (isInvalid('licencia')) {
-      <small id="licencia-error" class="text-destructive text-xs mt-1">Licencia es requerida.</small>
-      }
+    <div class="flex items-center justify-end gap-4 pt-8 mt-8 border-t border-border">
+      <button type="button" (click)="onCancel()" [disabled]="isLoading()" class="btn btn-secondary">
+        Cancelar
+      </button>
+      <button type="submit" [disabled]="!canSubmit()" class="btn btn-primary">
+        <span *ngIf="isLoading()" class="pi pi-spin pi-spinner" style="margin-right: 0.5rem"></span>
+        {{ submitButtonLabel() }}
+      </button>
     </div>
-
-    <div class="space-y-2 input-field">
-      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="fechaNacimiento"
-        ><span class="material-symbols-outlined text-lg transition-all duration-300">calendar_month</span>Fecha de Nacimiento</label
-      >
-      <p-calendar
-        id="fechaNacimiento"
-        formControlName="fechaNacimiento"
-        styleClass="w-full"
-        dateFormat="yy-mm-dd"
-        [showIcon]="true"
-        [inputStyleClass]="'font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background'"
-        [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('fechaNacimiento') }"
-        aria-describedby="fechaNacimiento-error"
-      />
-      @if (isInvalid('fechaNacimiento')) {
-      <small id="fechaNacimiento-error" class="text-destructive text-xs mt-1"
-        >Fecha de nacimiento es requerida.</small
-      >
-      }
-    </div>
-
-    <div class="space-y-2 input-field md:col-span-2">
-      <label class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300" htmlFor="activo"
-        ><span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>Estado</label
-      >
-      <p-dropdown
-        id="activo"
-        formControlName="activo"
-        [options]="statusOptions"
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Seleccione un estado"
-        styleClass="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
-        [ngClass]="{ 'ng-invalid ng-dirty': isInvalid('activo') }"
-        aria-describedby="activo-error"
-        [panelStyleClass]="'p-dropdown-panel-overlay-panel bg-card border border-border rounded-md shadow-lg'"
-      />
-      @if (isInvalid('activo')) {
-      <small id="activo-error" class="text-destructive text-xs mt-1">Estado es requerido.</small>
-      }
-    </div>
-  </div>
-  <div class="flex items-center justify-end gap-4 pt-6 border-t border-border">
-    <p-button
-      label="Cancelar"
-      severity="secondary"
-      (click)="onCancel()"
-      [outlined]="true"
-      [disabled]="isLoading()"
-      styleClass="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-accent-foreground hover:bg-accent h-11 px-6 py-2"
-    />
-    <p-button
-      label="{{ submitButtonLabel() }}"
-      icon="pi pi-check"
-      type="submit"
-      [loading]="isLoading()"
-      [disabled]="!canSubmit()"
-      styleClass="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-semibold tracking-wide ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-11 px-8 py-2 bg-primary hover:bg-primary/90 active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-glow-primary-lg"
-    />
-  </div>
-</form>
+  </form>
+</div>
