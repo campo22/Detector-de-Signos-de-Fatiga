@@ -185,35 +185,6 @@ export class DriverFormComponent {
       }
 
     });
-
-
-
-    // --- Debugging logs para el formulario ---
-
-    this.driverForm.valueChanges.subscribe(value => {
-
-      console.log('DriverForm - valueChanges:', value);
-
-      console.log('DriverForm - valid:', this.driverForm.valid);
-
-      console.log('DriverForm - pristine:', this.driverForm.pristine);
-
-      console.log('DriverForm - dirty:', this.driverForm.dirty);
-
-      console.log('DriverForm - touched:', this.driverForm.touched);
-
-      console.log('DriverForm - fechaNacimiento valid:', this.driverForm.get('fechaNacimiento')?.valid);
-
-    });
-
-
-
-    this.driverForm.statusChanges.subscribe(status => {
-
-      console.log('DriverForm - statusChanges:', status);
-
-    });
-
   }
 
   // --- Método público para resetear el formulario (llamado desde el padre) ---

@@ -46,6 +46,25 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        'hsl-background': 'hsl(var(--background))',
+        'hsl-foreground': 'hsl(var(--foreground))',
+        'hsl-card': 'hsl(var(--card))',
+        'hsl-card-foreground': 'hsl(var(--card-foreground))',
+        'hsl-popover': 'hsl(var(--popover))',
+        'hsl-popover-foreground': 'hsl(var(--popover-foreground))',
+        'hsl-primary': 'hsl(var(--primary))',
+        'hsl-primary-foreground': 'hsl(var(--primary-foreground))',
+        'hsl-secondary': 'hsl(var(--secondary))',
+        'hsl-secondary-foreground': 'hsl(var(--secondary-foreground))',
+        'hsl-muted': 'hsl(var(--muted))',
+        'hsl-muted-foreground': 'hsl(var(--muted-foreground))',
+        'hsl-accent': 'hsl(var(--accent))',
+        'hsl-accent-foreground': 'hsl(var(--accent-foreground))',
+        'hsl-destructive': 'hsl(var(--destructive))',
+        'hsl-destructive-foreground': 'hsl(var(--destructive-foreground))',
+        'hsl-border': 'hsl(var(--border))',
+        'hsl-input': 'hsl(var(--input))',
+        'hsl-ring': 'hsl(var(--ring))',
       },
       fontFamily: {
         display: ['Inter', 'sans-serif'],
@@ -68,17 +87,11 @@ module.exports = {
       },
       keyframes: {
         'glow-border': {
-          '0%, 100%': {
-            'box-shadow': '0 0 10px -8px hsl(var(--primary))',
-            'border-color': 'hsl(var(--border))',
-          },
-          '50%': {
-            'box-shadow': '0 0 20px -4px hsl(var(--primary) / 0.6)',
-            'border-color': 'hsl(var(--primary) / 0.6)',
-          },
+          '0%, 100%': { 'box-shadow': '0 0 10px -8px hsl(var(--primary))', 'border-color': 'hsl(var(--border))' },
+          '50%': { 'box-shadow': '0 0 20px -4px hsl(var(--primary) / 0.6)', 'border-color': 'hsl(var(--primary) / 0.6)' },
         },
-      },
+      }
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/container-queries')],
 };
