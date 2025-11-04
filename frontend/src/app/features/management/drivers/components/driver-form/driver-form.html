@@ -1,6 +1,6 @@
 <form [formGroup]="driverForm" (ngSubmit)="onSubmit()" class="space-y-6">
   @if (errorMessage(); as msg) {
-  <div class="mb-4 p-3 bg-hsl-destructive/10 border border-hsl-destructive/30 text-hsl-destructive text-sm rounded-md">
+  <div class="mb-4 p-3 bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-md">
     {{ msg }}
   </div>
   }
@@ -8,11 +8,11 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
     <!-- Nombre Completo -->
     <div class="space-y-2 input-field">
-      <label for="nombre" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-hsl-muted-foreground transition-colors duration-300">
+      <label for="nombre" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300">
         <span class="material-symbols-outlined text-lg transition-all duration-300">person</span>
         Nombre Completo
       </label>
-      <input id="nombre" type="text" pInputText formControlName="nombre" placeholder="Ej: Juan Pérez" class="font-display flex h-11 w-full rounded-md border border-hsl-border bg-hsl-input px-3 py-2 text-sm placeholder:text-hsl-muted-foreground/60 transition-all duration-300 focus:border-hsl-primary/60 focus:bg-hsl-background focus:outline-none focus:ring-2 focus:ring-hsl-ring/50 focus:ring-offset-2 focus:ring-offset-hsl-background" />
+      <input id="nombre" type="text" pInputText formControlName="nombre" placeholder="Ej: Juan Pérez" class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background" />
       @if (isInvalid('nombre')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
@@ -23,11 +23,11 @@
 
     <!-- Número de Licencia -->
     <div class="space-y-2 input-field">
-      <label for="licencia" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-hsl-muted-foreground transition-colors duration-300">
+      <label for="licencia" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300">
         <span class="material-symbols-outlined text-lg transition-all duration-300">pin</span>
         Número de Licencia
       </label>
-      <input id="licencia" type="text" pInputText formControlName="licencia" placeholder="X123-456-789" class="font-mono flex h-11 w-full rounded-md border border-hsl-border bg-hsl-input px-3 py-2 text-sm placeholder:text-hsl-muted-foreground/60 transition-all duration-300 focus:border-hsl-primary/60 focus:bg-hsl-background focus:outline-none focus:ring-2 focus:ring-hsl-ring/50 focus:ring-offset-2 focus:ring-offset-hsl-background" />
+      <input id="licencia" type="text" pInputText formControlName="licencia" placeholder="X123-456-789" class="font-mono flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background" />
       @if (isInvalid('licencia')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
@@ -38,11 +38,11 @@
 
     <!-- Fecha de Nacimiento -->
     <div class="space-y-2 input-field">
-      <label for="fechaNacimiento" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-hsl-muted-foreground transition-colors duration-300">
+      <label for="fechaNacimiento" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300">
         <span class="material-symbols-outlined text-lg transition-all duration-300">calendar_month</span>
         Fecha de Nacimiento
       </label>
-      <p-datePicker id="fechaNacimiento" formControlName="fechaNacimiento" styleClass="w-full" dateFormat="yy-mm-dd" [showIcon]="true" [appendTo]="'body'" inputStyleClass="font-display flex h-11 w-full rounded-md border border-hsl-border bg-hsl-input px-3 py-2 text-sm placeholder:text-hsl-muted-foreground/60 transition-all duration-300 focus:border-hsl-primary/60 focus:bg-hsl-background focus:outline-none focus:ring-2 focus:ring-hsl-ring/50 focus:ring-offset-2 focus:ring-offset-hsl-background" />
+      <p-datePicker id="fechaNacimiento" formControlName="fechaNacimiento" styleClass="w-full" dateFormat="yy-mm-dd" [showIcon]="true" [appendTo]="'body'" inputStyleClass="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background" />
       @if (isInvalid('fechaNacimiento')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
@@ -53,7 +53,7 @@
 
     <!-- Estado -->
     <div class="space-y-2 input-field">
-        <label for="activo" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-hsl-muted-foreground transition-colors duration-300">
+        <label for="activo" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300">
             <span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>
             Estado
         </label>
@@ -67,11 +67,11 @@
     </div>
   </div>
 
-  <div class="flex items-center justify-end gap-4 pt-6 border-t border-hsl-border">
-    <button type="button" (click)="onCancel()" [disabled]="isLoading()" class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-hsl-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hsl-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-hsl-accent-foreground hover:bg-hsl-accent h-11 px-6 py-2">
+  <div class="flex items-center justify-end gap-4 pt-6 border-t border-border">
+    <button type="button" (click)="onCancel()" [disabled]="isLoading()" class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-accent-foreground hover:bg-accent h-11 px-6 py-2">
       Cancelar
     </button>
-    <button type="submit" [disabled]="!canSubmit()" class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-semibold tracking-wide ring-offset-hsl-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hsl-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-hsl-primary-foreground h-11 px-8 py-2 bg-hsl-primary hover:bg-hsl-primary/90 active:scale-[0.98] shadow-lg shadow-hsl-primary/20 hover:shadow-glow-primary-lg">
+    <button type="submit" [disabled]="!canSubmit()" class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-semibold tracking-wide ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-11 px-8 py-2 bg-primary hover:bg-primary/90 active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-glow-primary-lg">
       <span *ngIf="isLoading()" class="pi pi-spin pi-spinner" style="margin-right: 0.5rem"></span>
       {{ submitButtonLabel() }}
     </button>
