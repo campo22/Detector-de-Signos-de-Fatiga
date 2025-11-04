@@ -60,6 +60,10 @@ export class Drivers {
     }
   }
 
+  /**
+   * Abre el diálogo para editar un conductor.
+   * @param driver Conductor a editar.
+   */
   openEditDialog(driver: Driver): void {
     this.isEditMode.set(true);
     this.selectedDriver.set(driver); // Guarda una copia para evitar mutaciones directas si es necesario
@@ -93,8 +97,7 @@ export class Drivers {
    */
   handleCancel(): void {
     this.isDialogVisible.set(false);
-    // Opcional: Limpiar selectedDriver si es necesario al cancelar
-    // this.selectedDriver.set(null);
+    this.selectedDriver.set(null);
   }
 
   // --- Métodos para eliminar conductor ---

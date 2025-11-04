@@ -1,9 +1,9 @@
-// Ruta: src/app/features/management/drivers/components/driver-form/driver-form.ts
+
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, Output, EventEmitter, signal, effect, computed, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop'; // Importar toSignal
-import { startWith, map } from 'rxjs/operators'; // Importar startWith y map desde rxjs/operators
+import { toSignal } from '@angular/core/rxjs-interop';
+import { startWith, map } from 'rxjs/operators';
 
 // Importaciones PrimeNG (Asegúrate de tener los módulos correctos)
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +12,7 @@ import { DatePickerModule } from 'primeng/datepicker'; // Para fechaNacimiento
 import { SelectModule } from 'primeng/select';       // Para estado activo
 
 // Modelos y Servicios
-import { Driver, DriverRequest } from '../../../../../core/models/driver.models'; // Asumiendo DriverRequest existe y coincide con el backend
+import { Driver, DriverRequest } from '../../../../../core/models/driver.models';
 import { DriverService } from '../../../../shared/services/driver.service';
 
 interface StatusOption {
@@ -26,7 +26,6 @@ interface StatusOption {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    // Módulos PrimeNG necesarios
     ButtonModule,
     InputTextModule,
     DatePickerModule,
@@ -94,7 +93,12 @@ export class DriverFormComponent {
 
   // --- Señales para la reactividad del formulario ---
 
-  private formStatusSignal = toSignal(this.driverForm.statusChanges.pipe(startWith(this.driverForm.status)));
+  private formStatusSignal = toSignal(
+    // Obtiene el estado actual del formulario
+    this.driverForm.statusChanges.pipe(
+      startWith(this.driverForm.status)
+    )
+  );
 
   private formPristineSignal = toSignal(this.driverForm.valueChanges.pipe(
 
@@ -172,14 +176,9 @@ export class DriverFormComponent {
 
         this.errorMessage.set(null); // Limpia errores previos
 
-        this.driverForm.markAsPristine();
+        this.driverForm.markAsPristine(); // Marca el formulario como limpio
 
       } else {
-
-        // En modo creación, el formulario se resetea desde el componente padre (Drivers)
-
-        // o se inicializa vacío. No resetear aquí para evitar borrar datos mientras se escribe.
-
         this.errorMessage.set(null);
 
       }
@@ -201,7 +200,7 @@ export class DriverFormComponent {
   // --- Método de Envío ---
   onSubmit(): void {
     if (this.driverForm.invalid) {
-      this.driverForm.markAllAsTouched();
+      this.driverForm.markAllAsTouched();  // Marca todos los campos como tocados
       return;
     }
 
@@ -226,7 +225,7 @@ export class DriverFormComponent {
 
   // --- Método Cancelar ---
   onCancel(): void {
-    // No reseteamos aquí, el padre podría querer mantener los datos si se reabre
+
     this.errorMessage.set(null);
     this.cancel.emit(); // Notifica al padre que se canceló
   }
@@ -246,7 +245,6 @@ export class DriverFormComponent {
       ? formValue.fechaNacimiento.toISOString().split('T')[0]
       : null;
 
-    // Asegúrate que este objeto coincida con tu interfaz DriverRequest
     return {
       nombre: formValue.nombre,
       licencia: formValue.licencia,
@@ -259,7 +257,6 @@ export class DriverFormComponent {
   private handleSuccess(result: Driver): void {
     console.log('✅ Operación exitosa:', result);
     this.save.emit(result);
-    // No reseteamos aquí, el padre cerrará el diálogo y podría querer resetear después
   }
 
   // --- Manejador de Error ---

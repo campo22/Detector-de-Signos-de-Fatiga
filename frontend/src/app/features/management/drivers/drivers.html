@@ -75,14 +75,23 @@
 </div>
 
 <!-- Diálogo para Añadir/Editar Conductor -->
-<div *ngIf="isDialogVisible()" class="fixed inset-0 bg-background/80 flex items-center justify-center p-4 backdrop-blur-sm z-50">
-  <div class="bg-card w-full max-w-2xl rounded-lg border border-border shadow-2xl shadow-black/50 relative overflow-hidden">
+<div
+  *ngIf="isDialogVisible()"
+  class="fixed inset-0 bg-background/80 flex items-center justify-center p-4 backdrop-blur-sm z-50"
+>
+  <div
+    class="bg-card w-full max-w-2xl rounded-lg border border-border shadow-2xl shadow-black/50 relative overflow-hidden animate-glow-border"
+  >
     <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
     <div class="relative z-10 p-2">
       <div class="border border-border/50 rounded-[calc(var(--radius)-2px)] p-6 sm:p-8">
         <div class="flex flex-col space-y-2 mb-8">
-          <h2 class="font-display text-2xl font-bold tracking-tight text-foreground">{{ dialogHeader() }}</h2>
-          <p class="text-sm text-muted-foreground">Registre un nuevo miembro en la flota de SafeTrack.</p>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-primary">
+            {{ dialogHeader() }}
+          </h2>
+          <p class="text-sm text-muted-foreground">
+            Registre un nuevo miembro en la flota de SafeTrack.
+          </p>
         </div>
         <app-driver-form
           [driverData]="selectedDriver()"
@@ -94,4 +103,3 @@
     </div>
   </div>
 </div>
-
