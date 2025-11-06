@@ -19,6 +19,10 @@ export class AuthService {
   public isAuthenticated = signal<boolean>(false);
   private isRefreshing = signal<boolean>(false);
 
+  constructor() {
+    this.loadAuthDataFromStorage();
+  }
+
   // --- MÉTODOS PÚBLICOS ---
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
@@ -39,12 +43,12 @@ export class AuthService {
           this.setAuthData(response.body);
         } else {
           // Forzar logout si la respuesta no es exitosa aunque no sea un error HTTP
-          this.logout();
+          this.clearAuthData();
         }
       }),
       map(response => response.ok && !!response.body),
       catchError(() => {
-        this.logout();
+        this.clearAuthData();
         return of(false);
       }),
       finalize(() => this.isRefreshing.set(false))
@@ -57,9 +61,7 @@ export class AuthService {
       .pipe(
         // el fialize se ejecuta cuando se completa el observable
         finalize(() => {
-          this.accessToken.set(null);
-          this.currentUserRole.set(null);
-          this.isAuthenticated.set(false);
+          this.clearAuthData();
           this.router.navigate(['/login']);
         })
       )
@@ -82,5 +84,30 @@ export class AuthService {
     this.accessToken.set(response.accessToken);
     this.currentUserRole.set(response.rol);
     this.isAuthenticated.set(true);
+
+    // Guardar en localStorage
+    localStorage.setItem('accessToken', response.accessToken);
+    localStorage.setItem('userRole', response.rol);
+  }
+
+  private clearAuthData(): void {
+    this.accessToken.set(null);
+    this.currentUserRole.set(null);
+    this.isAuthenticated.set(false);
+
+    // Limpiar localStorage
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userRole');
+  }
+
+  private loadAuthDataFromStorage(): void {
+    const token = localStorage.getItem('accessToken');
+    const role = localStorage.getItem('userRole');
+
+    if (token && role) {
+      this.accessToken.set(token);
+      this.currentUserRole.set(role as Role);
+      this.isAuthenticated.set(true);
+    }
   }
 }

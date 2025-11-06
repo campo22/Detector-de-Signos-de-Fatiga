@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
+    "test": "ng test"
   },
   "prettier": {
     "printWidth": 100,
@@ -32,7 +31,6 @@
     "@angular/platform-browser": "^20.3.6",
     "@angular/platform-server": "^20.3.6",
     "@angular/router": "^20.3.6",
-    "@angular/ssr": "^20.3.6",
     "@primeuix/themes": "^1.2.4",
     "@stomp/stompjs": "^7.2.0",
     "@tailwindcss/container-queries": "^0.1.1",
