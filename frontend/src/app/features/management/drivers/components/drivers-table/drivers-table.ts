@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, EventEmitter, inject, Output, signal } from '@angular/core';
 import { DriverService } from '../../../../shared/services/driver.service';
 import { DriverFilterService } from '../../services/driver-filter.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -7,6 +7,9 @@ import { Page } from '../../../../../core/models/event.models';
 import { Driver } from '../../../../../core/models/driver.models';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 type SortState = {
   column: string;
@@ -16,10 +19,14 @@ type SortState = {
 @Component({
   selector: 'app-drivers-table',
   imports: [
-    CommonModule
+    CommonModule,
+    ButtonModule,
+    TagModule,
+    TooltipModule
   ],
   templateUrl: './drivers-table.html',
-  styleUrl: './drivers-table.scss'
+  styleUrl: './drivers-table.scss',
+
 })
 export class DriversTable {
 

@@ -103,17 +103,26 @@ export class Drivers {
   // --- Métodos para eliminar conductor ---
   confirmDeleteDriver(driver: Driver): void {
     this.confirmationService.confirm({
-      message: `¿Estás seguro de que quieres eliminar al conductor ${driver.nombre}? Esta acción no se puede deshacer.`,
-      header: 'Confirmar Eliminación',
-      icon: 'pi pi-exclamation-triangle',
+      header: `Eliminar a ${driver.nombre}`,
+      message: `Se eliminarán todos los datos asociados a <strong>${driver.nombre}</strong>. Esta acción es irreversible. ¿Deseas continuar?`,
+      icon: 'pi pi-exclamation-triangle text-orange-500',
+      acceptLabel: 'Sí, eliminar',
+      rejectLabel: 'No, cancelar',
+      acceptButtonStyleClass: 'p-button-primary',
+      rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
         if (driver.id) {
           this.deleteDriver(driver.id);
         }
       },
       reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'Eliminación cancelada' });
-      }
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelado',
+          detail: 'La eliminación del conductor ha sido cancelada.',
+          life: 3000,
+        });
+      },
     });
   }
 

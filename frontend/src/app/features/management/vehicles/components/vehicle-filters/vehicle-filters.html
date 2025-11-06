@@ -1,0 +1,85 @@
+<form
+  class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end"
+  [formGroup]="filterForm"
+>
+  <div class="flex flex-col gap-1">
+    <label for="filter-placa" class="block text-sm font-medium text-muted-foreground">
+      Buscar por Placa
+    </label>
+    <input
+      pInputText
+      id="filter-placa"
+      formControlName="placa"
+      class="w-full"
+      placeholder="Ej. ABC-123"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label for="filter-marca" class="block text-sm font-medium text-muted-foreground">
+      Marca
+    </label>
+    <input
+      pInputText
+      id="filter-marca"
+      formControlName="marca"
+      class="w-full"
+      placeholder="Ej. Ford"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label for="filter-modelo" class="block text-sm font-medium text-muted-foreground">
+      Modelo
+    </label>
+    <input
+      pInputText
+      id="filter-modelo"
+      formControlName="modelo"
+      class="w-full"
+      placeholder="Ej. Transit"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label for="filter-status" class="block text-sm font-medium text-muted-foreground">
+      Estado
+    </label>
+    <p-select
+      id="filter-status"
+      formControlName="activo"
+      [options]="statusOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Todos"
+      styleClass="w-full"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label for="filter-assignment" class="block text-sm font-medium text-muted-foreground">
+      Asignación
+    </label>
+    <p-select
+      id="filter-assignment"
+      formControlName="asignado"
+      [options]="assignmentOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Todos"
+      styleClass="w-full"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <p-button
+      type="button"
+      label="Limpiar"
+      icon="pi pi-filter-slash"
+      (click)="clearFilters()"
+      [disabled]="!hasActiveFilters()"
+      [outlined]="true"
+      styleClass="w-full"
+    />
+  </div>
+</form>

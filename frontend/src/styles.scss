@@ -150,3 +150,15 @@ th {
 .btn-secondary:hover {
   background-color: hsl(var(--accent));
 }
+
+.custom-confirm-dialog .p-dialog {
+    @apply bg-card border border-border shadow-2xl shadow-black/50 rounded-lg;
+}
+
+.custom-confirm-dialog .p-dialog-header {
+    @apply border-b border-border;
+}
+
+.custom-confirm-dialog .p-dialog-footer {
+    @apply border-t border-border;
+}
