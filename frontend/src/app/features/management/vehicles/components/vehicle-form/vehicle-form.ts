@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, input, Output, EventEmitter, signal, effect, computed, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, take } from 'rxjs/operators'; // Add take
 
 // Importaciones PrimeNG
 import { ButtonModule } from 'primeng/button';
@@ -12,11 +12,16 @@ import { SelectModule } from 'primeng/select';
 // Modelos y Servicios
 import { Vehicle, VehicleRequest } from '../../../../../core/models/vehicle.models';
 import { VehicleService } from '../../../../shared/services/Vehicle.service';
+import { DriverService } from '../../../../shared/services/driver.service';
+import { Driver } from '../../../../../core/models/driver.models'; // Add Driver import
+import { Page } from '../../../../../core/models/event.models'; // Add Page import
 
 interface StatusOption {
   label: string;
   value: boolean;
 }
+
+import { AutoCompleteModule } from 'primeng/autocomplete'; // New import
 
 @Component({
   selector: 'app-vehicle-form',
@@ -26,7 +31,8 @@ interface StatusOption {
     ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-    SelectModule
+    SelectModule,
+    AutoCompleteModule // Add AutoCompleteModule
   ],
   templateUrl: './vehicle-form.html',
   styleUrl: './vehicle-form.scss',
@@ -35,6 +41,7 @@ interface StatusOption {
 export class VehicleFormComponent {
   private fb = inject(FormBuilder);
   private vehicleService = inject(VehicleService);
+  private driverService = inject(DriverService); // New injection
 
   // --- Entradas como Signals ---
   vehicleData = input<Vehicle | null>(null);
@@ -48,6 +55,9 @@ export class VehicleFormComponent {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
+  availableDrivers = signal<Driver[]>([]); // New signal
+  filteredDrivers = signal<Driver[]>([]); // New signal
+
   statusOptions: StatusOption[] = [
     { label: 'Activo', value: true },
     { label: 'Inactivo', value: false }
@@ -60,7 +70,7 @@ export class VehicleFormComponent {
     modelo: ['', Validators.required],
     anio: [null, [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear() + 1)]],
     activo: [null as boolean | null, Validators.required],
-    driverId: [null as string | null] // Añadir driverId, puede ser nulo inicialmente
+    driver: [null as Driver | null] // Change driverId to driver object
   });
 
   // --- Señales para la reactividad del formulario ---
@@ -94,12 +104,18 @@ export class VehicleFormComponent {
       const vehicle = this.vehicleData();
 
       if (vehicle) {
+        // Find the driver object if driverId is present
+        const assignedDriver = vehicle.driverAsignado
+            ? this.availableDrivers().find(d => d.id === vehicle.driverAsignado?.id) || null
+            : null;
+
         this.vehicleForm.patchValue({
           placa: vehicle.placa,
           marca: vehicle.marca,
           modelo: vehicle.modelo,
           anio: vehicle.anio,
-          activo: vehicle.activo
+          activo: vehicle.activo,
+          driver: assignedDriver // Set the driver object
         }, { emitEvent: false });
         this.errorMessage.set(null);
         this.vehicleForm.markAsPristine();
@@ -107,11 +123,30 @@ export class VehicleFormComponent {
         this.errorMessage.set(null);
       }
     });
+    this.loadAvailableDrivers(); // New method call
+  }
+
+  private loadAvailableDrivers(): void {
+    this.driverService.getDrivers({}, 0, 1000, 'nombre', 'asc') // Fetch all drivers
+        .pipe(take(1))
+        .subscribe((page: Page<Driver>) => {
+            this.availableDrivers.set(page.content);
+        });
+  }
+
+  searchDrivers(event: { originalEvent: Event; query: string }): void {
+    const query = event.query.toLowerCase();
+    const filtered = this.availableDrivers().filter(driver =>
+        driver.nombre.toLowerCase().includes(query) ||
+        driver.licencia.toLowerCase().includes(query)
+    );
+    this.filteredDrivers.set(filtered);
   }
 
   resetForm(): void {
     this.vehicleForm.reset({
-      activo: null
+      activo: null,
+      driver: null // Reset driver field
     });
     this.vehicleForm.markAsPristine();
     this.vehicleForm.markAsUntouched();
@@ -154,6 +189,7 @@ export class VehicleFormComponent {
 
   private buildVehiclePayload(): VehicleRequest {
     const formValue = this.vehicleForm.getRawValue();
+    const driverId = formValue.driver ? formValue.driver.id : null; // Extract driverId from driver object
 
     return {
       placa: formValue.placa,
@@ -161,7 +197,7 @@ export class VehicleFormComponent {
       modelo: formValue.modelo,
       anio: formValue.anio,
       activo: formValue.activo,
-      driverId: formValue.driverId // Incluir driverId en el payload
+      driverId: driverId
     };
   }
 
