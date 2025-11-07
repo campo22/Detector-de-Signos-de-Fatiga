@@ -18,9 +18,10 @@ export interface DriverResponse {
   id: string;
   nombre: string;
   licencia: string;
-  fechaNacimiento: Date;
+  fechaNacimiento: string; // Backend LocalDate serializes to string
   activo: boolean;
 }
+
 export interface DriverFilterRequest {
   nombre?: string;
   licencia?: string;

@@ -111,6 +111,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Transactional
     public VehicleResponse updateVehicle(UUID id, VehicleRequest request) {
         log.info("Actualizando vehiculo con id: {}", id);
+        log.info("Valor de activo recibido en el request: {}", request.getActivo()); // Debug log
         Vehicle vehicle= vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontro el vehiculo con id: " + id));
 
@@ -120,6 +121,10 @@ public class VehicleServiceImpl implements VehicleService {
                             request.getDriverId())
                     );
             vehicle.setDriver(driver);
+        }
+        // Actualizar el estado activo explícitamente
+        if (request.getActivo() != null) {
+            vehicle.setActivo(request.getActivo());
         }
         vehicleMapper.updateVehicleFromRequest(request, vehicle);
         Vehicle updatedVehicle= vehicleRepository.save(vehicle);

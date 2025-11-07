@@ -37,5 +37,6 @@ public interface VehicleMapper {
      * @param vehicle La entidad a actualizar (obtenida de la BD).
      */
     @Mapping(target = "driver", ignore = true)
+    @Mapping(target = "activo", source = "activo") // Mapeo explícito para el campo activo
     void updateVehicleFromRequest(VehicleRequest request, @MappingTarget Vehicle vehicle);
 }

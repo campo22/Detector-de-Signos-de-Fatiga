@@ -7,7 +7,7 @@ import { startWith, map, take } from 'rxjs/operators'; // Add take
 // Importaciones PrimeNG
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
+import { DropdownModule } from 'primeng/dropdown'; // Change SelectModule to DropdownModule
 
 // Modelos y Servicios
 import { Vehicle, VehicleRequest } from '../../../../../core/models/vehicle.models';
@@ -31,7 +31,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete'; // New import
     ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-    SelectModule,
+    DropdownModule, // Change SelectModule to DropdownModule
     AutoCompleteModule // Add AutoCompleteModule
   ],
   templateUrl: './vehicle-form.html',
@@ -69,7 +69,7 @@ export class VehicleFormComponent {
     marca: ['', Validators.required],
     modelo: ['', Validators.required],
     anio: [null, [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear() + 1)]],
-    activo: [null as boolean | null, Validators.required],
+    activo: [this.statusOptions[0], Validators.required],
     driver: [null as Driver | null] // Change driverId to driver object
   });
 
@@ -102,11 +102,12 @@ export class VehicleFormComponent {
   constructor() {
     effect(() => {
       const vehicle = this.vehicleData();
+      console.log('VehicleFormComponent: Vehicle data received for editing', vehicle); // Debug log
 
       if (vehicle) {
         // Find the driver object if driverId is present
-        const assignedDriver = vehicle.driverAsignado
-            ? this.availableDrivers().find(d => d.id === vehicle.driverAsignado?.id) || null
+        const assignedDriver = vehicle.driver
+            ? this.availableDrivers().find(d => d.id === vehicle.driver?.id) || null
             : null;
 
         this.vehicleForm.patchValue({
@@ -114,7 +115,7 @@ export class VehicleFormComponent {
           marca: vehicle.marca,
           modelo: vehicle.modelo,
           anio: vehicle.anio,
-          activo: vehicle.activo,
+          activo: this.statusOptions.find(option => option.value === vehicle.activo), // Find the StatusOption object
           driver: assignedDriver // Set the driver object
         }, { emitEvent: false });
         this.errorMessage.set(null);
@@ -145,7 +146,7 @@ export class VehicleFormComponent {
 
   resetForm(): void {
     this.vehicleForm.reset({
-      activo: null,
+      activo: true,
       driver: null // Reset driver field
     });
     this.vehicleForm.markAsPristine();
@@ -191,12 +192,14 @@ export class VehicleFormComponent {
     const formValue = this.vehicleForm.getRawValue();
     const driverId = formValue.driver ? formValue.driver.id : null; // Extract driverId from driver object
 
+    console.log('VehicleFormComponent: Payload activo value:', formValue.activo.value); // Debug log
+
     return {
       placa: formValue.placa,
       marca: formValue.marca,
       modelo: formValue.modelo,
       anio: formValue.anio,
-      activo: formValue.activo,
+      activo: formValue.activo.value, // Extract the boolean value
       driverId: driverId
     };
   }
@@ -211,5 +214,10 @@ export class VehicleFormComponent {
     const apiErrorMessage = error?.error?.message || error?.message || 'Ocurrió un error desconocido.';
     this.errorMessage.set(`Error al guardar: ${apiErrorMessage}. Intenta de nuevo.`);
     this.isLoading.set(false);
+  }
+
+  // Función de comparación para p-select
+  compareStatusOptions(option1: StatusOption, option2: StatusOption): boolean {
+    return option1 && option2 ? option1.value === option2.value : option1 === option2;
   }
 }

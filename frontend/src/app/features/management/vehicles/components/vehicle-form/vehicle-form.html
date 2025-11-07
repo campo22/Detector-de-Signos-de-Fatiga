@@ -117,13 +117,13 @@
         <span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>
         Estado
       </label>
-      <p-select
+      <p-dropdown
         id="activo"
         formControlName="activo"
         [options]="statusOptions"
         optionLabel="label"
-        optionValue="value"
         placeholder="Seleccione un estado"
+        [compareWith]="compareStatusOptions"
         styleClass="w-full h-11 rounded-md"
       />
       @if (isInvalid('activo')) {
@@ -159,12 +159,10 @@
         inputStyleClass="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
       >
         <ng-template let-driver pTemplate="item">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">person</span>
-            <div>
-              <div class="font-medium">{{ driver.nombre }}</div>
-              <div class="text-xs text-muted-foreground">{{ driver.licencia }}</div>
-            </div>
+          <div class="flex flex-col p-2">
+            <div class="font-bold text-foreground">{{ driver.nombre }}</div>
+            <div class="text-sm text-muted-foreground">Licencia: {{ driver.licencia }}</div>
+            <div class="text-xs text-muted-foreground">ID: {{ driver.id }}</div>
           </div>
         </ng-template>
         <ng-template let-driver pTemplate="selectedItem">

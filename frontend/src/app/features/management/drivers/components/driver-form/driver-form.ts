@@ -9,7 +9,7 @@ import { startWith, map } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker'; // Para fechaNacimiento
-import { SelectModule } from 'primeng/select';       // Para estado activo
+import { DropdownModule } from 'primeng/dropdown';       // Para estado activo
 
 // Modelos y Servicios
 import { Driver, DriverRequest } from '../../../../../core/models/driver.models';
@@ -29,7 +29,7 @@ interface StatusOption {
     ButtonModule,
     InputTextModule,
     DatePickerModule,
-    SelectModule
+    DropdownModule // Change SelectModule to DropdownModule
   ],
   templateUrl: './driver-form.html',
   styleUrl: './driver-form.scss',
@@ -85,7 +85,7 @@ export class DriverFormComponent {
 
     fechaNacimiento: [null as Date | null, Validators.required],
 
-    activo: [null as boolean | null, Validators.required]
+    activo: [this.statusOptions[0], Validators.required] // Initialize with StatusOption object
 
   });
 
@@ -170,7 +170,7 @@ export class DriverFormComponent {
 
           fechaNacimiento: fechaNac,
 
-          activo: driver.activo
+          activo: this.statusOptions.find(option => option.value === driver.activo) // Find the StatusOption object
 
         }, { emitEvent: false }); // Evita disparar valueChanges innecesariamente
 
@@ -189,7 +189,7 @@ export class DriverFormComponent {
   // --- Método público para resetear el formulario (llamado desde el padre) ---
   resetForm(): void {
     this.driverForm.reset({
-      activo: null // Valor por defecto para 'activo' al resetear
+      activo: this.statusOptions[0] // Valor por defecto para 'activo' al resetear
     });
     this.driverForm.markAsPristine();
     this.driverForm.markAsUntouched();
@@ -249,7 +249,7 @@ export class DriverFormComponent {
       nombre: formValue.nombre,
       licencia: formValue.licencia,
       fechaNacimiento: fechaNacimientoISO!,
-      activo: formValue.activo!
+      activo: formValue.activo.value // Extract the boolean value
     };
   }
 
@@ -267,4 +267,8 @@ export class DriverFormComponent {
     this.errorMessage.set(`Error al guardar: ${apiErrorMessage}. Intenta de nuevo.`);
     this.isLoading.set(false);
   }
-}
+
+  // Función de comparación para p-dropdown
+  compareStatusOptions(option1: StatusOption, option2: StatusOption): boolean {
+    return option1 && option2 ? option1.value === option2.value : option1 === option2;
+  }

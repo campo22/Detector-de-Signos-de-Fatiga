@@ -34,7 +34,7 @@ public class Vehicle {
     private boolean activo = true;
 
     // --- Relación con Conductor ---
-    @ManyToOne(fetch = FetchType.LAZY) // LAZY para no cargar el conductor a menos que se necesite
+    @ManyToOne(fetch = FetchType.EAGER) // EAGER para cargar el conductor junto con el vehículo
     @JoinColumn(name = "driver_id") // Columna de clave foránea en la tabla 'vehicles'
     private Driver driver; // Un vehículo puede ser asignado a un conductor
 }

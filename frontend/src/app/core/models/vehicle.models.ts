@@ -1,7 +1,4 @@
-export interface SimpleDriverResponse {
-  id: string;
-  nombre: string;
-}
+import { DriverResponse } from './driver.models';
 
 export interface Vehicle {
   id: string;
@@ -10,7 +7,7 @@ export interface Vehicle {
   modelo: string | null;
   anio: number;
   activo: boolean;
-  driverAsignado: SimpleDriverResponse | null;
+  driver: DriverResponse | null; // Cambiado de driverAsignado a driver y tipo DriverResponse
 }
 
 export interface VehicleRequest {
