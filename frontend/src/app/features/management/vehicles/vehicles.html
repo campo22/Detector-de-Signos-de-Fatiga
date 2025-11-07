@@ -1,3 +1,6 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '450px' }" styleClass="custom-confirm-dialog"></p-confirmDialog>
+
 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
   <h2 class="text-2xl font-bold text-foreground">Gestión de Vehículos</h2>
   <div class="flex items-center gap-4">
@@ -9,6 +12,7 @@
       <span>Exportar</span>
     </button>
     <button
+      (click)="openAddDialog()"
       class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
       aria-label="Añadir nuevo vehículo"
     >
@@ -60,11 +64,43 @@
   </div>
 </div>
 
-<div class="bg-card rounded-t-lg shadow-lg border-x border-t border-border flex flex-col">
+<div class="bg-card rounded-lg shadow-lg border border-border flex flex-col">
   <div class="p-6 border-b border-border">
     <h3 class="text-lg font-semibold text-foreground mb-4">Lista de Vehículos</h3>
-
     <app-vehicle-filters></app-vehicle-filters>
   </div>
+  <app-vehicles-table
+    (editVehicle)="openEditDialog($event)"
+    (deleteVehicle)="confirmDeleteVehicle($event)"
+  ></app-vehicles-table>
 </div>
-<app-vehicles-table></app-vehicles-table>
+
+<!-- Diálogo para Añadir/Editar Vehículo -->
+<div
+  *ngIf="isDialogVisible()"
+  class="fixed inset-0 bg-background/80 flex items-center justify-center p-4 backdrop-blur-sm z-50"
+>
+  <div
+    class="bg-card w-full max-w-2xl rounded-lg border border-border shadow-2xl shadow-black/50 relative overflow-hidden animate-glow-border"
+  >
+    <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+    <div class="relative z-10 p-2">
+      <div class="border border-border/50 rounded-[calc(var(--radius)-2px)] p-6 sm:p-8">
+        <div class="flex flex-col space-y-2 mb-8">
+          <h2 class="font-display text-2xl font-bold tracking-tight text-primary">
+            {{ dialogHeader() }}
+          </h2>
+          <p class="text-sm text-muted-foreground">
+            Registre un nuevo vehículo en la flota de SafeTrack.
+          </p>
+        </div>
+        <app-vehicle-form
+          [vehicleData]="selectedVehicle()"
+          [isEditMode]="isEditMode()"
+          (save)="handleSave($event)"
+          (cancel)="handleCancel()"
+        ></app-vehicle-form>
+      </div>
+    </div>
+  </div>
+</div>

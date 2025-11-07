@@ -1,0 +1,35 @@
+.input-field:focus-within label {
+  color: hsl(var(--primary));
+}
+.input-field:focus-within .material-symbols-outlined {
+  color: hsl(var(--primary));
+  text-shadow: 0 0 12px hsl(var(--primary) / 0.5);
+}
+
+// Style PrimeNG components to match the design
+:host ::ng-deep {
+    .p-select {
+        background: hsl(var(--input));
+        border: 1px solid hsl(var(--border));
+        transition: all 0.3s;
+
+        &:hover {
+            border-color: hsl(var(--border));
+        }
+
+        .p-select-label {
+            color: hsl(var(--foreground));
+            padding-left: 0.75rem; // px-3
+            padding-right: 0.75rem; // px-3
+        }
+    }
+
+    .p-select.p-focus {
+        border-color: hsl(var(--primary) / 0.6) !important;
+        box-shadow: 0 0 0 2px hsl(var(--ring) / 0.5), 0 0 0 2px hsl(var(--background)) inset !important;
+    }
+
+    .p-placeholder {
+        color: hsl(var(--muted-foreground) / 0.6) !important;
+    }
+}
