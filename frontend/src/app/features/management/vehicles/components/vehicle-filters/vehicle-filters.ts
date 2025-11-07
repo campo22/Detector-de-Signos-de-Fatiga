@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
 import { VehicleFilterService } from '../../services/vehicle-filter.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { VehicleFilterRequest } from '../../../../../core/models/vehicle.models';
@@ -17,10 +14,7 @@ interface FilterOption {
   selector: 'app-vehicle-filters',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    SelectModule,
-    ButtonModule
+    ReactiveFormsModule
   ],
   templateUrl: './vehicle-filters.html',
   styleUrl: './vehicle-filters.scss',

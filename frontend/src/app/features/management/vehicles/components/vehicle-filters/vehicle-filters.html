@@ -2,84 +2,85 @@
   class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end"
   [formGroup]="filterForm"
 >
-  <div class="flex flex-col gap-1">
-    <label for="filter-placa" class="block text-sm font-medium text-muted-foreground">
+  <div>
+    <label for="filter-placa" class="block text-sm font-medium text-muted-foreground mb-1">
       Buscar por Placa
     </label>
     <input
-      pInputText
+      type="text"
       id="filter-placa"
       formControlName="placa"
-      class="w-full"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
       placeholder="Ej. ABC-123"
     />
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="filter-marca" class="block text-sm font-medium text-muted-foreground">
+  <div>
+    <label for="filter-marca" class="block text-sm font-medium text-muted-foreground mb-1">
       Marca
     </label>
     <input
-      pInputText
+      type="text"
       id="filter-marca"
       formControlName="marca"
-      class="w-full"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
       placeholder="Ej. Ford"
     />
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="filter-modelo" class="block text-sm font-medium text-muted-foreground">
+  <div>
+    <label for="filter-modelo" class="block text-sm font-medium text-muted-foreground mb-1">
       Modelo
     </label>
     <input
-      pInputText
+      type="text"
       id="filter-modelo"
       formControlName="modelo"
-      class="w-full"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
       placeholder="Ej. Transit"
     />
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="filter-status" class="block text-sm font-medium text-muted-foreground">
+  <div>
+    <label for="filter-status" class="block text-sm font-medium text-muted-foreground mb-1">
       Estado
     </label>
-    <p-select
+    <select
       id="filter-status"
       formControlName="activo"
-      [options]="statusOptions"
-      optionLabel="label"
-      optionValue="value"
-      placeholder="Todos"
-      styleClass="w-full"
-    />
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary"
+    >
+      <option [ngValue]="null">Todos</option>
+      <option [ngValue]="true">Activo</option>
+      <option [ngValue]="false">Inactivo</option>
+    </select>
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="filter-assignment" class="block text-sm font-medium text-muted-foreground">
+  <div>
+    <label for="filter-assignment" class="block text-sm font-medium text-muted-foreground mb-1">
       Asignación
     </label>
-    <p-select
+    <select
       id="filter-assignment"
       formControlName="asignado"
-      [options]="assignmentOptions"
-      optionLabel="label"
-      optionValue="value"
-      placeholder="Todos"
-      styleClass="w-full"
-    />
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary"
+    >
+      <option [ngValue]="null">Todos</option>
+      <option [ngValue]="true">Asignado</option>
+      <option [ngValue]="false">No Asignado</option>
+    </select>
   </div>
 
-  <div class="flex flex-col gap-1">
-    <p-button
+  <div>
+    <button
       type="button"
-      label="Limpiar"
-      icon="pi pi-filter-slash"
       (click)="clearFilters()"
       [disabled]="!hasActiveFilters()"
-      [outlined]="true"
-      styleClass="w-full"
-    />
+      class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-secondary border border-border text-muted-foreground rounded-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      title="Limpiar filtros aplicados"
+    >
+      <span class="material-symbols-outlined text-base">filter_alt_off</span>
+      <span>Limpiar</span>
+    </button>
   </div>
 </form>
