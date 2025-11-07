@@ -14,6 +14,8 @@ import com.safetrack.repository.specification.VehicleSpecification;
 import com.safetrack.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,13 +93,11 @@ public class VehicleServiceImpl implements VehicleService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<VehicleResponse> getAllVehicles(VehicleFilterRequest filter) {
+    public Page<VehicleResponse> getAllVehicles(VehicleFilterRequest filter, Pageable pageable) {
         log.info("Obteniendo la lista de todos los vehiculos con filtro: {}", filter);
-        Specification<Vehicle> spec= vehicleSpecification.getSpecification(filter);
-
-        return vehicleRepository.findAll(spec).stream()
-                .map(vehicleMapper::toVehicleResponse)
-                .collect(Collectors.toList());
+        Specification<Vehicle> spec = vehicleSpecification.getSpecification(filter);
+        return vehicleRepository.findAll(spec, pageable)
+                .map(vehicleMapper::toVehicleResponse);
     }
 
     /**

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthResponse, LoginRequest, Role } from '../../../core/models/auth.models';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,10 @@ export class AuthService {
     console.log('AuthService: Ejecutando logout...');
     this.http.post(`${this.apiUrl}/logout`, {}, { responseType: 'text' })
       .pipe(
+        catchError(error => {
+          console.error('Logout failed', error);
+          return of(null); // Devuelve un observable nulo para que el finalize se ejecute
+        }),
         // el fialize se ejecuta cuando se completa el observable
         finalize(() => {
           this.clearAuthData();
@@ -104,10 +109,26 @@ export class AuthService {
     const token = localStorage.getItem('accessToken');
     const role = localStorage.getItem('userRole');
 
-    if (token && role) {
+    if (token && role && !this.isTokenExpired(token)) {
       this.accessToken.set(token);
       this.currentUserRole.set(role as Role);
       this.isAuthenticated.set(true);
+    } else {
+      this.clearAuthData();
+    }
+  }
+
+  private isTokenExpired(token: string): boolean {
+    try {
+      const decoded = jwtDecode(token);
+      const expiration = decoded.exp;
+      if (expiration === undefined) {
+        return true;
+      }
+      const now = Date.now() / 1000;
+      return expiration < now;
+    } catch (error) {
+      return true;
     }
   }
 }

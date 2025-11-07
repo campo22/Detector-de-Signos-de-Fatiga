@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,9 +46,13 @@ public class VehicleController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR', 'AUDITOR')")
-    @Operation(summary = "Obtener una lista de todos los vehículos")
-    public ResponseEntity<List<VehicleResponse>> getAllVehicles(VehicleFilterRequest filter ) {
-        return ResponseEntity.ok(vehicleService.getAllVehicles(filter));
+    @Operation(summary = "Obtener una lista paginada de todos los vehículos con filtros")
+    public ResponseEntity<Page<VehicleResponse>> getAllVehicles(
+            VehicleFilterRequest filter,
+            @PageableDefault(size = 10, sort = "placa", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        Page<VehicleResponse> vehiclePage = vehicleService.getAllVehicles(filter, pageable);
+        return ResponseEntity.ok(vehiclePage);
     }
 
     @PutMapping("/{id}")

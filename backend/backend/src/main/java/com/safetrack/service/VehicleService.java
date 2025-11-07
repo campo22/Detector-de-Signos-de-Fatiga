@@ -3,6 +3,8 @@ package com.safetrack.service;
 import com.safetrack.domain.dto.request.VehicleFilterRequest;
 import com.safetrack.domain.dto.request.VehicleRequest;
 import com.safetrack.domain.dto.response.VehicleResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,11 +28,11 @@ public interface VehicleService {
     VehicleResponse getVehicleById(UUID id);
 
     /**
-     * Obtiene una lista de todos los vehículos registrados en el sistema.
+     * Obtiene una lista paginada de todos los vehículos registrados en el sistema.
      *
      * @return Una lista de objetos VehicleResponse, cada uno representando un vehículo.
      */
-    List<VehicleResponse> getAllVehicles(VehicleFilterRequest filter);
+    Page<VehicleResponse> getAllVehicles(VehicleFilterRequest filter, Pageable pageable);
 
     /**
      * Actualiza la información de un vehículo existente.
