@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { ClipboardModule } from '@angular/cdk/clipboard'; // Import ClipboardModule
+import { MessageService } from 'primeng/api'; // Import MessageService
 
 type SortState = {
   column: string;
@@ -22,17 +24,18 @@ type SortState = {
     CommonModule,
     ButtonModule,
     TagModule,
-    TooltipModule
+    TooltipModule,
+    ClipboardModule, // Add ClipboardModule
   ],
   templateUrl: './drivers-table.html',
   styleUrl: './drivers-table.scss',
-
 })
 export class DriversTable {
 
   private driverService = inject(DriverService);
   private driverFilterService = inject(DriverFilterService);
   private router = inject(Router);
+  private messageService = inject(MessageService); // Inject MessageService
 
   public currentPage = signal(0);
   public sortState = signal<SortState>({
@@ -129,4 +132,12 @@ export class DriversTable {
     this.router.navigate(['/monitoring', driverId]);
   }
 
+  onIdCopied(id: string): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Copiado',
+      detail: `ID ${id.substring(0, 8)}... copiado al portapapeles.`,
+      life: 2000 // El mensaje desaparecerá después de 2 segundos
+    });
+  }
 }

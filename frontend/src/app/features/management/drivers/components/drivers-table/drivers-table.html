@@ -25,6 +25,8 @@
             </span>
             }
           </th>
+          <!-- Columna: ID -->
+          <th scope="col" class="px-6 py-3">ID</th>
           <!-- Columna: Licencia. Permite ordenar los datos al hacer clic. -->
           <th
             scope="col"
@@ -72,6 +74,21 @@
           <!-- Celda: Nombre del conductor -->
           <td class="px-6 py-4 font-medium text-foreground whitespace-nowrap">
             {{ driver.nombre }}
+          </td>
+          <!-- Celda: ID del conductor con botón de copiado -->
+          <td class="px-6 py-4 font-mono text-xs">
+            <div class="flex items-center gap-2">
+              <span>{{ driver.id.substring(0, 8) }}...</span>
+              <button
+                [cdkCopyToClipboard]="driver.id"
+                (cdkCopyToClipboardCopied)="onIdCopied(driver.id)"
+                pTooltip="Copiar ID completo"
+                tooltipPosition="top"
+                class="p-1 rounded-md hover:bg-primary/10 text-primary transition-colors"
+              >
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+              </button>
+            </div>
           </td>
           <!-- Celda: Licencia del conductor -->
           <td class="px-6 py-4">{{ driver.licencia }}</td>
@@ -124,7 +141,7 @@
                   <span class="material-symbols-outlined text-xl">visibility</span>
                 </button>
                 <div
-                  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nowrap z-50"
+                  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nownowrap z-50"
                 >
                   Ver Detalles
                 </div>

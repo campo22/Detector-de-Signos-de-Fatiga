@@ -9,6 +9,8 @@ import { Vehicle } from '../../../../../core/models/vehicle.models';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { merge, switchMap, startWith, catchError, tap } from 'rxjs';
 import { Page } from '../../../../../core/models/event.models';
+import { ClipboardModule } from '@angular/cdk/clipboard'; // Import ClipboardModule
+import { MessageService } from 'primeng/api'; // Import MessageService
 
 // Define el tipo para el estado de ordenamiento
 type SortState = {
@@ -22,7 +24,8 @@ type SortState = {
     CommonModule,
     ButtonModule,
     TagModule,
-    TooltipModule
+    TooltipModule,
+    ClipboardModule, // Add ClipboardModule
   ],
   templateUrl: './vehicles-table.html',
   styleUrl: './vehicles-table.scss',
@@ -32,6 +35,7 @@ export class VehiclesTable {
   // --- 2. Inyección de dependencias de VEHÍCULO ---
   private vehicleService = inject(VehicleService);
   private vehicleFilterService = inject(VehicleFilterService);
+  private messageService = inject(MessageService); // Inject MessageService
 
   //  los eventos de edición y eliminación de vehículos se emitirán al padre osea el componente padre ejemnplo:
   // <app-vehicles-table
@@ -131,4 +135,12 @@ export class VehiclesTable {
     this.currentPage.set(0); // Volver a página 1 al reordenar
   }
 
+  onIdCopied(id: string): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Copiado',
+      detail: `ID ${id.substring(0, 8)}... copiado al portapapeles.`,
+      life: 2000 // El mensaje desaparecerá después de 2 segundos
+    });
+  }
 }

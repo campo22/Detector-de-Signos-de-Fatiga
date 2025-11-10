@@ -7,6 +7,8 @@
         class="text-xs text-muted-foreground uppercase bg-secondary/30 backdrop-blur-sm sticky top-0 z-10"
       >
         <tr>
+          <!-- Columna ID -->
+          <th scope="col" class="px-6 py-3">ID</th>
           <th
             scope="col"
             class="px-6 py-3 cursor-pointer hover:text-primary transition-colors"
@@ -79,6 +81,21 @@
           class="bg-card border-b border-border even:bg-secondary/20 hover:bg-muted/40 transition-colors driver-row"
           [style.animation-delay]="i * 40 + 'ms'"
         >
+          <!-- Celda ID del vehículo con botón de copiado -->
+          <td class="px-6 py-4 font-mono text-xs">
+            <div class="flex items-center gap-2">
+              <span>{{ vehicle.id.substring(0, 8) }}...</span>
+              <button
+                [cdkCopyToClipboard]="vehicle.id"
+                (cdkCopyToClipboardCopied)="onIdCopied(vehicle.id)"
+                pTooltip="Copiar ID completo"
+                tooltipPosition="top"
+                class="p-1 rounded-md hover:bg-primary/10 text-primary transition-colors"
+              >
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+              </button>
+            </div>
+          </td>
           <td class="px-6 py-4 font-medium text-foreground whitespace-nowrap">
             {{ vehicle.placa }}
           </td>
@@ -107,7 +124,22 @@
           </td>
 
           <td class="px-6 py-4">
-            {{ vehicle.driver?.nombre || 'Sin Asignar' }}
+            @if (vehicle.driver) {
+            <div class="flex items-center gap-2">
+              <span>{{ vehicle.driver.nombre }}</span>
+              <button
+                [cdkCopyToClipboard]="vehicle.driver.id"
+                (cdkCopyToClipboardCopied)="onIdCopied(vehicle.driver.id)"
+                pTooltip="Copiar ID del Conductor"
+                tooltipPosition="top"
+                class="p-1 rounded-md hover:bg-primary/10 text-primary transition-colors"
+              >
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+              </button>
+            </div>
+            } @else {
+            <span class="text-muted-foreground/70">Sin Asignar</span>
+            }
           </td>
 
           <td class="px-6 py-4 text-center" style="overflow: visible">
