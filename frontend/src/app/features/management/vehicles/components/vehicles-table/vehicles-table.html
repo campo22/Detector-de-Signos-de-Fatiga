@@ -143,7 +143,22 @@
           </td>
 
           <td class="px-6 py-4 text-center" style="overflow: visible">
-            <div class="flex items-center justify-center gap-4">
+            <div class="flex items-center justify-center gap-2">
+              <!-- Botón para ver detalles -->
+              <div class="group relative flex items-center">
+                <button
+                  (click)="onViewDetails(vehicle)"
+                  title="Ver Detalles"
+                  class="p-3 rounded-full text-success hover:bg-success/10 transition-all duration-200"
+                >
+                  <span class="material-symbols-outlined text-xl">visibility</span>
+                </button>
+                <div
+                  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nowrap z-50"
+                >
+                  Ver Detalles
+                </div>
+              </div>
               <!-- Botón para editar el vehículo -->
               <div class="group relative flex items-center">
                 <button

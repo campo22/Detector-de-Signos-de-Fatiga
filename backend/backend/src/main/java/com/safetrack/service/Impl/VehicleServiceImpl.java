@@ -121,6 +121,8 @@ public class VehicleServiceImpl implements VehicleService {
                             request.getDriverId())
                     );
             vehicle.setDriver(driver);
+        } else {
+            vehicle.setDriver(null);
         }
         // Actualizar el estado activo explícitamente
         if (request.getActivo() != null) {

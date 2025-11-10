@@ -6,6 +6,7 @@ import { VehiclesTable } from './components/vehicles-table/vehicles-table';
 import { VehicleFilters } from './components/vehicle-filters/vehicle-filters';
 import { VehicleService } from '../../shared/services/Vehicle.service';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form';
+import { VehicleDetailsComponent } from './components/vehicle-details/vehicle-details'; // Importar el nuevo componente
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -22,6 +23,7 @@ import { Vehicle } from '../../../core/models/vehicle.models';
     VehiclesTable,
     VehicleFilters,
     VehicleFormComponent,
+    VehicleDetailsComponent, // Añadir el nuevo componente a los imports
     DialogModule,
     ButtonModule,
     ToastModule,
@@ -39,11 +41,15 @@ export class Vehicles {
   private confirmationService = inject(ConfirmationService);
   private vehicleFilterService = inject(VehicleFilterService);
 
+  // Signals para el diálogo de Edición/Creación
   isDialogVisible = signal(false);
   isEditMode = signal(false);
   selectedVehicle = signal<Vehicle | null>(null);
-
   dialogHeader = computed(() => this.isEditMode() ? 'Editar Vehículo' : 'Añadir Nuevo Vehículo');
+
+  // Signals para el diálogo de Detalles
+  isDetailsDialogVisible = signal(false);
+  selectedVehicleForDetails = signal<Vehicle | null>(null);
 
   openAddDialog(): void {
     this.isEditMode.set(false);
@@ -58,6 +64,18 @@ export class Vehicles {
     this.isEditMode.set(true);
     this.selectedVehicle.set(vehicle);
     this.isDialogVisible.set(true);
+  }
+
+  // --- Métodos para el diálogo de Detalles ---
+  openDetailsDialog(vehicle: Vehicle): void {
+    this.selectedVehicleForDetails.set(vehicle);
+    this.isDetailsDialogVisible.set(true);
+  }
+
+  closeDetailsDialog(): void {
+    this.isDetailsDialogVisible.set(false);
+    // Opcional: limpiar el vehículo seleccionado después de cerrar
+    // setTimeout(() => this.selectedVehicleForDetails.set(null), 300);
   }
 
   handleSave(savedVehicle: Vehicle): void {

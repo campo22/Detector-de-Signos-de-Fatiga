@@ -1,0 +1,108 @@
+@if (vehicle) {
+<div class="p-6 sm:p-8 space-y-8">
+  <!-- Sección de Detalles del Vehículo -->
+  <div>
+    <div class="flex items-center gap-4 mb-6">
+      <span class="material-symbols-outlined text-4xl text-primary">directions_car</span>
+      <div>
+        <h3 class="text-2xl font-bold text-foreground tracking-tight">{{ vehicle.placa }}</h3>
+        <p class="text-sm text-muted-foreground">Vehículo</p>
+      </div>
+    </div>
+    <div class="space-y-4">
+      <div class="flex items-start gap-4">
+        <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">label</span>
+        <div>
+          <p class="text-xs text-muted-foreground">Marca / Modelo</p>
+          <p class="font-medium text-foreground">{{ vehicle.marca }} / {{ vehicle.modelo }}</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4">
+        <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">calendar_today</span>
+        <div>
+          <p class="text-xs text-muted-foreground">Año</p>
+          <p class="font-medium text-foreground">{{ vehicle.anio }}</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4">
+        <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">toggle_on</span>
+        <div>
+          <p class="text-xs text-muted-foreground">Estado del Vehículo</p>
+          <p-tag
+            [value]="vehicle.activo ? 'Activo' : 'Inactivo'"
+            [severity]="vehicle.activo ? 'success' : 'danger'"
+            styleClass="text-xs"
+          ></p-tag>
+        </div>
+      </div>
+       <div class="flex items-start gap-4">
+        <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">fingerprint</span>
+        <div>
+          <p class="text-xs text-muted-foreground">ID del Vehículo</p>
+          <p class="font-mono text-xs text-foreground">{{ vehicle.id }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Separador -->
+  <div class="border-t border-border/50"></div>
+
+  <!-- Sección de Detalles del Conductor -->
+  <div>
+    @if (vehicle.driver; as driver) {
+      <div class="flex items-center gap-4 mb-6">
+        <span class="material-symbols-outlined text-4xl text-primary">person</span>
+        <div>
+          <h3 class="text-2xl font-bold text-foreground tracking-tight">{{ driver.nombre }}</h3>
+          <p class="text-sm text-muted-foreground">Conductor Asignado</p>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-start gap-4">
+          <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">badge</span>
+          <div>
+            <p class="text-xs text-muted-foreground">Licencia</p>
+            <p class="font-medium text-foreground">{{ driver.licencia }}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">cake</span>
+          <div>
+            <p class="text-xs text-muted-foreground">Fecha de Nacimiento</p>
+            <p class="font-medium text-foreground">{{ driver.fechaNacimiento | date: 'longDate' }}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">toggle_on</span>
+          <div>
+            <p class="text-xs text-muted-foreground">Estado del Conductor</p>
+            <p-tag
+              [value]="driver.activo ? 'Activo' : 'Inactivo'"
+              [severity]="driver.activo ? 'success' : 'danger'"
+              styleClass="text-xs"
+            ></p-tag>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">fingerprint</span>
+          <div>
+            <p class="text-xs text-muted-foreground">ID del Conductor</p>
+            <p class="font-mono text-xs text-foreground">{{ driver.id }}</p>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center text-center p-6 rounded-lg bg-secondary/20 border border-dashed border-border">
+         <span class="material-symbols-outlined text-5xl text-muted-foreground mb-2">person_off</span>
+        <h3 class="font-semibold text-foreground">Sin Conductor Asignado</h3>
+        <p class="text-sm text-muted-foreground mt-1">Este vehículo está actualmente disponible.</p>
+      </div>
+    }
+  </div>
+</div>
+} @else {
+<div class="p-8 text-center text-muted-foreground">
+  Cargando detalles del vehículo...
+</div>
+}

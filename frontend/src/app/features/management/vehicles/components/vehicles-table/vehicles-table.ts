@@ -45,6 +45,7 @@ export class VehiclesTable {
 
   @Output() editVehicle = new EventEmitter<Vehicle>();
   @Output() deleteVehicle = new EventEmitter<Vehicle>();
+  @Output() viewDetails = new EventEmitter<Vehicle>();
 
   // --- 4. Signals para estado local (paginación y orden) ---
   public currentPage = signal(0);
@@ -107,6 +108,11 @@ export class VehiclesTable {
   onDeleteVehicle(vehicle: Vehicle): void {
     console.log('Solicitando eliminar vehículo:', vehicle.id);
     this.deleteVehicle.emit(vehicle); // Emite el evento al padre
+  }
+
+  onViewDetails(vehicle: Vehicle): void {
+    console.log('Solicitando ver detalles del vehículo:', vehicle.id);
+    this.viewDetails.emit(vehicle); // Emite el evento al padre
   }
 
   // --- 8. Métodos de Paginación y Ordenamiento ---
