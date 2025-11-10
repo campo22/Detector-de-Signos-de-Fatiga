@@ -9,7 +9,7 @@ import { startWith, map } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker'; // Para fechaNacimiento
-import { DropdownModule } from 'primeng/dropdown';       // Para estado activo
+import { SelectModule } from 'primeng/select';       // Para estado activo
 
 // Modelos y Servicios
 import { Driver, DriverRequest } from '../../../../../core/models/driver.models';
@@ -29,7 +29,7 @@ interface StatusOption {
     ButtonModule,
     InputTextModule,
     DatePickerModule,
-    DropdownModule // Change SelectModule to DropdownModule
+    SelectModule // Change SelectModule to DropdownModule
   ],
   templateUrl: './driver-form.html',
   styleUrl: './driver-form.scss',
@@ -272,3 +272,4 @@ export class DriverFormComponent {
   compareStatusOptions(option1: StatusOption, option2: StatusOption): boolean {
     return option1 && option2 ? option1.value === option2.value : option1 === option2;
   }
+}

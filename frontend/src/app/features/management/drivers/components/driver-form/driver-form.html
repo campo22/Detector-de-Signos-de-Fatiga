@@ -98,15 +98,15 @@
         <span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>
         Estado
       </label>
-      <p-dropdown
+      <p-select
         id="activo"
         formControlName="activo"
         [options]="statusOptions"
         optionLabel="label"
         placeholder="Seleccione un estado"
-        [compareWith]="compareStatusOptions"
+        dataKey="value"
         styleClass="w-full h-11 rounded-md"
-      />
+      ></p-select>
       @if (isInvalid('activo')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>

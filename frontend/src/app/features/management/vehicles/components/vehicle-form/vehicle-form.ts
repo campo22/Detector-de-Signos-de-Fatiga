@@ -7,7 +7,7 @@ import { startWith, map, take } from 'rxjs/operators'; // Add take
 // Importaciones PrimeNG
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown'; // Change SelectModule to DropdownModule
+import { SelectModule } from 'primeng/select'; // Change SelectModule to DropdownModule
 
 // Modelos y Servicios
 import { Vehicle, VehicleRequest } from '../../../../../core/models/vehicle.models';
@@ -31,7 +31,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete'; // New import
     ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule, // Change SelectModule to DropdownModule
+    SelectModule, // Change SelectModule to DropdownModule
     AutoCompleteModule // Add AutoCompleteModule
   ],
   templateUrl: './vehicle-form.html',
