@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, effect } from '@angular/core';
+import { Component, OnInit, inject, signal, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { switchMap, catchError, of, merge, tap } from 'rxjs';
@@ -52,10 +52,14 @@ export class UsersComponent implements OnInit {
 
   // State Signals
   usersPage = signal<Page<User> | null>(null);
-  isDialogVisible = signal(false);
-  isEditMode = signal(false);
-  selectedUser = signal<User | null>(null);
-  
+  selectedUser = signal<User | 'new' | null>(null);
+  isDialogVisible = computed(() => this.selectedUser() !== null);
+  isEditMode = computed(() => typeof this.selectedUser() === 'object' && this.selectedUser() !== null);
+  userForForm = computed(() => {
+    const selected = this.selectedUser();
+    return typeof selected === 'object' ? selected : null;
+  });
+
   private currentPage = signal(0);
   private sortState = signal<{ field: SortColumn; order: number }>({ field: 'name', order: 1 });
 
@@ -117,15 +121,11 @@ export class UsersComponent implements OnInit {
   }
 
   openNew(): void {
-    this.isEditMode.set(false);
-    this.selectedUser.set(null);
-    this.isDialogVisible.set(true);
+    this.selectedUser.set('new');
   }
 
   editUser(user: User): void {
-    this.isEditMode.set(true);
     this.selectedUser.set(user);
-    this.isDialogVisible.set(true);
   }
 
   deleteUser(user: User): void {
@@ -147,26 +147,14 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  handleSave(payload: UserRequest | UserUpdateRequest): void {
-    const operation = this.isEditMode()
-      ? this.userService.updateUser(this.selectedUser()!.id, payload as UserUpdateRequest)
-      : this.userService.createUser(payload as UserRequest);
-
+  handleSave(savedUser: User): void {
     const summary = this.isEditMode() ? 'Usuario Actualizado' : 'Usuario Creado';
-
-    operation.subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: `${summary} correctamente.` });
-        this.isDialogVisible.set(false);
-        this.userFilterService.triggerRefresh();
-      },
-      error: (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message || `No se pudo guardar el usuario.` });
-      }
-    });
+    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: `${summary} correctamente.` });
+    this.selectedUser.set(null);
+    this.userFilterService.triggerRefresh();
   }
 
   handleCancel(): void {
-    this.isDialogVisible.set(false);
+    this.selectedUser.set(null);
   }
 }
