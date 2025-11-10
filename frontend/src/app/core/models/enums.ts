@@ -20,3 +20,13 @@ export enum FatigueType {
   BOSTEZO = 'BOSTEZO',
   CANSANCIO_VISUAL = 'CANSANCIO_VISUAL',
 }
+
+/**
+ * Roles de usuario en el sistema. Debe coincidir con el enum Role.java del backend.
+ */
+export enum Role {
+  ADMINISTRADOR = 'ADMINISTRADOR',
+  GESTOR = 'GESTOR',
+  CONDUCTOR = 'CONDUCTOR',
+  AUDITOR = 'AUDITOR',
+}

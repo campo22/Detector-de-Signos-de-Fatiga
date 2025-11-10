@@ -1,1 +1,54 @@
-<p>users works!</p>
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '450px' }" styleClass="custom-confirm-dialog"></p-confirmDialog>
+
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+  <h2 class="text-2xl font-bold text-foreground">Gestión de Usuarios</h2>
+  <div class="flex items-center gap-4">
+    <button
+      (click)="openNew()"
+      class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
+    >
+      <span class="material-symbols-outlined text-base">add</span>
+      <span>Añadir Usuario</span>
+    </button>
+  </div>
+</div>
+
+<div class="bg-card rounded-lg shadow-lg border border-border flex flex-col">
+  <div class="p-6 border-b border-border">
+    <h3 class="text-lg font-semibold text-foreground mb-4">Lista de Usuarios</h3>
+    <app-user-filters></app-user-filters>
+  </div>
+
+  <app-user-table
+    [usersPage]="usersPage()"
+    (editUser)="editUser($event)"
+    (deleteUser)="deleteUser($event)"
+    (changeSort)="handleSortChange($event)"
+    (changePage)="handlePageChange($event)">
+  </app-user-table>
+</div>
+
+<div *ngIf="isDialogVisible()" class="fixed inset-0 bg-background/80 flex items-center justify-center p-4 backdrop-blur-sm z-50">
+  <div class="bg-card w-full max-w-2xl rounded-lg border border-border shadow-2xl shadow-black/50 relative overflow-hidden animate-glow-border">
+    <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+    <div class="relative z-10 p-2">
+      <div class="border border-border/50 rounded-[calc(var(--radius)-2px)] p-6 sm:p-8">
+        <div class="flex flex-col space-y-2 mb-8">
+          <h2 class="font-display text-2xl font-bold tracking-tight text-primary">
+            {{ isEditMode() ? 'Editar Usuario' : 'Crear Usuario' }}
+          </h2>
+          <p class="text-sm text-muted-foreground">
+            {{ isEditMode() ? 'Actualice los detalles del usuario.' : 'Registre un nuevo usuario en el sistema.' }}
+          </p>
+        </div>
+        <app-user-form
+          [isEditMode]="isEditMode()"
+          [user]="selectedUser()"
+          (save)="handleSave($event)"
+          (cancel)="handleCancel()">
+        </app-user-form>
+      </div>
+    </div>
+  </div>
+</div>

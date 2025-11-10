@@ -1,0 +1,92 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div *ngIf="errorMessage()" class="mb-4 p-3 bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-md">
+    {{ errorMessage() }}
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+    <!-- Name -->
+    <div class="space-y-2 input-field">
+      <label for="name" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground">
+        <span class="material-symbols-outlined text-lg">person</span>
+        Nombre Completo
+      </label>
+      <input id="name" type="text" pInputText formControlName="name" placeholder="Ej: Jane Doe" class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60" />
+      <div *ngIf="isInvalid('name')" class="flex items-center gap-2 text-red-600 text-xs mt-1">
+        <span class="material-symbols-outlined text-sm">error</span>
+        <span *ngIf="userForm.controls['name'].errors?.['required']">Nombre es requerido.</span>
+        <span *ngIf="userForm.controls['name'].errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="space-y-2 input-field">
+      <label for="email" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground">
+        <span class="material-symbols-outlined text-lg">email</span>
+        Email
+      </label>
+      <input id="email" type="email" pInputText formControlName="email" placeholder="jane.doe@example.com" class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60" />
+      <div *ngIf="isInvalid('email')" class="flex items-center gap-2 text-red-600 text-xs mt-1">
+        <span class="material-symbols-outlined text-sm">error</span>
+        <span>Debe ser un email válido.</span>
+      </div>
+    </div>
+
+    <!-- Password Section -->
+    <div *ngIf="!isEditMode" class="space-y-2 input-field md:col-span-2 grid md:grid-cols-2 gap-x-6">
+        <div class="space-y-2">
+            <label for="password" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground">
+                <span class="material-symbols-outlined text-lg">password</span>
+                Contraseña
+            </label>
+            <input id="password" type="password" pInputText formControlName="password" class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm" />
+            <div *ngIf="isInvalid('password')" class="flex items-center gap-2 text-red-600 text-xs mt-1">
+                <span class="material-symbols-outlined text-sm">error</span>
+                <span>Contraseña es requerida (mín 6 chars).</span>
+            </div>
+        </div>
+        <div class="space-y-2">
+            <label for="confirmPassword" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground">
+                <span class="material-symbols-outlined text-lg">password</span>
+                Confirmar Contraseña
+            </label>
+            <input id="confirmPassword" type="password" pInputText formControlName="confirmPassword" class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm" />
+            <div *ngIf="userForm.hasError('passwordMismatch') && userForm.get('confirmPassword')?.touched" class="flex items-center gap-2 text-red-600 text-xs mt-1">
+                <span class="material-symbols-outlined text-sm">error</span>
+                <span>Las contraseñas no coinciden.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role -->
+    <div class="space-y-2 input-field">
+      <label for="rol" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground">
+        <span class="material-symbols-outlined text-lg">manage_accounts</span>
+        Rol
+      </label>
+      <p-select id="rol" formControlName="rol" [options]="roles" optionLabel="label" placeholder="Seleccione un rol" styleClass="w-full h-11 rounded-md"></p-select>
+      <div *ngIf="isInvalid('rol')" class="flex items-center gap-2 text-red-600 text-xs mt-1">
+        <span class="material-symbols-outlined text-sm">error</span>
+        <span>Rol es requerido.</span>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div *ngIf="isEditMode" class="space-y-2 input-field">
+      <label for="activo" class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground">
+        <span class="material-symbols-outlined text-lg">toggle_on</span>
+        Estado
+      </label>
+      <p-select id="activo" formControlName="activo" [options]="statusOptions" optionLabel="label" optionValue="value" styleClass="w-full h-11 rounded-md"></p-select>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-4 pt-6 border-t border-border">
+    <button type="button" (click)="onCancel()" [disabled]="isLoading()" class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 h-11 px-6 py-2 text-accent-foreground hover:bg-accent">
+      Cancelar
+    </button>
+    <button type="submit" [disabled]="!canSubmit()" class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-semibold tracking-wide ring-offset-background transition-all duration-300 h-11 px-8 py-2 text-primary-foreground bg-primary hover:bg-primary/90 active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-glow-primary-lg disabled:pointer-events-none disabled:opacity-50">
+      <span *ngIf="isLoading()" class="pi pi-spin pi-spinner mr-2"></span>
+      {{ submitButtonLabel() }}
+    </button>
+  </div>
+</form>

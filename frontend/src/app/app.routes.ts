@@ -64,7 +64,7 @@ export const routes: Routes = [
       // 2. Ejemplo de ruta protegida por Rol. Solo los administradores pueden entrar aquí.
       {
         path: 'management/users',
-        loadComponent: () => import('./features/management/users/users').then(m => m.Users),
+        loadComponent: () => import('./features/management/users/users').then(m => m.UsersComponent),
         canActivate: [roleGuard], // Aplicamos el guardián de rol
         data: { requiredRole: Role.ADMINISTRADOR } // Le pasamos el rol requerido
       },
