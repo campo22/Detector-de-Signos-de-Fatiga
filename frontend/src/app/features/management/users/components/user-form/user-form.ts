@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject, signal, computed } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject, signal, computed, Signal } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators, FormControlStatus } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -45,7 +45,7 @@ export class UserFormComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
 
-  userForm!: FormGroup;
+  userForm: FormGroup; // Declarado sin '!' porque se inicializa en el constructor
   roles: { label: string; value: Role }[] = [];
   statusOptions = [
     { label: 'Activo', value: true },
@@ -56,12 +56,13 @@ export class UserFormComponent implements OnInit, OnChanges {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
-  private formStatusSignal = toSignal(this.userForm?.statusChanges.pipe(startWith(this.userForm?.status)));
-  private formPristineSignal = toSignal(this.userForm?.valueChanges.pipe(startWith(true), map(() => this.userForm.pristine)));
+  // Declarar como Signal<T> (solo lectura)
+  private formStatusSignal!: Signal<FormControlStatus>;
+  private formPristineSignal!: Signal<boolean>;
 
   isFormValid = computed(() => this.formStatusSignal() === 'VALID');
   isFormPristine = computed(() => this.formPristineSignal());
-  canSubmit = computed(() => this.isFormValid() && !this.isLoading() && (!this.isFormPristine() || !this.isEditMode));
+  canSubmit = computed(() => this.isFormValid() && !this.isLoading() && (!this.isFormPristine() || this.isEditMode));
   submitButtonLabel = computed(() => {
     if (this.isLoading()) return 'Guardando...';
     if (!this.isFormValid()) return 'Complete campos requeridos';
@@ -69,8 +70,24 @@ export class UserFormComponent implements OnInit, OnChanges {
     return this.isEditMode ? 'Actualizar Usuario' : 'Crear Usuario';
   });
 
+  constructor() {
+    this.userForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: [''],
+      confirmPassword: [''],
+      rol: [null, Validators.required],
+      activo: [true]
+    }, { validators: passwordMatchValidator() });
+
+    // Asignar formStatusSignal y formPristineSignal aquí, después de que userForm esté inicializado
+    this.formStatusSignal = toSignal(this.userForm.statusChanges.pipe(startWith(this.userForm.status)), { initialValue: this.userForm.status });
+    this.formPristineSignal = toSignal(this.userForm.valueChanges.pipe(startWith(this.userForm.pristine), map(() => this.userForm.pristine)), { initialValue: this.userForm.pristine });
+
+    this.updatePasswordValidators(); // Llamar aquí después de inicializar userForm
+  }
+
   ngOnInit(): void {
-    this.initForm();
     this.roles = Object.keys(Role)
       .filter(key => key !== 'CONDUCTOR')
       .map(key => ({
@@ -88,19 +105,6 @@ export class UserFormComponent implements OnInit, OnChanges {
     }
   }
 
-  private initForm(): void {
-    this.userForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: [''],
-      confirmPassword: [''],
-      rol: [null, Validators.required],
-      activo: [true]
-    }, { validators: passwordMatchValidator() });
-
-    this.updatePasswordValidators();
-  }
-
   private populateForm(user: User | null): void {
     if (user) {
       this.userForm.patchValue({
@@ -114,6 +118,19 @@ export class UserFormComponent implements OnInit, OnChanges {
       this.userForm.reset({ rol: null, activo: true });
     }
     this.errorMessage.set(null);
+  }
+
+  // --- Método público para resetear el formulario (llamado desde el padre) ---
+  resetForm(): void {
+    this.userForm.reset({
+      rol: null, // Valor por defecto para 'rol'
+      activo: true // Valor por defecto para 'activo'
+    });
+    this.userForm.markAsPristine();
+    this.userForm.markAsUntouched();
+    this.errorMessage.set(null);
+    this.isLoading.set(false);
+    this.updatePasswordValidators(); // Re-aplicar validadores de contraseña si es necesario
   }
 
   private updatePasswordValidators(): void {
@@ -147,7 +164,7 @@ export class UserFormComponent implements OnInit, OnChanges {
       payload = {
         name: formValue.name,
         email: formValue.email,
-        rol: formValue.rol,
+        rol: formValue.rol.value, // Extraer solo el valor del rol
         activo: formValue.activo
       };
       if (formValue.password) {
@@ -158,7 +175,7 @@ export class UserFormComponent implements OnInit, OnChanges {
         name: formValue.name,
         email: formValue.email,
         password: formValue.password,
-        rol: formValue.rol
+        rol: formValue.rol.value // Extraer solo el valor del rol
       };
     }
 

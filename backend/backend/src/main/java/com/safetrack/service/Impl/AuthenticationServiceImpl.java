@@ -5,6 +5,7 @@ import com.safetrack.domain.dto.request.RegisterRequest;
 import com.safetrack.domain.dto.response.AuthResponse;
 import com.safetrack.domain.dto.result.AuthResult;
 import com.safetrack.domain.entity.User;
+import com.safetrack.exception.DuplicateResourceException;
 import com.safetrack.exception.TokenRefreshException;
 import com.safetrack.repository.UserRepository;
 import com.safetrack.security.JwtUtils;
@@ -47,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("Registrando nuevo usuario: {}", request);
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new RuntimeException("El usuario ya existe en la base de datos");
+            throw new DuplicateResourceException("El usuario con email " + request.getEmail() + " ya existe.");
         }
         User user=User.builder()
                 .name(request.getName())
