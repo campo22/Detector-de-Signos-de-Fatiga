@@ -6,14 +6,16 @@ import { VehiclesTable } from './components/vehicles-table/vehicles-table';
 import { VehicleFilters } from './components/vehicle-filters/vehicle-filters';
 import { VehicleService } from '../../shared/services/Vehicle.service';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form';
-import { VehicleDetailsComponent } from './components/vehicle-details/vehicle-details'; // Importar el nuevo componente
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { VehicleDetailsComponent } from './components/vehicle-details/vehicle-details';
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MenuModule } from 'primeng/menu'; // Importar MenuModule
 import { VehicleFilterService } from './services/vehicle-filter.service';
 import { Vehicle } from '../../../core/models/vehicle.models';
+import { ExportService } from '../../../core/services/export.service'; // Importar ExportService
 
 @Component({
   selector: 'app-vehicles',
@@ -23,11 +25,12 @@ import { Vehicle } from '../../../core/models/vehicle.models';
     VehiclesTable,
     VehicleFilters,
     VehicleFormComponent,
-    VehicleDetailsComponent, // Añadir el nuevo componente a los imports
+    VehicleDetailsComponent,
     DialogModule,
     ButtonModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    MenuModule // Añadir MenuModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './vehicles.html',
@@ -40,17 +43,21 @@ export class Vehicles {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
   private vehicleFilterService = inject(VehicleFilterService);
+  private exportService = inject(ExportService); // Inyectar ExportService
 
-  // Signals para el diálogo de Edición/Creación
+  // --- Signals para diálogos ---
   isDialogVisible = signal(false);
   isEditMode = signal(false);
   selectedVehicle = signal<Vehicle | null>(null);
   dialogHeader = computed(() => this.isEditMode() ? 'Editar Vehículo' : 'Añadir Nuevo Vehículo');
 
-  // Signals para el diálogo de Detalles
   isDetailsDialogVisible = signal(false);
   selectedVehicleForDetails = signal<Vehicle | null>(null);
 
+  // --- Items para el menú de exportación ---
+  exportMenuItems: MenuItem[];
+
+  // --- Métodos para diálogos ---
   openAddDialog(): void {
     this.isEditMode.set(false);
     this.selectedVehicle.set(null);
@@ -66,7 +73,6 @@ export class Vehicles {
     this.isDialogVisible.set(true);
   }
 
-  // --- Métodos para el diálogo de Detalles ---
   openDetailsDialog(vehicle: Vehicle): void {
     this.selectedVehicleForDetails.set(vehicle);
     this.isDetailsDialogVisible.set(true);
@@ -74,8 +80,6 @@ export class Vehicles {
 
   closeDetailsDialog(): void {
     this.isDetailsDialogVisible.set(false);
-    // Opcional: limpiar el vehículo seleccionado después de cerrar
-    // setTimeout(() => this.selectedVehicleForDetails.set(null), 300);
   }
 
   handleSave(savedVehicle: Vehicle): void {
@@ -98,6 +102,7 @@ export class Vehicles {
     this.selectedVehicle.set(null);
   }
 
+  // --- Métodos de eliminación ---
   confirmDeleteVehicle(vehicle: Vehicle): void {
     this.confirmationService.confirm({
       header: `Eliminar Vehículo ${vehicle.placa}`,
@@ -137,12 +142,26 @@ export class Vehicles {
     });
   }
 
+  // --- Señales para estadísticas ---
   totalVehicles = signal<number | string>('--');
   activeVehicles = signal<number | string>('--');
   unassignedVehicles = signal<number | string>('--');
 
   constructor() {
     this.loadVehicleStats();
+    // Inicializar los items del menú de exportación
+    this.exportMenuItems = [
+      {
+        label: 'Exportar a Excel (.xlsx)',
+        icon: 'pi pi-file-excel export-excel-icon',
+        command: () => this.exportVehicles('excel')
+      },
+      {
+        label: 'Exportar a PDF',
+        icon: 'pi pi-file-pdf export-pdf-icon',
+        command: () => this.exportVehicles('pdf')
+      }
+    ];
   }
 
   private loadVehicleStats(): void {
@@ -166,5 +185,43 @@ export class Vehicles {
       .subscribe((page) => {
         this.unassignedVehicles.set(page.totalElements);
       });
+  }
+
+  // --- Método de Exportación ---
+  exportVehicles(format: 'excel' | 'pdf'): void {
+    this.messageService.add({ severity: 'info', summary: 'Exportando', detail: `Preparando la exportación a ${format.toUpperCase()}...`, life: 3000 });
+
+    this.vehicleService.getVehicles(this.vehicleFilterService.filters$(), 0, 10000, 'placa', 'asc').pipe(take(1)).subscribe({
+      next: (page) => {
+        if (!page.content || page.content.length === 0) {
+          this.messageService.add({ severity: 'warn', summary: 'Sin datos', detail: 'No hay vehículos para exportar.' });
+          return;
+        }
+
+        const dataToExport = page.content.map(vehicle => ({
+          id: vehicle.id,
+          placa: vehicle.placa,
+          marca: vehicle.marca,
+          modelo: vehicle.modelo,
+          anio: vehicle.anio,
+          activo: vehicle.activo ? 'Activo' : 'Inactivo',
+          conductor: vehicle.driver ? vehicle.driver.nombre : 'Sin Asignar'
+        }));
+
+        const filename = `vehiculos_${new Date().toISOString().split('T')[0]}`;
+
+        if (format === 'excel') {
+          this.exportService.exportToExcel(dataToExport, filename, 'Vehículos');
+        } else if (format === 'pdf') {
+          const headers = ['ID', 'Placa', 'Marca', 'Modelo', 'Año', 'Estado', 'Conductor'];
+          const dataKeys = ['id', 'placa', 'marca', 'modelo', 'anio', 'activo', 'conductor'];
+          this.exportService.exportToPdf(dataToExport, headers, dataKeys, filename, 'Lista de Vehículos');
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener datos para exportación:', err);
+        this.messageService.add({ severity: 'error', summary: 'Error de Exportación', detail: 'No se pudieron obtener los datos para la exportación.' });
+      }
+    });
   }
 }

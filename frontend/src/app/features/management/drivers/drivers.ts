@@ -6,19 +6,20 @@ import { DriversTable } from './components/drivers-table/drivers-table';
 import { DriverFiltersComponent } from './components/driver-filters/driver-filters';
 import { DriverService } from '../../shared/services/driver.service';
 import { DriverFormComponent } from './components/driver-form/driver-form';
-import { MessageService, ConfirmationService } from 'primeng/api'; // Importar ConfirmationService
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api'; // Importar MenuItem
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmDialogModule } from 'primeng/confirmdialog'; // Importar ConfirmDialogModule
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MenuModule } from 'primeng/menu'; // Importar MenuModule
 import { DriverFilterService } from './services/driver-filter.service';
 import { Driver } from '../../../core/models/driver.models';
+import { ExportService } from '../../../core/services/export.service'; // Importar ExportService
 
 @Component({
   selector: 'app-drivers',
   standalone: true,
   imports: [
-
     CommonModule,
     DriversTable,
     DriverFiltersComponent,
@@ -26,20 +27,21 @@ import { Driver } from '../../../core/models/driver.models';
     DialogModule,
     ButtonModule,
     ToastModule,
-    ConfirmDialogModule // Añadir ConfirmDialogModule
+    ConfirmDialogModule,
+    MenuModule // Añadir MenuModule
   ],
   providers: [MessageService, ConfirmationService], // Añadir ConfirmationService
   templateUrl: './drivers.html',
   styleUrls: ['./drivers.scss'],
 })
 export class Drivers {
-  @ViewChild(DriverFormComponent) driverFormRef!: DriverFormComponent; // Referencia al componente del formulario
+  @ViewChild(DriverFormComponent) driverFormRef!: DriverFormComponent;
 
   private driverService = inject(DriverService);
   private messageService = inject(MessageService);
-  private confirmationService = inject(ConfirmationService); // Inyectar ConfirmationService
+  private confirmationService = inject(ConfirmationService);
   private driverFilterService = inject(DriverFilterService);
-
+  private exportService = inject(ExportService); // Inyectar ExportService
 
   // --- Signals para controlar el estado del diálogo ---
   isDialogVisible = signal(false);
@@ -48,6 +50,9 @@ export class Drivers {
 
   // --- Computed Signal para el título del diálogo ---
   dialogHeader = computed(() => this.isEditMode() ? 'Editar Conductor' : 'Añadir Nuevo Conductor');
+
+  // --- Items para el menú de exportación ---
+  exportMenuItems: MenuItem[];
 
   // --- Métodos para abrir el diálogo ---
   openAddDialog(): void {
@@ -146,6 +151,19 @@ export class Drivers {
 
   constructor() {
     this.loadDriverStats();
+    // Inicializar los items del menú
+    this.exportMenuItems = [
+      {
+        label: 'Exportar a Excel (.xlsx)',
+        icon: 'pi pi-file-excel export-excel-icon',
+        command: () => this.exportDrivers('excel')
+      },
+      {
+        label: 'Exportar a PDF',
+        icon: 'pi pi-file-pdf export-pdf-icon',
+        command: () => this.exportDrivers('pdf')
+      }
+    ];
   }
 
   private loadDriverStats(): void {
@@ -172,5 +190,43 @@ export class Drivers {
       .subscribe((page) => {
         this.inactiveDrivers.set(page.totalElements);
       });
+  }
+
+  // --- Método de Exportación ---
+  exportDrivers(format: 'excel' | 'pdf'): void {
+    this.messageService.add({ severity: 'info', summary: 'Exportando', detail: `Preparando la exportación a ${format.toUpperCase()}...`, life: 3000 });
+
+    // Obtener todos los datos (usamos un tamaño de página grande)
+    this.driverService.getDrivers(this.driverFilterService.filter$(), 0, 10000, 'nombre', 'asc').pipe(take(1)).subscribe({
+      next: (page) => {
+        if (!page.content || page.content.length === 0) {
+          this.messageService.add({ severity: 'warn', summary: 'Sin datos', detail: 'No hay conductores para exportar.' });
+          return;
+        }
+
+        // Procesar datos para que sean legibles
+        const dataToExport = page.content.map(driver => ({
+          id: driver.id,
+          nombre: driver.nombre,
+          licencia: driver.licencia,
+          fechaNacimiento: driver.fechaNacimiento,
+          activo: driver.activo ? 'Activo' : 'Inactivo'
+        }));
+
+        const filename = `conductores_${new Date().toISOString().split('T')[0]}`;
+
+        if (format === 'excel') {
+          this.exportService.exportToExcel(dataToExport, filename, 'Conductores');
+        } else if (format === 'pdf') {
+          const headers = ['ID', 'Nombre', 'Licencia', 'Fecha de Nacimiento', 'Estado'];
+          const dataKeys = ['id', 'nombre', 'licencia', 'fechaNacimiento', 'activo'];
+          this.exportService.exportToPdf(dataToExport, headers, dataKeys, filename, 'Lista de Conductores');
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener datos para exportación:', err);
+        this.messageService.add({ severity: 'error', summary: 'Error de Exportación', detail: 'No se pudieron obtener los datos para la exportación.' });
+      }
+    });
   }
 }

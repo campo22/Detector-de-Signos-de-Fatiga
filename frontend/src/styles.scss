@@ -160,5 +160,51 @@ th {
 }
 
 .custom-confirm-dialog .p-dialog-footer {
+
     @apply border-t border-border;
+
 }
+
+
+
+/* Estilos para los iconos del menú de exportación */
+
+
+
+.export-excel-icon {
+
+
+
+  color: #28a745 !important;
+
+
+
+  margin-right: 0.5rem;
+
+
+
+}
+
+
+
+
+
+
+
+.export-pdf-icon {
+
+
+
+  color: #dc3545 !important;
+
+
+
+  margin-right: 0.5rem;
+
+
+
+}
+
+
+
+
