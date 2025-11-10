@@ -39,7 +39,9 @@
         for="marca"
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
-        <span class="material-symbols-outlined text-lg transition-all duration-300">directions_car</span>
+        <span class="material-symbols-outlined text-lg transition-all duration-300"
+          >directions_car</span
+        >
         Marca
       </label>
       <input
@@ -89,7 +91,9 @@
         for="anio"
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
-        <span class="material-symbols-outlined text-lg transition-all duration-300">calendar_today</span>
+        <span class="material-symbols-outlined text-lg transition-all duration-300"
+          >calendar_today</span
+        >
         Año
       </label>
       <input
@@ -140,7 +144,9 @@
         for="driver"
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
-        <span class="material-symbols-outlined text-lg transition-all duration-300">person_pin</span>
+        <span class="material-symbols-outlined text-lg transition-all duration-300"
+          >person_pin</span
+        >
         Conductor Asignado (Opcional)
       </label>
       <p-autoComplete
@@ -148,6 +154,7 @@
         formControlName="driver"
         [suggestions]="filteredDrivers()"
         (completeMethod)="searchDrivers($event)"
+        (onClear)="onDriverClear()"
         field="nombre"
         placeholder="Buscar Conductor"
         [dropdown]="true"
@@ -166,9 +173,7 @@
           </div>
         </ng-template>
         <ng-template let-driver pTemplate="selectedItem">
-          <div *ngIf="driver">
-            {{ driver | json }}
-          </div>
+          {{ driver?.nombre }}
         </ng-template>
       </p-autoComplete>
       @if (isInvalid('driver')) {

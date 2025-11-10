@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, input, Output, EventEmitter, signal, effect, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, Output, EventEmitter, signal, effect, computed, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith, map, take } from 'rxjs/operators'; // Add take
@@ -22,6 +21,7 @@ interface StatusOption {
 }
 
 import { AutoCompleteModule } from 'primeng/autocomplete'; // New import
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -38,14 +38,14 @@ import { AutoCompleteModule } from 'primeng/autocomplete'; // New import
   styleUrl: './vehicle-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VehicleFormComponent {
+export class VehicleFormComponent implements OnChanges {
   private fb = inject(FormBuilder);
   private vehicleService = inject(VehicleService);
   private driverService = inject(DriverService); // New injection
 
   // --- Entradas como Signals ---
-  vehicleData = input<Vehicle | null>(null);
-  isEditMode = input<boolean>(false);
+  @Input() vehicleData: Vehicle | null = null;
+  @Input() isEditMode: boolean = false;
 
   // --- Salidas ---
   @Output() save = new EventEmitter<Vehicle>();
@@ -95,53 +95,66 @@ export class VehicleFormComponent {
   submitButtonLabel = computed(() => {
     if (this.isLoading()) { return 'Guardando...'; }
     if (!this.isFormValid()) { return 'Complete campos requeridos'; }
-    if (this.isFormPristine() && this.isEditMode()) { return 'Sin cambios'; }
-    return this.isEditMode() ? 'Actualizar Vehículo' : 'Crear Vehículo';
+    if (this.isFormPristine() && this.isEditMode) { return 'Sin cambios'; }
+    return this.isEditMode ? 'Actualizar Vehículo' : 'Crear Vehículo';
   });
 
   constructor() {
-    effect(() => {
-      const vehicle = this.vehicleData();
-      console.log('VehicleFormComponent: Vehicle data received for editing', vehicle); // Debug log
+    this.loadAvailableDrivers();
+  }
 
-      if (vehicle) {
-        // Find the driver object if driverId is present
-        const assignedDriver = vehicle.driver
-            ? this.availableDrivers().find(d => d.id === vehicle.driver?.id) || null
-            : null;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['vehicleData']) {
+      this.populateForm(this.vehicleData);
+    }
+  }
 
-        this.vehicleForm.patchValue({
-          placa: vehicle.placa,
-          marca: vehicle.marca,
-          modelo: vehicle.modelo,
-          anio: vehicle.anio,
-          activo: this.statusOptions.find(option => option.value === vehicle.activo), // Find the StatusOption object
-          driver: assignedDriver // Set the driver object
-        }, { emitEvent: false });
-        this.errorMessage.set(null);
-        this.vehicleForm.markAsPristine();
-      } else {
-        this.errorMessage.set(null);
-      }
-    });
-    this.loadAvailableDrivers(); // New method call
+  private populateForm(vehicle: Vehicle | null): void {
+    console.log('Populating form with vehicle data:', vehicle); // Debug log
+    if (vehicle) {
+      const assignedDriver = vehicle.driver
+        ? this.availableDrivers().find(d => d.id === vehicle.driver?.id) || null
+        : null;
+
+      this.vehicleForm.patchValue({
+        placa: vehicle.placa,
+        marca: vehicle.marca,
+        modelo: vehicle.modelo,
+        anio: vehicle.anio,
+        activo: this.statusOptions.find(option => option.value === vehicle.activo),
+        driver: assignedDriver
+      }, { emitEvent: false });
+      this.errorMessage.set(null);
+      this.vehicleForm.markAsPristine();
+    } else {
+      this.resetForm();
+    }
   }
 
   private loadAvailableDrivers(): void {
     this.driverService.getDrivers({}, 0, 1000, 'nombre', 'asc') // Fetch all drivers
-        .pipe(take(1))
-        .subscribe((page: Page<Driver>) => {
-            this.availableDrivers.set(page.content);
-        });
+      .pipe(take(1))
+      .subscribe((page: Page<Driver>) => {
+        this.availableDrivers.set(page.content);
+        // If we are in edit mode when drivers are loaded, re-populate the form
+        // to ensure the driver object is correctly assigned.
+        if (this.isEditMode && this.vehicleData) {
+          this.populateForm(this.vehicleData);
+        }
+      });
   }
 
   searchDrivers(event: { originalEvent: Event; query: string }): void {
     const query = event.query.toLowerCase();
     const filtered = this.availableDrivers().filter(driver =>
-        driver.nombre.toLowerCase().includes(query) ||
-        driver.licencia.toLowerCase().includes(query)
+      driver.nombre.toLowerCase().includes(query) ||
+      driver.licencia.toLowerCase().includes(query)
     );
     this.filteredDrivers.set(filtered);
+  }
+
+  onDriverClear(): void {
+    this.vehicleForm.get('driver')?.setValue(null, { emitEvent: false }); // Prevent re-triggering the effect
   }
 
   resetForm(): void {
@@ -165,9 +178,9 @@ export class VehicleFormComponent {
     this.errorMessage.set(null);
 
     const payload = this.buildVehiclePayload();
-    const currentVehicle = this.vehicleData();
+    const currentVehicle = this.vehicleData;
 
-    const operation$ = this.isEditMode() && currentVehicle?.id
+    const operation$ = this.isEditMode && currentVehicle?.id
       ? this.vehicleService.updateVehicle(currentVehicle.id, payload)
       : this.vehicleService.createVehicle(payload);
 
@@ -191,8 +204,6 @@ export class VehicleFormComponent {
   private buildVehiclePayload(): VehicleRequest {
     const formValue = this.vehicleForm.getRawValue();
     const driverId = formValue.driver ? formValue.driver.id : null; // Extract driverId from driver object
-
-    console.log('VehicleFormComponent: Payload activo value:', formValue.activo.value); // Debug log
 
     return {
       placa: formValue.placa,
