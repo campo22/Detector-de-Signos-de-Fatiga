@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, signal, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { switchMap, catchError, of, merge, tap } from 'rxjs';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { switchMap, catchError, of, merge, tap, take, filter } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
 
 // Servicios
 import { UserService } from '../../shared/services/user.service';
@@ -44,11 +45,12 @@ type SortColumn = 'name' | 'email' | 'rol' | 'activo';
   templateUrl: './users.html',
   styleUrls: ['./users.scss'],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
   private userService = inject(UserService);
   public userFilterService = inject(UserFilterService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private router = inject(Router); // Inject Router
 
   // State Signals
   usersPage = signal<Page<User> | null>(null);
@@ -62,37 +64,68 @@ export class UsersComponent implements OnInit {
     return typeof selected === 'object' ? selected : null;
   });
 
-  private currentPage = signal(0);
-  private sortState = signal<{ field: SortColumn; order: number }>({ field: 'name', order: 1 });
+
 
   private filters$ = toObservable(this.userFilterService.filters$);
   private refresh$ = this.userFilterService.refreshTrigger$;
+  private refreshSignal = toSignal(this.userFilterService.refreshTrigger$); // Convert Observable to Signal
+  private navigationEnd = toSignal(
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+  );
+
+  public totalUsers = signal<number | string>('--');
+  public activeUsers = signal<number | string>('--');
+  public inactiveUsers = signal<number | string>('--');
 
   constructor() {
     effect(() => {
-      merge(this.filters$, this.refresh$)
-        .pipe(
-          tap(() => this.currentPage.set(0)) // Reset page on filter change
-        )
-        .subscribe(() => {
-          this.loadUsers();
-        });
+      // Register dependencies as signals
+      this.navigationEnd(); // Signal
+      this.userFilterService.filters$(); // Signal
+      this.refreshSignal(); // Signal
+
+      // Call the loading methods
+      this.loadUsers(0, 10, { field: 'name', order: 1 });
+      this.loadUserStats();
     });
   }
 
-  ngOnInit(): void {
-    this.loadUsers();
+
+
+  private loadUserStats(): void {
+    // Total users
+    this.userService
+      .getUsers({}, 0, 1, { field: 'name', order: 1 })
+      .pipe(take(1))
+      .subscribe((page) => {
+        this.totalUsers.set(page.totalElements);
+      });
+
+    // Active users
+    this.userService
+      .getUsers({ activo: true }, 0, 1, { field: 'name', order: 1 })
+      .pipe(take(1))
+      .subscribe((page) => {
+        this.activeUsers.set(page.totalElements);
+      });
+
+    // Inactive users
+    this.userService
+      .getUsers({ activo: false }, 0, 1, { field: 'name', order: 1 })
+      .pipe(take(1))
+      .subscribe((page) => {
+        this.inactiveUsers.set(page.totalElements);
+      });
   }
 
-  loadUsers(): void {
+
+  loadUsers(
+    page: number = 0,
+    size: number = 10,
+    sort: { field: SortColumn; order: number } = { field: 'name', order: 1 }
+  ): void {
     this.usersPage.set(null); // Set to null to show loading state
 
-    const page = this.currentPage();
-    const size = 10;
-    const sort = {
-      field: this.sortState().field,
-      order: this.sortState().order,
-    };
     const filters = this.userFilterService.filters$();
 
     this.userService
@@ -131,22 +164,7 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  handleSortChange(sort: { column: SortColumn; direction: 'asc' | 'desc' }): void {
-    this.sortState.set({ field: sort.column, order: sort.direction === 'asc' ? 1 : -1 });
-    this.loadUsers();
-  }
 
-  handlePageChange(direction: 'next' | 'prev'): void {
-    const page = this.usersPage();
-    if (!page) return;
-
-    if (direction === 'next' && !page.last) {
-      this.currentPage.set(this.currentPage() + 1);
-    } else if (direction === 'prev' && !page.first) {
-      this.currentPage.set(this.currentPage() - 1);
-    }
-    this.loadUsers();
-  }
 
   openNew(): void {
     this.selectedUser.set('new');
@@ -170,6 +188,7 @@ export class UsersComponent implements OnInit {
               detail: 'Usuario eliminado correctamente.',
             });
             this.userFilterService.triggerRefresh();
+            this.loadUserStats(); // Update stats
           },
           error: () => {
             this.messageService.add({
@@ -183,6 +202,10 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  handlePaginationChange(pagination: { page: number, size: number, sort: { field: SortColumn, order: number } }): void {
+    this.loadUsers(pagination.page, pagination.size, pagination.sort);
+  }
+
   handleSave(): void {
     const summary = this.isEditMode() ? 'Usuario Actualizado' : 'Usuario Creado';
     this.messageService.add({
@@ -192,6 +215,7 @@ export class UsersComponent implements OnInit {
     });
     this.selectedUser.set(null);
     this.userFilterService.triggerRefresh();
+    this.loadUserStats(); // Update stats
   }
 
   handleCancel(): void {
