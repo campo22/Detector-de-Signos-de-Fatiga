@@ -38,11 +38,11 @@ type SortColumn = 'name' | 'email' | 'rol' | 'activo';
     ConfirmDialogModule,
     UserFiltersComponent,
     UserTableComponent,
-    UserFormComponent
+    UserFormComponent,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './users.html',
-  styleUrls: ['./users.scss']
+  styleUrls: ['./users.scss'],
 })
 export class UsersComponent implements OnInit {
   private userService = inject(UserService);
@@ -54,7 +54,9 @@ export class UsersComponent implements OnInit {
   usersPage = signal<Page<User> | null>(null);
   selectedUser = signal<User | 'new' | null>(null);
   isDialogVisible = computed(() => this.selectedUser() !== null);
-  isEditMode = computed(() => typeof this.selectedUser() === 'object' && this.selectedUser() !== null);
+  isEditMode = computed(
+    () => typeof this.selectedUser() === 'object' && this.selectedUser() !== null
+  );
   userForForm = computed(() => {
     const selected = this.selectedUser();
     return typeof selected === 'object' ? selected : null;
@@ -68,11 +70,13 @@ export class UsersComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      merge(this.filters$, this.refresh$).pipe(
-        tap(() => this.currentPage.set(0)) // Reset page on filter change
-      ).subscribe(() => {
-        this.loadUsers();
-      });
+      merge(this.filters$, this.refresh$)
+        .pipe(
+          tap(() => this.currentPage.set(0)) // Reset page on filter change
+        )
+        .subscribe(() => {
+          this.loadUsers();
+        });
     });
   }
 
@@ -82,7 +86,7 @@ export class UsersComponent implements OnInit {
 
   loadUsers(): void {
     this.usersPage.set(null); // Set to null to show loading state
-    
+
     const page = this.currentPage();
     const size = 10;
     const sort = {
@@ -91,16 +95,40 @@ export class UsersComponent implements OnInit {
     };
     const filters = this.userFilterService.filters$();
 
-    this.userService.getUsers(filters, page, size, sort).pipe(
-      catchError(err => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los usuarios.' });
-        return of({
-          content: [], pageable: { pageNumber: 0, pageSize: 10, sort: { sorted: false, unsorted: true, empty: true }, offset: 0, paged: true, unpaged: false }, totalPages: 0, totalElements: 0, last: true, first: true, size: 10, number: 0, numberOfElements: 0, sort: { sorted: false, unsorted: true, empty: true }, empty: true
-        } as Page<User>);
-      })
-    ).subscribe(page => {
-      this.usersPage.set(page);
-    });
+    this.userService
+      .getUsers(filters, page, size, sort)
+      .pipe(
+        catchError((err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudieron cargar los usuarios.',
+          });
+          return of({
+            content: [],
+            pageable: {
+              pageNumber: 0,
+              pageSize: 10,
+              sort: { sorted: false, unsorted: true, empty: true },
+              offset: 0,
+              paged: true,
+              unpaged: false,
+            },
+            totalPages: 0,
+            totalElements: 0,
+            last: true,
+            first: true,
+            size: 10,
+            number: 0,
+            numberOfElements: 0,
+            sort: { sorted: false, unsorted: true, empty: true },
+            empty: true,
+          } as Page<User>);
+        })
+      )
+      .subscribe((page) => {
+        this.usersPage.set(page);
+      });
   }
 
   handleSortChange(sort: { column: SortColumn; direction: 'asc' | 'desc' }): void {
@@ -136,20 +164,32 @@ export class UsersComponent implements OnInit {
       accept: () => {
         this.userService.deleteUser(user.id).subscribe({
           next: () => {
-            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Usuario eliminado correctamente.' });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: 'Usuario eliminado correctamente.',
+            });
             this.userFilterService.triggerRefresh();
           },
           error: () => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el usuario.' });
-          }
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No se pudo eliminar el usuario.',
+            });
+          },
         });
-      }
+      },
     });
   }
 
-  handleSave(savedUser: User): void {
+  handleSave(): void {
     const summary = this.isEditMode() ? 'Usuario Actualizado' : 'Usuario Creado';
-    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: `${summary} correctamente.` });
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: `${summary} correctamente.`,
+    });
     this.selectedUser.set(null);
     this.userFilterService.triggerRefresh();
   }

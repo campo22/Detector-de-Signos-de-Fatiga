@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs'; // Added this import
 
 // Modelos y Servicios
 import { Role } from '../../../../../core/models/enums';
@@ -39,7 +40,7 @@ export function passwordMatchValidator(): ValidatorFn {
 export class UserFormComponent implements OnInit, OnChanges {
   @Input() user: User | null = null;
   @Input() isEditMode: boolean = false;
-  @Output() save = new EventEmitter<User>();
+  @Output() save = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
@@ -183,12 +184,12 @@ export class UserFormComponent implements OnInit, OnChanges {
       ? this.userService.updateUser(this.user!.id, payload as UserUpdateRequest)
       : this.userService.createUser(payload as UserRequest);
 
-    operation$.subscribe({
-      next: (savedUser) => {
+    (operation$ as Observable<any>).subscribe({ // Cast to Observable<any>
+      next: () => {
         this.isLoading.set(false);
-        this.save.emit(savedUser);
+        this.save.emit();
       },
-      error: (err) => {
+      error: (err: any) => {
         this.errorMessage.set(err.error?.message || 'Ocurrió un error al guardar el usuario.');
         this.isLoading.set(false);
       }

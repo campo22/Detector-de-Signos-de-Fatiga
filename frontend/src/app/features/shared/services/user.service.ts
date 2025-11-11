@@ -43,9 +43,9 @@ export class UserService {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 
-  createUser(user: UserRequest): Observable<User> {
+  createUser(user: UserRequest): Observable<string> {
     // La creación de usuarios se gestiona a través del endpoint de registro
-    return this.http.post<User>(`${this.authUrl}/register`, user);
+    return this.http.post(`${this.authUrl}/register`, user, { responseType: 'text' });
   }
 
   updateUser(id: string, user: UserUpdateRequest): Observable<User> {
