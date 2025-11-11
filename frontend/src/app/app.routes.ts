@@ -75,6 +75,14 @@ export const routes: Routes = [
     ]
   },
 
+  // --- Ruta de Configuración (Página Completa) ---
+  {
+    path: 'settings',
+    loadComponent: () => import('./features/settings/settings').then(m => m.Settings),
+    canActivate: [authGuard], // Proteger la ruta
+  },
+
+
   // --- Ruta Wildcard (Comodín) ---
   // Si el usuario escribe una URL que no existe, lo redirigimos al dashboard.
   { path: '**', redirectTo: 'dashboard' }

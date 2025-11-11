@@ -19,6 +19,7 @@ export class AuthService {
   private currentUserRole = signal<Role | null>(null);
   public isAuthenticated = signal<boolean>(false);
   private isRefreshing = signal<boolean>(false);
+  private currentUserId = signal<string | null>(null);
 
   constructor() {
     this.loadAuthDataFromStorage();
@@ -77,6 +78,10 @@ export class AuthService {
     return this.accessToken();
   }
 
+  getUserId(): string | null {
+    return this.currentUserId();
+  }
+
 
   hasRole(requiredRole: Role): boolean {
     return this.currentUserRole() === requiredRole;
@@ -90,28 +95,43 @@ export class AuthService {
     this.currentUserRole.set(response.rol);
     this.isAuthenticated.set(true);
 
+    try {
+      const decodedToken: any = jwtDecode(response.accessToken);
+      this.currentUserId.set(decodedToken.sub || decodedToken.userId || null); // Asume 'sub' o 'userId' en el payload
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      this.currentUserId.set(null);
+    }
+
     // Guardar en localStorage
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('userRole', response.rol);
+    if (this.currentUserId()) {
+      localStorage.setItem('userId', this.currentUserId()!);
+    }
   }
 
   private clearAuthData(): void {
     this.accessToken.set(null);
     this.currentUserRole.set(null);
+    this.currentUserId.set(null); // Limpiar también el ID del usuario
     this.isAuthenticated.set(false);
 
     // Limpiar localStorage
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('userId'); // Limpiar también el ID del usuario
   }
 
   private loadAuthDataFromStorage(): void {
     const token = localStorage.getItem('accessToken');
     const role = localStorage.getItem('userRole');
+    const userId = localStorage.getItem('userId'); // Cargar el ID del usuario
 
-    if (token && role && !this.isTokenExpired(token)) {
+    if (token && role && userId && !this.isTokenExpired(token)) {
       this.accessToken.set(token);
       this.currentUserRole.set(role as Role);
+      this.currentUserId.set(userId); // Establecer el ID del usuario
       this.isAuthenticated.set(true);
     } else {
       this.clearAuthData();

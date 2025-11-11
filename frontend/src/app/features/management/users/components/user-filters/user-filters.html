@@ -40,6 +40,20 @@
   </div>
 
   <div>
+    <label for="filter-status" class="block text-sm font-medium text-muted-foreground mb-1">
+      Estado
+    </label>
+    <select
+      id="filter-status"
+      formControlName="activo"
+      class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary"
+    >
+      <option [ngValue]="null">Todos</option>
+      <option *ngFor="let status of statusOptions" [ngValue]="status.value">{{ status.label }}</option>
+    </select>
+  </div>
+
+  <div>
     <button
       type="button"
       (click)="clearFilters()"

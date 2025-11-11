@@ -27,9 +27,15 @@ export class UserFiltersComponent implements OnInit {
     name: [''],
     email: [''],
     rol: [null as Role | null],
+    activo: [null as boolean | null],
   });
 
   roles: { label: string; value: Role }[] = [];
+
+  statusOptions = [
+    { label: 'Activo', value: true },
+    { label: 'Inactivo', value: false }
+  ];
 
   public filters = toSignal(
     this.filterForm.valueChanges.pipe(
@@ -42,7 +48,7 @@ export class UserFiltersComponent implements OnInit {
 
   public readonly hasActiveFilters = computed(() => {
     const f = this.filters();
-    return !!(f.name || f.email || f.rol !== null);
+    return !!(f.name || f.email || f.rol !== null || f.activo !== null);
   });
 
   private syncFiltersEffect = effect(() => {
@@ -63,7 +69,8 @@ export class UserFiltersComponent implements OnInit {
     this.filterForm.reset({
       name: '',
       email: '',
-      rol: null
+      rol: null,
+      activo: null
     });
   }
 }

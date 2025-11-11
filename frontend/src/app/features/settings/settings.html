@@ -1,0 +1,146 @@
+<div class="flex h-auto min-h-screen w-full bg-background text-foreground">
+  <!-- Columna Izquierda (Navegación) -->
+  <aside class="w-1/4 min-w-[280px] bg-card border-r border-border p-6">
+    <div class="flex items-center gap-3 px-3 py-2">
+      <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkKC1S-nG-BxZJd3Pt3ospI_2whrXAipwooP7wWe7Lw4U037livWzBMZZRL69bLzuM3_aw3D4REDrJiDA4EFDvaWyvZ94Qmtqqd0BGMcjYR2kaBY6Uv0JPm1QI-pYKlN1Rrf6Ad5RclzM8wSJHcoftvaTWC1wdiySVEAtYMMqScewRW_FlcS2p7wPZ5uD6odfVnStqHv__9FYgk5nsm_u0GdvYr8z3irRrsCIdfNguv_KB7GQfl5Jj89R13MK6iPkfVdskTXztAZ0y');"></div>
+      <h1 class="text-xl font-bold">SafeTrack</h1>
+    </div>
+    <nav class="flex flex-col gap-2 mt-8">
+      <a (click)="selectSection('general')" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors" [ngClass]="{
+        'bg-primary text-primary-foreground shadow-lg shadow-primary/30': selectedSection() === 'general',
+        'text-muted-foreground hover:bg-secondary hover:text-foreground': selectedSection() !== 'general'
+      }">
+        <span class="material-symbols-outlined text-2xl">settings</span>
+        <p class="font-medium">{{ 'SETTINGS.GENERAL' | translate }}</p>
+      </a>
+      <a (click)="selectSection('cuenta')" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors" [ngClass]="{
+        'bg-primary text-primary-foreground shadow-lg shadow-primary/30': selectedSection() === 'cuenta',
+        'text-muted-foreground hover:bg-secondary hover:text-foreground': selectedSection() !== 'cuenta'
+      }">
+        <span class="material-symbols-outlined text-2xl" [style.font-variation-settings]="selectedSection() === 'cuenta' ? '\'FILL\' 1' : ''">person</span>
+        <p class="font-medium">{{ 'SETTINGS.ACCOUNT' | translate }}</p>
+      </a>
+      <a (click)="selectSection('notificaciones')" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors" [ngClass]="{
+        'bg-primary text-primary-foreground shadow-lg shadow-primary/30': selectedSection() === 'notificaciones',
+        'text-muted-foreground hover:bg-secondary hover:text-foreground': selectedSection() !== 'notificaciones'
+      }">
+        <span class="material-symbols-outlined text-2xl">notifications</span>
+        <p class="font-medium">{{ 'SETTINGS.NOTIFICATIONS' | translate }}</p>
+      </a>
+      <a (click)="selectSection('facturacion')" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors" [ngClass]="{
+        'bg-primary text-primary-foreground shadow-lg shadow-primary/30': selectedSection() === 'facturacion',
+        'text-muted-foreground hover:bg-secondary hover:text-foreground': selectedSection() !== 'facturacion'
+      }">
+        <span class="material-symbols-outlined text-2xl">receipt_long</span>
+        <p class="font-medium">{{ 'SETTINGS.BILLING' | translate }}</p>
+      </a>
+      <a (click)="selectSection('reglas')" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors" [ngClass]="{
+        'bg-primary text-primary-foreground shadow-lg shadow-primary/30': selectedSection() === 'reglas',
+        'text-muted-foreground hover:bg-secondary hover:text-foreground': selectedSection() !== 'reglas'
+      }">
+        <span class="material-symbols-outlined text-2xl">gavel</span>
+        <p class="font-medium">{{ 'SETTINGS.RULES' | translate }}</p>
+      </a>
+      <a (click)="selectSection('api')" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors" [ngClass]="{
+        'bg-primary text-primary-foreground shadow-lg shadow-primary/30': selectedSection() === 'api',
+        'text-muted-foreground hover:bg-secondary hover:text-foreground': selectedSection() !== 'api'
+      }">
+        <span class="material-symbols-outlined text-2xl">key</span>
+        <p class="font-medium">{{ 'SETTINGS.API_KEYS' | translate }}</p>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Columna Derecha (Contenido) -->
+  <main class="w-3/4 p-8 overflow-y-auto">
+    <div *ngIf="selectedSection() === 'cuenta'">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold tracking-tight">{{ 'SETTINGS.ACCOUNT_SETTINGS' | translate }}</h2>
+          <p class="text-muted-foreground mt-1">{{ 'SETTINGS.MANAGE_ACCOUNT_DETAILS' | translate }}</p>
+        </div>
+        
+        <div class="space-y-10">
+          <!-- Sección Cambiar Contraseña -->
+          <section [formGroup]="passwordForm" (ngSubmit)="savePassword()" class="bg-card border border-border rounded-xl">
+            <div class="p-6 border-b border-border">
+              <h3 class="text-xl font-semibold">{{ 'SETTINGS.CHANGE_PASSWORD' | translate }}</h3>
+            </div>
+            <div class="p-6 space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+                <label class="font-medium text-muted-foreground">{{ 'SETTINGS.CURRENT_PASSWORD' | translate }}</label>
+                <div class="md:col-span-2">
+                  <input class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary" [placeholder]="'SETTINGS.CURRENT_PASSWORD' | translate" type="password" formControlName="currentPassword"/>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+                <label class="font-medium text-muted-foreground">{{ 'SETTINGS.NEW_PASSWORD' | translate }}</label>
+                <div class="md:col-span-2">
+                  <input class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary" [placeholder]="'SETTINGS.NEW_PASSWORD' | translate" type="password" formControlName="newPassword"/>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+                <label class="font-medium text-muted-foreground">{{ 'SETTINGS.CONFIRM_NEW_PASSWORD' | translate }}</label>
+                <div class="md:col-span-2">
+                  <input class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary" [placeholder]="'SETTINGS.CONFIRM_NEW_PASSWORD' | translate" type="password" formControlName="confirmPassword"/>
+                  <div *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched" class="text-destructive text-sm mt-2">
+                    {{ 'SETTINGS.PASSWORDS_DO_NOT_MATCH' | translate }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 bg-secondary/30 border-t border-border flex justify-end rounded-b-xl">
+              <button class="px-6 py-2 bg-primary text-primary-foreground font-semibold rounded-md hover:opacity-90 transition-opacity" type="submit" [disabled]="!passwordForm.valid">
+                {{ 'SETTINGS.SAVE_CHANGES' | translate }}
+              </button>
+            </div>
+          </section>
+
+          <!-- Otras secciones pueden seguir un patrón similar -->
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedSection() === 'general'">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold tracking-tight">{{ 'SETTINGS.GENERAL_SETTINGS' | translate }}</h2>
+          <p class="text-muted-foreground mt-1">{{ 'SETTINGS.MANAGE_APP_SETTINGS' | translate }}</p>
+        </div>
+        
+        <div class="space-y-10">
+          <section [formGroup]="generalForm" (ngSubmit)="saveGeneral()" class="bg-card border border-border rounded-xl">
+            <div class="p-6 border-b border-border">
+              <h3 class="text-xl font-semibold">{{ 'SETTINGS.APPEARANCE' | translate }}</h3>
+            </div>
+            <div class="p-6 space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+                <label class="font-medium text-muted-foreground">{{ 'SETTINGS.THEME' | translate }}</label>
+                <div class="md:col-span-2">
+                  <select formControlName="theme" class="form-select w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary">
+                    <option value="light">{{ 'SETTINGS.LIGHT' | translate }}</option>
+                    <option value="dark">{{ 'SETTINGS.DARK' | translate }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+                <label class="font-medium text-muted-foreground">{{ 'SETTINGS.LANGUAGE' | translate }}</label>
+                <div class="md:col-span-2">
+                  <select formControlName="language" class="form-select w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary">
+                    <option value="es">{{ 'SETTINGS.SPANISH' | translate }}</option>
+                    <option value="en">{{ 'SETTINGS.ENGLISH' | translate }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 bg-secondary/30 border-t border-border flex justify-end rounded-b-xl">
+              <button class="px-6 py-2 bg-primary text-primary-foreground font-semibold rounded-md hover:opacity-90 transition-opacity" type="submit" [disabled]="!generalForm.valid">
+                {{ 'SETTINGS.SAVE_CHANGES' | translate }}
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -41,3 +41,11 @@ export interface UserFilterRequest {
   rol?: Role | null;
   activo?: boolean | null;
 }
+
+/**
+ * Representa la estructura para cambiar la contraseña de un usuario.
+ */
+export interface ChangePasswordRequest {
+  currentPassword?: string;
+  newPassword?: string;
+}

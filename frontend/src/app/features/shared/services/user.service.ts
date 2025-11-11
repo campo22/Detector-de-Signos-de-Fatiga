@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User, UserFilterRequest, UserRequest, UserUpdateRequest } from '../../../core/models/user.models';
+import { User, UserFilterRequest, UserRequest, UserUpdateRequest, ChangePasswordRequest } from '../../../core/models/user.models';
 import { Page } from '../../../core/models/event.models';
 
 @Injectable({
@@ -54,5 +54,9 @@ export class UserService {
 
   deleteUser(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  changePassword(id: string, request: ChangePasswordRequest): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/change-password`, request);
   }
 }
