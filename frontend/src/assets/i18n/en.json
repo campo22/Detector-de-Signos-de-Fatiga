@@ -42,7 +42,11 @@
     "NOTIFICATIONS_CONTENT": "Here you can configure your notifications.",
     "RULES_SUBTITLE": "Manage application rules and policies.",
     "RULES_CONTENT": "Here you can configure the rules.",
-    "ADVANCED_SETTINGS": "View advanced settings"
+    "ADVANCED_SETTINGS": "View advanced settings",
+    "TITLE": "Rules Management",
+    "DESCRIPTION": "Manage fatigue and distraction detection rules and policies.",
+    "CURRENT_RULES": "Current Rules",
+    "NO_RULES_YET": "No rules configured yet. You can add new rules here."
   },
   "DASHBOARD": {
     "ALERT_DISTRIBUTION": "Alert Distribution",

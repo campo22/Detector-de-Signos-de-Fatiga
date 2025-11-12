@@ -5,7 +5,40 @@
 
 /* Definición de las variables de color y estilo del nuevo diseño */
 @layer base {
+  /* TEMA CLARO (Light Theme) */
   :root {
+    --background: 220 20% 96%;      /* Gris muy claro */
+    --foreground: 222 47% 11%;      /* Azul oscuro (texto) */
+    --card: 220 20% 100%;           /* Blanco */
+    --card-foreground: 222 47% 11%; /* Azul oscuro (texto) */
+    --popover: 220 20% 100%;        /* Blanco */
+    --popover-foreground: 222 47% 11%;
+    --primary: 217 91% 60%;         /* Azul primario */
+    --primary-foreground: 210 40% 98%; /* Texto claro para primario */
+    --primary-glow: 217 91% 60%;
+    --secondary: 220 15% 90%;       /* Gris claro secundario */
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 15% 90%;
+    --muted-foreground: 215 20% 45%; /* Texto gris oscuro */
+    --accent: 220 15% 92%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 300 80% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --destructive-glow: 300 80% 50%;
+    --warning: 48 96% 50%;
+    --warning-foreground: 210 40% 98%;
+    --warning-glow: 48 96% 50%;
+    --success: 130 80% 40%;
+    --success-foreground: 210 40% 98%;
+    --success-glow: 130 80% 40%;
+    --border: 220 15% 88%;          /* Borde gris claro */
+    --input: 220 15% 94%;           /* Input gris muy claro */
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;
+  }
+
+  /* TEMA OSCURO (Dark Theme) - El que el usuario considera "por defecto" */
+  .dark {
     --background: 222 84% 4%;
     --foreground: 210 40% 98%;
     --card: 222 84% 4.9%;
@@ -32,37 +65,6 @@
     --success-glow: 130 90% 50%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 217 91% 60%;
-    --radius: 0.75rem;
-  }
-
-  .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
-    --card: 222 47% 11%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 210 40% 98%;
-    --primary-glow: 217 91% 60%;
-    --secondary: 217 32% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 32% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 32% 17%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --destructive-glow: 0 71% 50%;
-    --warning: 40 84% 47%;
-    --warning-foreground: 210 40% 98%;
-    --warning-glow: 40 84% 47%;
-    --success: 142 76% 36%;
-    --success-foreground: 210 40% 98%;
-    --success-glow: 142 76% 36%;
-    --border: 217 32% 17%;
-    --input: 217 32% 17%;
     --ring: 217 91% 60%;
   }
 }

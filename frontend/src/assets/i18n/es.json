@@ -42,7 +42,11 @@
     "NOTIFICATIONS_CONTENT": "Aquí podrás configurar tus notificaciones.",
     "RULES_SUBTITLE": "Administra las reglas y políticas de la aplicación.",
     "RULES_CONTENT": "Aquí podrás configurar las reglas.",
-    "ADVANCED_SETTINGS": "Ver configuración avanzada"
+    "ADVANCED_SETTINGS": "Ver configuración avanzada",
+    "TITLE": "Gestión de Reglas",
+    "DESCRIPTION": "Administra las reglas y políticas de detección de fatiga y distracción.",
+    "CURRENT_RULES": "Reglas Actuales",
+    "NO_RULES_YET": "Aún no hay reglas configuradas. Puedes añadir nuevas reglas aquí."
   },
   "DASHBOARD": {
     "ALERT_DISTRIBUTION": "Distribución de Alertas",
