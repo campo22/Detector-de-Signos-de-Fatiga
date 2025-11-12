@@ -7,6 +7,7 @@ import { AuthService } from '../../features/auth/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { LanguageService } from '../../core/services/language.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -27,12 +28,12 @@ export class Settings implements OnInit {
   private themeService = inject(ThemeService);
   private languageService = inject(LanguageService);
   private translate = inject(TranslateService);
+  private router = inject(Router);
 
   passwordForm: FormGroup;
   generalForm: FormGroup;
 
-  selectedSection = signal<'cuenta' | 'general' | 'notificaciones' | 'facturacion' | 'reglas' | 'api'>('cuenta');
-  sidebarOpen = signal(true);
+  selectedSection = signal<'cuenta' | 'general' | 'notificaciones' | 'reglas'>('general');
 
   // Propiedades para el HTML
   currentTheme = signal<string>('light');
@@ -66,9 +67,8 @@ export class Settings implements OnInit {
   }
 
   // Métodos para el HTML
-  changeTheme(event: any) {
-    const newTheme = event.target.value;
-    this.themeService.setTheme(newTheme as 'light' | 'dark');
+  changeTheme(newTheme: 'light' | 'dark' | 'system') {
+    this.themeService.setTheme(newTheme);
     this.currentTheme.set(newTheme);
 
     // Actualizar el formulario también
@@ -84,26 +84,12 @@ export class Settings implements OnInit {
     this.generalForm.patchValue({ language: newLanguage });
   }
 
-  testFunctionality() {
-    console.log('Probando funcionalidad');
-    console.log('Tema actual:', this.currentTheme());
-    console.log('Idioma actual:', this.currentLanguage());
-
-    // Probar traducción
-    const testTranslation = this.translate.instant('SETTINGS.GENERAL_SETTINGS');
-    console.log('Traducción SETTINGS.GENERAL_SETTINGS:', testTranslation);
-  }
-
-  selectSection(section: 'cuenta' | 'general' | 'notificaciones' | 'facturacion' | 'reglas' | 'api'): void {
+  selectSection(section: 'cuenta' | 'general' | 'notificaciones' | 'reglas'): void {
     this.selectedSection.set(section);
-    // Cerrar sidebar en móviles después de seleccionar una sección
-    if (window.innerWidth < 768) {
-      this.sidebarOpen.set(false);
-    }
   }
 
-  toggleSidebar(): void {
-    this.sidebarOpen.update(value => !value);
+  closeSettings(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   passwordMatchValidator(form: FormGroup) {

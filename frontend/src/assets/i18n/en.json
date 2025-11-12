@@ -35,7 +35,13 @@
     "PASSWORD_UPDATED_SUCCESS": "Password updated successfully.",
     "PASSWORD_UPDATE_ERROR": "Error updating password. Please try again.",
     "USER_ID_ERROR": "Error: Could not get user ID.",
-    "SETTINGS_SAVED_SUCCESS": "General settings saved successfully."
+    "SETTINGS_SAVED_SUCCESS": "General settings saved successfully.",
+    "TITLE": "Settings",
+    "SYSTEM": "System",
+    "NOTIFICATIONS_SUBTITLE": "Manage your notification preferences.",
+    "NOTIFICATIONS_CONTENT": "Here you can configure your notifications.",
+    "RULES_SUBTITLE": "Manage application rules and policies.",
+    "RULES_CONTENT": "Here you can configure the rules."
   },
   "DASHBOARD": {
     "ALERT_DISTRIBUTION": "Alert Distribution",
@@ -275,8 +281,8 @@
       "SAVING_BUTTON": "Saving...",
       "COMPLETE_FIELDS_BUTTON": "Complete required fields",
       "NO_CHANGES_BUTTON": "No changes",
-      "UPDATE_BUTTON": "Update Vehicle",
-      "CREATE_BUTTON": "Create Vehicle",
+      "UPDATE_BUTTON": "Update User",
+      "CREATE_BUTTON": "Create User",
       "UNKNOWN_ERROR": "An unknown error occurred.",
       "SAVE_ERROR": "Error saving: {error}. Please try again."
     },

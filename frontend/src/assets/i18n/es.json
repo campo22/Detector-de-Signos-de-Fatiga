@@ -35,7 +35,13 @@
     "PASSWORD_UPDATED_SUCCESS": "Contraseña actualizada con éxito.",
     "PASSWORD_UPDATE_ERROR": "Error al cambiar la contraseña. Por favor, inténtelo de nuevo.",
     "USER_ID_ERROR": "Error: No se pudo obtener el ID del usuario.",
-    "SETTINGS_SAVED_SUCCESS": "Configuración general guardada con éxito."
+    "SETTINGS_SAVED_SUCCESS": "Configuración general guardada con éxito.",
+    "TITLE": "Configuración",
+    "SYSTEM": "Sistema",
+    "NOTIFICATIONS_SUBTITLE": "Gestiona tus preferencias de notificación.",
+    "NOTIFICATIONS_CONTENT": "Aquí podrás configurar tus notificaciones.",
+    "RULES_SUBTITLE": "Administra las reglas y políticas de la aplicación.",
+    "RULES_CONTENT": "Aquí podrás configurar las reglas."
   },
   "DASHBOARD": {
     "ALERT_DISTRIBUTION": "Distribución de Alertas",
@@ -478,5 +484,16 @@
     "EXPORT_VEHICLE_SHORT": "Vehículo",
     "EXPORT_PDF_TITLE": "Reporte_Historico_Eventos",
     "NO_DATA_PDF": "No hay datos para exportar a PDF."
+  },
+  "USER_PROFILE": {
+    "LOADING_PROFILE": "Cargando perfil de usuario...",
+    "ERROR_LOADING_PROFILE": "No se pudo cargar el perfil del usuario.",
+    "TITLE": "Perfil de Usuario",
+    "NAME": "Nombre:",
+    "EMAIL": "Email:",
+    "ROLE": "Rol:",
+    "STATUS": "Estado:",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo"
   }
 }

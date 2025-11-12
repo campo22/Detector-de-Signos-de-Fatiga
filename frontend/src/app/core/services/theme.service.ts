@@ -1,40 +1,56 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, effect, Injector } from '@angular/core';
+
+type Theme = 'light' | 'dark' | 'system';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
   private readonly THEME_KEY = 'appTheme';
-  currentTheme = signal<'light' | 'dark'>('light');
+  currentTheme = signal<Theme>('system');
 
-  constructor() {
+  constructor(private injector: Injector) {
     this.loadTheme();
+    this.watchSystemThemeChanges();
   }
 
-  setTheme(theme: 'light' | 'dark'): void {
+  setTheme(theme: Theme): void {
     this.currentTheme.set(theme);
     localStorage.setItem(this.THEME_KEY, theme);
-    this.applyTheme(theme);
+    this.applyTheme();
   }
 
   private loadTheme(): void {
-    const savedTheme = localStorage.getItem(this.THEME_KEY) as 'light' | 'dark';
+    const savedTheme = localStorage.getItem(this.THEME_KEY) as Theme;
     if (savedTheme) {
       this.currentTheme.set(savedTheme);
-    } else {
-      // Detect system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      this.currentTheme.set(prefersDark ? 'dark' : 'light');
     }
-    this.applyTheme(this.currentTheme());
+    this.applyTheme();
   }
 
-  private applyTheme(theme: 'light' | 'dark'): void {
+  private applyTheme(): void {
+    const theme = this.currentTheme();
+    let effectiveTheme: 'light' | 'dark';
+
+    if (theme === 'system') {
+      effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } else {
+      effectiveTheme = theme;
+    }
+
     const htmlElement = document.documentElement;
-    if (theme === 'dark') {
+    if (effectiveTheme === 'dark') {
       htmlElement.classList.add('dark');
     } else {
       htmlElement.classList.remove('dark');
     }
+  }
+
+  private watchSystemThemeChanges(): void {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (this.currentTheme() === 'system') {
+        this.applyTheme();
+      }
+    });
   }
 }
