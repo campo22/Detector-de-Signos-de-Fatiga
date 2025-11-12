@@ -1,0 +1,150 @@
+<aside
+  class="w-full lg:w-[400px] bg-card border-r border-border flex flex-col p-6 rounded-lg shadow-lg h-full"
+>
+  <h2 class="text-white mb-6 text-xl font-semibold font-display">Panel de Filtros Históricos</h2>
+
+  <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="flex flex-col gap-5 flex-grow">
+    <div class="space-y-4">
+      <p class="text-foreground/80 text-sm font-medium">Rango de Fechas</p>
+      <div class="grid grid-cols-1 @[280px]:grid-cols-2 gap-3">
+        <div class="relative date-input group">
+          <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
+            >calendar_today</span
+          >
+          <input
+            type="date"
+            formControlName="startDate"
+            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
+            placeholder="Inicio"
+          />
+        </div>
+        <div class="relative date-input group">
+          <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
+            >calendar_today</span
+          >
+          <input
+            type="date"
+            formControlName="endDate"
+            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
+            placeholder="Fin"
+          />
+        </div>
+      </div>
+    </div>
+    <hr class="border-border/50" />
+
+    <div class="space-y-4">
+      <label class="flex flex-col gap-2">
+        <p class="text-foreground/80 text-sm font-medium">Nombre Conductor</p>
+        <div class="relative group">
+          <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
+            >person</span
+          >
+          <input
+            type="text"
+            formControlName="driverName"
+            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
+            placeholder="Buscar por nombre..."
+          />
+        </div>
+      </label>
+      <label class="flex flex-col gap-2">
+        <p class="text-foreground/80 text-sm font-medium">Placa Vehículo</p>
+        <div class="relative group">
+          <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
+            >local_shipping</span
+          >
+          <input
+            type="text"
+            formControlName="vehiclePlate"
+            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
+            placeholder="Buscar por placa..."
+          />
+        </div>
+      </label>
+    </div>
+    <hr class="border-border/50" />
+
+    <div class="flex flex-col gap-2">
+      <p class="text-foreground/80 text-sm font-medium">Tipo de Evento</p>
+      <div class="relative group">
+        <span
+          class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
+          >category</span
+        >
+        <select
+          formControlName="fatigueType"
+          class="form-input w-full rounded-lg border bg-background pl-9 pr-10 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 appearance-none cursor-pointer"
+        >
+          <option [ngValue]="null">Todos los Tipos</option>
+          @for(type of fatigueTypes; track type[0]) {
+          <option [value]="type[1]">{{ type[0] | titlecase }}</option>
+          }
+        </select>
+        <span
+          class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-lg pointer-events-none"
+          >expand_more</span
+        >
+      </div>
+    </div>
+    <hr class="border-border/50" />
+
+    <div class="flex flex-col gap-3">
+      <p class="text-foreground/80 text-sm font-medium">Nivel de Fatiga</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button
+          type="button"
+          (click)="selectFatigueLevel(FatigueLevelEnum.ALTO)"
+          [ngClass]="
+            filterForm.controls.fatigueLevel.value === FatigueLevelEnum.ALTO
+              ? 'border-destructive bg-destructive/20 text-destructive ring-destructive/50'
+              : 'border-border bg-background/50 text-muted-foreground hover:bg-muted/50 hover:border-border'
+          "
+          class="fatigue-option flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold border-2 ring-2 ring-transparent transition-all duration-200 focus:outline-none"
+        >
+          <span class="size-2 rounded-full bg-destructive"></span> ALTO
+        </button>
+        <button
+          type="button"
+          (click)="selectFatigueLevel(FatigueLevelEnum.MEDIO)"
+          [ngClass]="
+            filterForm.controls.fatigueLevel.value === FatigueLevelEnum.MEDIO
+              ? 'border-warning bg-warning/20 text-warning ring-warning/50'
+              : 'border-border bg-background/50 text-muted-foreground hover:bg-muted/50 hover:border-border'
+          "
+          class="fatigue-option flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold border-2 ring-2 ring-transparent transition-all duration-200 focus:outline-none"
+        >
+          <span class="size-2 rounded-full bg-warning"></span> MEDIO
+        </button>
+        <button
+          type="button"
+          (click)="selectFatigueLevel(FatigueLevelEnum.BAJO)"
+          [ngClass]="
+            filterForm.controls.fatigueLevel.value === FatigueLevelEnum.BAJO
+              ? 'border-success bg-success/20 text-success ring-success/50'
+              : 'border-border bg-background/50 text-muted-foreground hover:bg-muted/50 hover:border-border'
+          "
+          class="fatigue-option flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold border-2 ring-2 ring-transparent transition-all duration-200 focus:outline-none"
+        >
+          <span class="size-2 rounded-full bg-success"></span> BAJO
+        </button>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="filterForm.invalid"
+      class="filter-button group mt-auto flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-blue-600 to-primary text-base font-bold text-white shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      <span
+        class="material-symbols-outlined transition-transform duration-300 group-hover:rotate-12 z-10"
+        >filter_alt</span
+      >
+      <span class="z-10">Aplicar Filtros</span>
+    </button>
+  </form>
+</aside>
