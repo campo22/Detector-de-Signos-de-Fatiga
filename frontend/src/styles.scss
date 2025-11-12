@@ -5,34 +5,35 @@
 
 /* Definición de las variables de color y estilo del nuevo diseño */
 @layer base {
-  /* TEMA CLARO (Light Theme) */
+  /* TEMA CLARO (Light Theme) - Mejorado */
   :root {
-    --background: 220 20% 96%;      /* Gris muy claro */
-    --foreground: 222 47% 11%;      /* Azul oscuro (texto) */
-    --card: 220 20% 100%;           /* Blanco */
-    --card-foreground: 222 47% 11%; /* Azul oscuro (texto) */
-    --popover: 220 20% 100%;        /* Blanco */
-    --popover-foreground: 222 47% 11%;
-    --primary: 217 91% 60%;         /* Azul primario */
-    --primary-foreground: 210 40% 98%; /* Texto claro para primario */
+    --background: 210 40% 98%;      /* Blanco Hueso */
+    --foreground: 220 20% 15%;      /* Gris oscuro casi negro, más neutro para títulos */
+    --subtle-foreground: 220 15% 30%; /* Gris medio oscuro para cuerpo de texto */
+    --card: 210 40% 100%;           /* Blanco Puro */
+    --card-foreground: 220 20% 15%; /* Gris oscuro casi negro (Texto en Tarjetas) */
+    --popover: 210 40% 100%;
+    --popover-foreground: 220 20% 15%;
+    --primary: 217 91% 60%;         /* Azul Primario (Sin cambios) */
+    --primary-foreground: 210 40% 98%;
     --primary-glow: 217 91% 60%;
-    --secondary: 220 15% 90%;       /* Gris claro secundario */
-    --secondary-foreground: 222 47% 11%;
-    --muted: 220 15% 90%;
-    --muted-foreground: 215 20% 45%; /* Texto gris oscuro */
-    --accent: 220 15% 92%;
-    --accent-foreground: 222 47% 11%;
-    --destructive: 300 80% 50%;
+    --secondary: 210 40% 96%;       /* Gris Claro (Fondo Secundario) */
+    --secondary-foreground: 220 15% 30%; /* Gris medio oscuro */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 20% 65%; /* Gris más claro para texto silenciado */
+    --accent: 210 40% 94%;
+    --accent-foreground: 220 15% 30%; /* Gris medio oscuro */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --destructive-glow: 300 80% 50%;
-    --warning: 48 96% 50%;
+    --destructive-glow: 0 84% 60%;
+    --warning: 45 93% 47%;
     --warning-foreground: 210 40% 98%;
-    --warning-glow: 48 96% 50%;
-    --success: 130 80% 40%;
+    --warning-glow: 45 93% 47%;
+    --success: 142 71% 45%;
     --success-foreground: 210 40% 98%;
-    --success-glow: 130 80% 40%;
-    --border: 220 15% 88%;          /* Borde gris claro */
-    --input: 220 15% 94%;           /* Input gris muy claro */
+    --success-glow: 142 71% 45%;
+    --border: 214 32% 91%;          /* Borde Gris Sutil */
+    --input: 210 40% 98%;           /* Input Blanco Hueso */
     --ring: 217 91% 60%;
     --radius: 0.75rem;
   }

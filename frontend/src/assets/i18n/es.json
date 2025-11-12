@@ -54,7 +54,12 @@
     "CRITICAL_EVENTS_TIMELINE": "Línea de Tiempo de Eventos Críticos",
     "RECENT_EVENTS": "Eventos Recientes",
     "WAITING_FOR_EVENTS": "Esperando nuevos eventos...",
-    "VIEW_ALL_ALERTS": "Ver todas las alertas"
+    "VIEW_ALL_ALERTS": "Ver todas las alertas",
+    "FILTERS": {
+      "START_DATE": "Fecha de Inicio",
+      "END_DATE": "Fecha de Fin",
+      "APPLY": "Aplicar"
+    }
   },
   "HEADER": {
     "MAIN_DASHBOARD": "Dashboard Principal",

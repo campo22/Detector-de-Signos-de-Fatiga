@@ -54,7 +54,12 @@
     "CRITICAL_EVENTS_TIMELINE": "Critical Events Timeline",
     "RECENT_EVENTS": "Recent Events",
     "WAITING_FOR_EVENTS": "Waiting for new events...",
-    "VIEW_ALL_ALERTS": "View all alerts"
+    "VIEW_ALL_ALERTS": "View all alerts",
+    "FILTERS": {
+      "START_DATE": "Start Date",
+      "END_DATE": "End Date",
+      "APPLY": "Apply"
+    }
   },
   "HEADER": {
     "MAIN_DASHBOARD": "Main Dashboard",

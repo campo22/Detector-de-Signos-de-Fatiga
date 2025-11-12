@@ -1,35 +1,29 @@
-<form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="flex items-center space-x-4">
-  <div
-    class="relative date-input group flex items-center space-x-2 bg-card border border-border rounded-lg px-3 py-2 ring-1 ring-transparent focus-within:ring-primary/50 transition-all duration-300 shadow-sm"
-  >
-    <span
-      class="material-symbols-outlined text-muted-foreground group-focus-within:text-primary transition-colors duration-300"
-      >calendar_today</span
-    >
-    <input
-      type="date"
-      formControlName="startDate"
-      class="bg-transparent focus:outline-none text-foreground appearance-none w-full cursor-pointer"
-      placeholder="Fecha Inicio"
-    />
+<form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="flex items-center gap-4 p-3 bg-card border border-border rounded-xl shadow-sm">
+  <div class="flex items-center gap-2">
+    <label for="startDate" class="text-sm font-semibold text-muted-foreground">{{ 'DASHBOARD.FILTERS.START_DATE' | translate }}</label>
+    <div class="relative">
+      <input
+        id="startDate"
+        type="date"
+        formControlName="startDate"
+        class="form-input bg-background border-border rounded-lg pl-3 pr-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary transition"
+      />
+    </div>
   </div>
 
-  <div
-    class="relative date-input group flex items-center space-x-2 bg-card border border-border rounded-lg px-3 py-2 ring-1 ring-transparent focus-within:ring-primary/50 transition-all duration-300 shadow-sm"
-  >
-    <span
-      class="material-symbols-outlined text-muted-foreground group-focus-within:text-primary transition-colors duration-300"
-      >calendar_today</span
-    >
-    <input
-      type="date"
-      formControlName="endDate"
-      class="bg-transparent focus:outline-none text-foreground appearance-none w-full cursor-pointer"
-      placeholder="Fecha Fin"
-    />
+  <div class="flex items-center gap-2">
+    <label for="endDate" class="text-sm font-semibold text-muted-foreground">{{ 'DASHBOARD.FILTERS.END_DATE' | translate }}</label>
+    <div class="relative">
+      <input
+        id="endDate"
+        type="date"
+        formControlName="endDate"
+        class="form-input bg-background border-border rounded-lg pl-3 pr-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary transition"
+      />
+    </div>
   </div>
 
-  <button type="submit" class="px-6 py-2 bg-primary hover:bg-primary/80 text-white rounded-lg">
-    Aplicar
+  <button type="submit" class="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg shadow-md hover:shadow-primary/40 transition-all duration-300">
+    {{ 'DASHBOARD.FILTERS.APPLY' | translate }}
   </button>
 </form>
