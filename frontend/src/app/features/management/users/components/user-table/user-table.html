@@ -3,7 +3,7 @@
     <thead class="text-xs text-muted-foreground uppercase bg-secondary/30 backdrop-blur-sm sticky top-0 z-10">
       <tr>
         <th scope="col" class="px-6 py-3 cursor-pointer hover:text-primary transition-colors" (click)="onChangeSort('name')">
-          Nombre
+          {{ 'USERS.TABLE.HEADER_NAME' | translate }}
           @if (sortState().column === 'name') {
             <span class="material-symbols-outlined text-sm align-middle ml-1">
               {{ sortState().direction === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
@@ -11,7 +11,7 @@
           }
         </th>
         <th scope="col" class="px-6 py-3 cursor-pointer hover:text-primary transition-colors" (click)="onChangeSort('email')">
-          Email
+          {{ 'USERS.TABLE.HEADER_EMAIL' | translate }}
           @if (sortState().column === 'email') {
             <span class="material-symbols-outlined text-sm align-middle ml-1">
               {{ sortState().direction === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
@@ -19,7 +19,7 @@
           }
         </th>
         <th scope="col" class="px-6 py-3 cursor-pointer hover:text-primary transition-colors" (click)="onChangeSort('rol')">
-          Rol
+          {{ 'USERS.TABLE.HEADER_ROLE' | translate }}
           @if (sortState().column === 'rol') {
             <span class="material-symbols-outlined text-sm align-middle ml-1">
               {{ sortState().direction === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
@@ -27,14 +27,14 @@
           }
         </th>
         <th scope="col" class="px-6 py-3 cursor-pointer hover:text-primary transition-colors" (click)="onChangeSort('activo')">
-          Estado
+          {{ 'USERS.TABLE.HEADER_STATUS' | translate }}
           @if (sortState().column === 'activo') {
             <span class="material-symbols-outlined text-sm align-middle ml-1">
               {{ sortState().direction === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
             </span>
           }
         </th>
-        <th scope="col" class="px-6 py-3 text-center">Acciones</th>
+        <th scope="col" class="px-6 py-3 text-center">{{ 'USERS.TABLE.HEADER_ACTIONS' | translate }}</th>
       </tr>
     </thead>
 
@@ -44,19 +44,19 @@
           <tr class="bg-card border-b border-border even:bg-secondary/20 hover:bg-muted/40 transition-colors user-row" [style.animation-delay]="i * 40 + 'ms'">
             <td class="px-6 py-4 font-medium text-foreground whitespace-nowrap">{{ user.name }}</td>
             <td class="px-6 py-4">{{ user.email }}</td>
-            <td class="px-6 py-4">{{ user.rol }}</td>
+            <td class="px-6 py-4">{{ 'USERS.ROLES.' + user.rol | translate }}</td>
             <td class="px-6 py-4">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="user.activo ? 'status-active bg-success/10 text-success' : 'status-inactive bg-destructive/10 text-destructive'">
                 <span class="w-2 h-2 mr-1.5 rounded-full" [ngClass]="user.activo ? 'bg-success' : 'bg-destructive'"></span>
-                {{ user.activo ? 'Activo' : 'Inactivo' }}
+                {{ user.activo ? ('USERS.STATUS_ACTIVE' | translate) : ('USERS.STATUS_INACTIVE' | translate) }}
               </span>
             </td>
             <td class="px-6 py-4 text-center">
               <div class="flex items-center justify-center gap-4">
-                <button (click)="onEdit(user)" title="Editar" class="p-3 rounded-full text-primary hover:bg-primary/10 transition-all duration-200">
+                <button (click)="onEdit(user)" [title]="'USERS.TABLE.EDIT_TOOLTIP' | translate" class="p-3 rounded-full text-primary hover:bg-primary/10 transition-all duration-200">
                   <span class="material-symbols-outlined text-xl">edit</span>
                 </button>
-                <button (click)="onDelete(user)" title="Eliminar" class="p-3 rounded-full text-destructive hover:bg-destructive/10 transition-all duration-200">
+                <button (click)="onDelete(user)" [title]="'USERS.TABLE.DELETE_TOOLTIP' | translate" class="p-3 rounded-full text-destructive hover:bg-destructive/10 transition-all duration-200">
                   <span class="material-symbols-outlined text-xl">delete</span>
                 </button>
               </div>
@@ -71,8 +71,8 @@
     <div class="text-center text-muted-foreground p-20">
       <div class="flex flex-col items-center justify-center gap-4">
         <span class="material-symbols-outlined text-6xl text-primary">person_search</span>
-        <h3 class="text-xl font-semibold">No se encontraron usuarios</h3>
-        <p>Intenta ajustar los filtros para encontrar lo que buscas.</p>
+        <h3 class="text-xl font-semibold">{{ 'USERS.TABLE.NO_USERS_FOUND_TITLE' | translate }}</h3>
+        <p>{{ 'USERS.TABLE.NO_USERS_FOUND_SUBTITLE' | translate }}</p>
       </div>
     </div>
   }
@@ -80,15 +80,15 @@
   @if (usersPage() === null) {
     <div class="flex flex-col items-center justify-center text-muted-foreground p-20 gap-4">
       <span class="material-symbols-outlined text-6xl animate-spin text-primary">progress_activity</span>
-      <p class="text-lg">Cargando usuarios...</p>
+      <p class="text-lg">{{ 'USERS.TABLE.LOADING' | translate }}</p>
     </div>
   }
 </div>
 
 @if (usersPage(); as page) {
-  <nav aria-label="Table navigation" class="flex flex-col sm:flex-row items-center justify-between p-4 border-t border-border gap-3">
+  <nav [attr.aria-label]="'USERS.TABLE.PAGINATION_ARIA_LABEL' | translate" class="flex flex-col sm:flex-row items-center justify-between p-4 border-t border-border gap-3">
     <span class="text-sm font-normal text-muted-foreground">
-      Mostrando <span class="font-semibold text-foreground">{{ page.numberOfElements }}</span> de
+      {{ 'USERS.TABLE.PAGINATION_SHOWING' | translate }} <span class="font-semibold text-foreground">{{ page.numberOfElements }}</span> {{ 'USERS.TABLE.PAGINATION_OF' | translate }}
       <span class="font-semibold text-foreground">{{ page.totalElements }}</span>
     </span>
     <ul class="inline-flex items-center -space-x-px text-sm h-8">
@@ -98,7 +98,7 @@
         </button>
       </li>
       <li class="px-3 h-8 flex items-center text-muted-foreground bg-card border-y border-border">
-        Pág {{ page.number + 1 }} de {{ page.totalPages }}
+        {{ 'USERS.TABLE.PAGINATION_PAGE' | translate }} {{ page.number + 1 }} {{ 'USERS.TABLE.PAGINATION_OF' | translate }} {{ page.totalPages }}
       </li>
       <li>
         <button (click)="onChangePage('next')" [disabled]="page.last" class="flex items-center justify-center px-3 h-8 leading-tight text-muted-foreground bg-card border border-border rounded-r-lg hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors">

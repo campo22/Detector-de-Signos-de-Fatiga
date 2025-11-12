@@ -2,14 +2,14 @@
 <p-confirmDialog [style]="{ width: '450px' }" styleClass="custom-confirm-dialog"></p-confirmDialog>
 
 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-  <h2 class="text-2xl font-bold text-foreground">Gestión de Usuarios</h2>
+  <h2 class="text-2xl font-bold text-foreground">{{ 'USERS.TITLE' | translate }}</h2>
   <div class="flex items-center gap-4">
     <button
       (click)="openNew()"
       class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
     >
       <span class="material-symbols-outlined text-base">add</span>
-      <span>Añadir Usuario</span>
+      <span>{{ 'USERS.ADD_USER_BUTTON' | translate }}</span>
     </button>
   </div>
 </div>
@@ -24,7 +24,7 @@
       <span class="material-symbols-outlined text-3xl">group</span>
     </div>
     <div>
-      <p class="text-sm text-muted-foreground">Usuarios Totales</p>
+      <p class="text-sm text-muted-foreground">{{ 'USERS.TOTAL_USERS_STAT' | translate }}</p>
       <p class="text-3xl font-bold text-foreground">{{ totalUsers() }}</p>
     </div>
   </div>
@@ -37,7 +37,7 @@
       <span class="material-symbols-outlined text-3xl">person_check</span>
     </div>
     <div>
-      <p class="text-sm text-muted-foreground">Usuarios Activos</p>
+      <p class="text-sm text-muted-foreground">{{ 'USERS.ACTIVE_USERS_STAT' | translate }}</p>
       <p class="text-3xl font-bold text-foreground">{{ activeUsers() }}</p>
     </div>
   </div>
@@ -50,7 +50,7 @@
       <span class="material-symbols-outlined text-3xl">person_off</span>
     </div>
     <div>
-      <p class="text-sm text-muted-foreground">Usuarios Inactivos</p>
+      <p class="text-sm text-muted-foreground">{{ 'USERS.INACTIVE_USERS_STAT' | translate }}</p>
       <p class="text-3xl font-bold text-foreground">{{ inactiveUsers() }}</p>
     </div>
   </div>
@@ -58,7 +58,7 @@
 
 <div class="bg-card rounded-lg shadow-lg border border-border flex flex-col">
   <div class="p-6 border-b border-border">
-    <h3 class="text-lg font-semibold text-foreground mb-4">Lista de Usuarios</h3>
+    <h3 class="text-lg font-semibold text-foreground mb-4">{{ 'USERS.USER_LIST_TITLE' | translate }}</h3>
     <app-user-filters></app-user-filters>
   </div>
 
@@ -76,10 +76,10 @@
       <div class="border border-border/50 rounded-[calc(var(--radius)-2px)] p-6 sm:p-8">
         <div class="flex flex-col space-y-2 mb-8">
           <h2 class="font-display text-2xl font-bold tracking-tight text-primary">
-            {{ isEditMode() ? 'Editar Usuario' : 'Crear Usuario' }}
+            {{ dialogHeader() }}
           </h2>
           <p class="text-sm text-muted-foreground">
-            {{ isEditMode() ? 'Actualice los detalles del usuario.' : 'Registre un nuevo usuario en el sistema.' }}
+            {{ dialogSubheader() }}
           </p>
         </div>
         <app-user-form

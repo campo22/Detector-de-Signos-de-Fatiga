@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs'; // Added this import
+import { Observable } from 'rxjs';
 
 // Modelos y Servicios
 import { Role } from '../../../../../core/models/enums';
@@ -13,6 +13,7 @@ import { UserService } from '../../../../shared/services/user.service';
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 export function passwordMatchValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -33,6 +34,7 @@ export function passwordMatchValidator(): ValidatorFn {
     ReactiveFormsModule,
     InputTextModule,
     SelectModule,
+    TranslateModule
   ],
   templateUrl: './user-form.html',
   styleUrls: ['./user-form.scss']
@@ -45,19 +47,18 @@ export class UserFormComponent implements OnInit, OnChanges {
 
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  private translate = inject(TranslateService);
 
-  userForm: FormGroup; // Declarado sin '!' porque se inicializa en el constructor
+  userForm: FormGroup;
   roles: { label: string; value: Role }[] = [];
   statusOptions = [
-    { label: 'Activo', value: true },
-    { label: 'Inactivo', value: false }
+    { label: this.translate.instant('USERS.STATUS_ACTIVE'), value: true },
+    { label: this.translate.instant('USERS.STATUS_INACTIVE'), value: false }
   ];
 
-  // --- State Signals ---
   isLoading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
-  // Declarar como Signal<T> (solo lectura)
   private formStatusSignal!: Signal<FormControlStatus>;
   private formPristineSignal!: Signal<boolean>;
 
@@ -65,10 +66,10 @@ export class UserFormComponent implements OnInit, OnChanges {
   isFormPristine = computed(() => this.formPristineSignal());
   canSubmit = computed(() => this.isFormValid() && !this.isLoading() && (!this.isFormPristine() || this.isEditMode));
   submitButtonLabel = computed(() => {
-    if (this.isLoading()) return 'Guardando...';
-    if (!this.isFormValid()) return 'Complete campos requeridos';
-    if (this.isFormPristine() && this.isEditMode) return 'Sin cambios';
-    return this.isEditMode ? 'Actualizar Usuario' : 'Crear Usuario';
+    if (this.isLoading()) return this.translate.instant('USERS.FORM.SAVING_BUTTON');
+    if (!this.isFormValid()) return this.translate.instant('USERS.FORM.COMPLETE_FIELDS_BUTTON');
+    if (this.isFormPristine() && this.isEditMode) return this.translate.instant('USERS.FORM.NO_CHANGES_BUTTON');
+    return this.isEditMode ? this.translate.instant('USERS.FORM.UPDATE_BUTTON') : this.translate.instant('USERS.FORM.CREATE_BUTTON');
   });
 
   constructor() {
@@ -81,18 +82,17 @@ export class UserFormComponent implements OnInit, OnChanges {
       activo: [true]
     }, { validators: passwordMatchValidator() });
 
-    // Asignar formStatusSignal y formPristineSignal aquí, después de que userForm esté inicializado
     this.formStatusSignal = toSignal(this.userForm.statusChanges.pipe(startWith(this.userForm.status)), { initialValue: this.userForm.status });
     this.formPristineSignal = toSignal(this.userForm.valueChanges.pipe(startWith(this.userForm.pristine), map(() => this.userForm.pristine)), { initialValue: this.userForm.pristine });
 
-    this.updatePasswordValidators(); // Llamar aquí después de inicializar userForm
+    this.updatePasswordValidators();
   }
 
   ngOnInit(): void {
     this.roles = Object.keys(Role)
       .filter(key => key !== 'CONDUCTOR')
       .map(key => ({
-        label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
+        label: this.translate.instant(`USERS.ROLES.${key}`),
         value: Role[key as keyof typeof Role]
       }));
   }
@@ -111,7 +111,7 @@ export class UserFormComponent implements OnInit, OnChanges {
       this.userForm.patchValue({
         name: user.name,
         email: user.email,
-        rol: user.rol,
+        rol: this.roles.find(r => r.value === user.rol),
         activo: user.activo
       });
       this.userForm.markAsPristine();
@@ -121,17 +121,16 @@ export class UserFormComponent implements OnInit, OnChanges {
     this.errorMessage.set(null);
   }
 
-  // --- Método público para resetear el formulario (llamado desde el padre) ---
   resetForm(): void {
     this.userForm.reset({
-      rol: null, // Valor por defecto para 'rol'
-      activo: true // Valor por defecto para 'activo'
+      rol: null,
+      activo: true
     });
     this.userForm.markAsPristine();
     this.userForm.markAsUntouched();
     this.errorMessage.set(null);
     this.isLoading.set(false);
-    this.updatePasswordValidators(); // Re-aplicar validadores de contraseña si es necesario
+    this.updatePasswordValidators();
   }
 
   private updatePasswordValidators(): void {
@@ -165,7 +164,7 @@ export class UserFormComponent implements OnInit, OnChanges {
       payload = {
         name: formValue.name,
         email: formValue.email,
-        rol: formValue.rol.value, // Extraer solo el valor del rol
+        rol: formValue.rol.value,
         activo: formValue.activo
       };
       if (formValue.password) {
@@ -176,7 +175,7 @@ export class UserFormComponent implements OnInit, OnChanges {
         name: formValue.name,
         email: formValue.email,
         password: formValue.password,
-        rol: formValue.rol.value // Extraer solo el valor del rol
+        rol: formValue.rol.value
       };
     }
 
@@ -184,13 +183,14 @@ export class UserFormComponent implements OnInit, OnChanges {
       ? this.userService.updateUser(this.user!.id, payload as UserUpdateRequest)
       : this.userService.createUser(payload as UserRequest);
 
-    (operation$ as Observable<any>).subscribe({ // Cast to Observable<any>
+    (operation$ as Observable<any>).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.save.emit();
       },
       error: (err: any) => {
-        this.errorMessage.set(err.error?.message || 'Ocurrió un error al guardar el usuario.');
+        const apiError = err.error?.message || this.translate.instant('USERS.FORM.UNKNOWN_ERROR');
+        this.errorMessage.set(this.translate.instant('USERS.FORM.SAVE_ERROR', { error: apiError }));
         this.isLoading.set(false);
       }
     });

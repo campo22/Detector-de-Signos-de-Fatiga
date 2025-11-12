@@ -1,1 +1,59 @@
-<p>profile works!</p>
+<div class="container mx-auto p-6">
+  @if (!currentUser()) {
+  <div class="text-center p-20 text-muted-foreground">
+    <span class="material-symbols-outlined text-6xl animate-spin">progress_activity</span>
+    <p class="mt-4 text-lg">{{ 'USER_PROFILE.LOADING_PROFILE' | translate }}</p>
+  </div>
+  } @else if (currentUser() === undefined) {
+  <div class="text-center p-20 text-destructive">
+    <span class="material-symbols-outlined text-6xl">error</span>
+    <p class="mt-4 text-lg">{{ 'USER_PROFILE.ERROR_LOADING_PROFILE' | translate }}</p>
+  </div>
+  } @else {
+  <div class="bg-card p-8 rounded-lg shadow-lg border border-border max-w-2xl mx-auto">
+    <h2 class="text-3xl font-bold text-primary mb-6 text-center">
+      {{ 'USER_PROFILE.TITLE' | translate }}
+    </h2>
+
+    <div class="space-y-4">
+      <div class="flex items-center">
+        <span class="material-symbols-outlined text-muted-foreground mr-3">person</span>
+        <p class="text-lg">
+          <strong class="text-foreground">{{ 'USER_PROFILE.NAME' | translate }}</strong>
+          {{ currentUser()!.name }}
+        </p>
+      </div>
+
+      <div class="flex items-center">
+        <span class="material-symbols-outlined text-muted-foreground mr-3">mail</span>
+        <p class="text-lg">
+          <strong class="text-foreground">{{ 'USER_PROFILE.EMAIL' | translate }}</strong>
+          {{ currentUser()!.email }}
+        </p>
+      </div>
+
+      <div class="flex items-center">
+        <span class="material-symbols-outlined text-muted-foreground mr-3">work</span>
+        <p class="text-lg">
+          <strong class="text-foreground">{{ 'USER_PROFILE.ROLE' | translate }}</strong>
+          {{ currentUser()!.rol | titlecase }}
+        </p>
+      </div>
+
+      <div class="flex items-center">
+        <span class="material-symbols-outlined text-muted-foreground mr-3">toggle_on</span>
+        <p class="text-lg">
+          <strong class="text-foreground">{{ 'USER_PROFILE.STATUS' | translate }}</strong>
+          <span
+            [ngClass]="currentUser()!.activo ? 'text-success' : 'text-destructive'"
+            class="font-semibold ml-1"
+          >
+            {{ currentUser()!.activo ? ('USER_PROFILE.ACTIVE' | translate) : ('USER_PROFILE.INACTIVE' | translate) }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+

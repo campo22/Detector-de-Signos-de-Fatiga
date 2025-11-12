@@ -14,7 +14,7 @@
             class="font-bold text-xl mb-4 text-foreground"
             style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
           >
-            Distribución de Alertas
+            {{ 'DASHBOARD.ALERT_DISTRIBUTION' | translate }}
           </h3>
           <app-alert-distribution-chart></app-alert-distribution-chart>
         </div>
@@ -29,7 +29,7 @@
             class="font-bold text-xl mb-4 text-foreground"
             style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
           >
-            Top 5 Conductores con Más Alertas
+            {{ 'DASHBOARD.TOP_DRIVERS' | translate }}
           </h3>
           <app-top-drivers-chart></app-top-drivers-chart>
         </div>
@@ -44,7 +44,7 @@
             class="font-bold text-xl mb-4 text-foreground"
             style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
           >
-            Línea de Tiempo de Eventos Críticos
+            {{ 'DASHBOARD.CRITICAL_EVENTS_TIMELINE' | translate }}
           </h3>
           <app-critical-events-timeline></app-critical-events-timeline>
         </div>
@@ -59,9 +59,9 @@
         <div class="relative z-10 p-6">
           <h3
             class="font-bold text-xl text-foreground"
-            style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
+            style="text-shadow: 0 1px 3px rgba(0, 0, a, 0.5)"
           >
-            Eventos Recientes
+            {{ 'DASHBOARD.RECENT_EVENTS' | translate }}
           </h3>
         </div>
         <div class="relative z-10 flex-1 overflow-y-auto px-6 pb-6 space-y-4 min-h-0" style="max-height: 500px;">
@@ -99,7 +99,7 @@
           } @empty {
           <div class="text-center text-muted-foreground py-10">
             <span class="material-symbols-outlined text-4xl mb-2">radar</span>
-            <p>Esperando nuevos eventos...</p>
+            <p>{{ 'DASHBOARD.WAITING_FOR_EVENTS' | translate }}</p>
           </div>
           }
         </div>
@@ -108,7 +108,7 @@
             [routerLink]="['/monitoring/live']"
             class="w-full text-center text-primary hover:text-primary/80 font-semibold transition-colors"
           >
-            Ver todas las alertas
+            {{ 'DASHBOARD.VIEW_ALL_ALERTS' | translate }}
           </button>
         </div>
       </div>

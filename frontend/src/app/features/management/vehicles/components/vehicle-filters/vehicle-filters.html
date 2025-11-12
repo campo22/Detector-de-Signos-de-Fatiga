@@ -4,70 +4,70 @@
 >
   <div>
     <label for="filter-placa" class="block text-sm font-medium text-muted-foreground mb-1">
-      Buscar por Placa
+      {{ 'VEHICLES.FILTERS.PLATE_LABEL' | translate }}
     </label>
     <input
       type="text"
       id="filter-placa"
       formControlName="placa"
       class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
-      placeholder="Ej. ABC-123"
+      [placeholder]="'VEHICLES.FILTERS.PLATE_PLACEHOLDER' | translate"
     />
   </div>
 
   <div>
     <label for="filter-marca" class="block text-sm font-medium text-muted-foreground mb-1">
-      Marca
+      {{ 'VEHICLES.FILTERS.BRAND_LABEL' | translate }}
     </label>
     <input
       type="text"
       id="filter-marca"
       formControlName="marca"
       class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
-      placeholder="Ej. Ford"
+      [placeholder]="'VEHICLES.FILTERS.BRAND_PLACEHOLDER' | translate"
     />
   </div>
 
   <div>
     <label for="filter-modelo" class="block text-sm font-medium text-muted-foreground mb-1">
-      Modelo
+      {{ 'VEHICLES.FILTERS.MODEL_LABEL' | translate }}
     </label>
     <input
       type="text"
       id="filter-modelo"
       formControlName="modelo"
       class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary placeholder:text-muted-foreground/50"
-      placeholder="Ej. Transit"
+      [placeholder]="'VEHICLES.FILTERS.MODEL_PLACEHOLDER' | translate"
     />
   </div>
 
   <div>
     <label for="filter-status" class="block text-sm font-medium text-muted-foreground mb-1">
-      Estado
+      {{ 'VEHICLES.FILTERS.STATUS_LABEL' | translate }}
     </label>
     <select
       id="filter-status"
       formControlName="activo"
       class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary"
     >
-      <option [ngValue]="null">Todos</option>
-      <option [ngValue]="true">Activo</option>
-      <option [ngValue]="false">Inactivo</option>
+      <option [ngValue]="null">{{ 'VEHICLES.FILTERS.ALL' | translate }}</option>
+      <option [ngValue]="true">{{ 'VEHICLES.FILTERS.ACTIVE' | translate }}</option>
+      <option [ngValue]="false">{{ 'VEHICLES.FILTERS.INACTIVE' | translate }}</option>
     </select>
   </div>
 
   <div>
     <label for="filter-assignment" class="block text-sm font-medium text-muted-foreground mb-1">
-      Asignación
+      {{ 'VEHICLES.FILTERS.ASSIGNMENT_LABEL' | translate }}
     </label>
     <select
       id="filter-assignment"
       formControlName="asignado"
       class="w-full px-4 py-2 bg-input border border-border rounded-md focus:ring-ring focus:border-primary"
     >
-      <option [ngValue]="null">Todos</option>
-      <option [ngValue]="true">Asignado</option>
-      <option [ngValue]="false">No Asignado</option>
+      <option [ngValue]="null">{{ 'VEHICLES.FILTERS.ALL' | translate }}</option>
+      <option [ngValue]="true">{{ 'VEHICLES.FILTERS.ASSIGNED' | translate }}</option>
+      <option [ngValue]="false">{{ 'VEHICLES.FILTERS.UNASSIGNED' | translate }}</option>
     </select>
   </div>
 
@@ -77,10 +77,10 @@
       (click)="clearFilters()"
       [disabled]="!hasActiveFilters()"
       class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-secondary border border-border text-muted-foreground rounded-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      title="Limpiar filtros aplicados"
+      [title]="'VEHICLES.FILTERS.CLEAR_TOOLTIP' | translate"
     >
       <span class="material-symbols-outlined text-base">filter_alt_off</span>
-      <span>Limpiar</span>
+      <span>{{ 'VEHICLES.FILTERS.CLEAR_BUTTON' | translate }}</span>
     </button>
   </div>
 </form>

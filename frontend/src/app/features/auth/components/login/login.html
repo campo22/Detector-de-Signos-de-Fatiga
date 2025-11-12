@@ -19,7 +19,7 @@
       <!-- Título -->
       <h1 class="text-center text-2xl font-bold text-white">SafeTrack</h1>
       <p class="text-center text-gray-400 mt-2 mb-6">
-        Bienvenido de nuevo. Inicia sesión en tu cuenta.
+        {{ 'LOGIN.WELCOME' | translate }}
       </p>
 
       <!-- Formulario -->
@@ -39,7 +39,7 @@
               id="email"
               type="email"
               formControlName="email"
-              placeholder="Email"
+              [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
               autocomplete="email"
               class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-colors duration-200 hover:border-gray-600"
               [ngClass]="{
@@ -52,7 +52,7 @@
             />
           </div>
           @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-          <small class="text-red-500 mt-1 block">Introduce un email válido.</small>
+          <small class="text-red-500 mt-1 block">{{ 'LOGIN.INVALID_EMAIL' | translate }}</small>
           }
         </div>
 
@@ -73,7 +73,7 @@
               autocomplete="password"
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
-              placeholder="Contraseña"
+              [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
               class="w-full pl-10 pr-10 py-3 rounded-lg bg-[#161b22] border text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-colors duration-200 hover:border-gray-600"
               [ngClass]="{
                 'border-gray-700':
@@ -94,14 +94,14 @@
             </button>
           </div>
           @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-          <small class="text-red-500 mt-1 block">La contraseña es requerida.</small>
+          <small class="text-red-500 mt-1 block">{{ 'LOGIN.PASSWORD_REQUIRED' | translate }}</small>
           }
         </div>
 
         <!-- Link olvidar -->
         <div class="text-right">
           <a href="#" class="text-sm text-sky-500 hover:underline transition-colors">
-            ¿Olvidaste tu contraseña?
+            {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
           </a>
         </div>
 
@@ -111,15 +111,15 @@
           [disabled]="loginForm.invalid || loading"
           class="w-full py-3 rounded-lg font-semibold text-white shadow-lg transition duration-300 bg-sky-500 shadow-sky-500/30 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-[#0d1117] disabled:bg-gray-600 disabled:cursor-not-allowed"
         >
-          <span *ngIf="!loading">Iniciar Sesión</span>
+          <span *ngIf="!loading">{{ 'LOGIN.SUBMIT_BUTTON' | translate }}</span>
           <i *ngIf="loading" class="pi pi-spin pi-spinner"></i>
         </button>
       </form>
 
       <!-- Registro -->
       <p class="text-center text-gray-400 text-sm mt-6">
-        ¿No tienes una cuenta?
-        <a href="#" class="text-sky-500 hover:underline">Regístrate</a>
+        {{ 'LOGIN.NO_ACCOUNT' | translate }}
+        <a href="#" class="text-sky-500 hover:underline">{{ 'LOGIN.REGISTER' | translate }}</a>
       </p>
     </div>
   </main>

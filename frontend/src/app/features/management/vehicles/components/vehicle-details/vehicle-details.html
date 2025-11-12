@@ -6,30 +6,30 @@
       <span class="material-symbols-outlined text-4xl text-primary">directions_car</span>
       <div>
         <h3 class="text-2xl font-bold text-foreground tracking-tight">{{ vehicle.placa }}</h3>
-        <p class="text-sm text-muted-foreground">Vehículo</p>
+        <p class="text-sm text-muted-foreground">{{ 'VEHICLES.DETAILS.VEHICLE_TITLE' | translate }}</p>
       </div>
     </div>
     <div class="space-y-4">
       <div class="flex items-start gap-4">
         <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">label</span>
         <div>
-          <p class="text-xs text-muted-foreground">Marca / Modelo</p>
+          <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.BRAND_MODEL_LABEL' | translate }}</p>
           <p class="font-medium text-foreground">{{ vehicle.marca }} / {{ vehicle.modelo }}</p>
         </div>
       </div>
       <div class="flex items-start gap-4">
         <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">calendar_today</span>
         <div>
-          <p class="text-xs text-muted-foreground">Año</p>
+          <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.YEAR_LABEL' | translate }}</p>
           <p class="font-medium text-foreground">{{ vehicle.anio }}</p>
         </div>
       </div>
       <div class="flex items-start gap-4">
         <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">toggle_on</span>
         <div>
-          <p class="text-xs text-muted-foreground">Estado del Vehículo</p>
+          <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.VEHICLE_STATUS_LABEL' | translate }}</p>
           <p-tag
-            [value]="vehicle.activo ? 'Activo' : 'Inactivo'"
+            [value]="vehicle.activo ? ('VEHICLES.STATUS_ACTIVE' | translate) : ('VEHICLES.STATUS_INACTIVE' | translate)"
             [severity]="vehicle.activo ? 'success' : 'danger'"
             styleClass="text-xs"
           ></p-tag>
@@ -38,7 +38,7 @@
        <div class="flex items-start gap-4">
         <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">fingerprint</span>
         <div>
-          <p class="text-xs text-muted-foreground">ID del Vehículo</p>
+          <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.VEHICLE_ID_LABEL' | translate }}</p>
           <p class="font-mono text-xs text-foreground">{{ vehicle.id }}</p>
         </div>
       </div>
@@ -55,30 +55,30 @@
         <span class="material-symbols-outlined text-4xl text-primary">person</span>
         <div>
           <h3 class="text-2xl font-bold text-foreground tracking-tight">{{ driver.nombre }}</h3>
-          <p class="text-sm text-muted-foreground">Conductor Asignado</p>
+          <p class="text-sm text-muted-foreground">{{ 'VEHICLES.DETAILS.ASSIGNED_DRIVER_TITLE' | translate }}</p>
         </div>
       </div>
       <div class="space-y-4">
         <div class="flex items-start gap-4">
           <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">badge</span>
           <div>
-            <p class="text-xs text-muted-foreground">Licencia</p>
+            <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.LICENSE_LABEL' | translate }}</p>
             <p class="font-medium text-foreground">{{ driver.licencia }}</p>
           </div>
         </div>
         <div class="flex items-start gap-4">
           <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">cake</span>
           <div>
-            <p class="text-xs text-muted-foreground">Fecha de Nacimiento</p>
+            <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.BIRTHDATE_LABEL' | translate }}</p>
             <p class="font-medium text-foreground">{{ driver.fechaNacimiento | date: 'longDate' }}</p>
           </div>
         </div>
         <div class="flex items-start gap-4">
           <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">toggle_on</span>
           <div>
-            <p class="text-xs text-muted-foreground">Estado del Conductor</p>
+            <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.DRIVER_STATUS_LABEL' | translate }}</p>
             <p-tag
-              [value]="driver.activo ? 'Activo' : 'Inactivo'"
+              [value]="driver.activo ? ('VEHICLES.STATUS_ACTIVE' | translate) : ('VEHICLES.STATUS_INACTIVE' | translate)"
               [severity]="driver.activo ? 'success' : 'danger'"
               styleClass="text-xs"
             ></p-tag>
@@ -87,7 +87,7 @@
         <div class="flex items-start gap-4">
           <span class="material-symbols-outlined text-lg text-muted-foreground mt-1">fingerprint</span>
           <div>
-            <p class="text-xs text-muted-foreground">ID del Conductor</p>
+            <p class="text-xs text-muted-foreground">{{ 'VEHICLES.DETAILS.DRIVER_ID_LABEL' | translate }}</p>
             <p class="font-mono text-xs text-foreground">{{ driver.id }}</p>
           </div>
         </div>
@@ -95,14 +95,14 @@
     } @else {
       <div class="flex flex-col items-center justify-center text-center p-6 rounded-lg bg-secondary/20 border border-dashed border-border">
          <span class="material-symbols-outlined text-5xl text-muted-foreground mb-2">person_off</span>
-        <h3 class="font-semibold text-foreground">Sin Conductor Asignado</h3>
-        <p class="text-sm text-muted-foreground mt-1">Este vehículo está actualmente disponible.</p>
+        <h3 class="font-semibold text-foreground">{{ 'VEHICLES.DETAILS.NO_DRIVER_ASSIGNED_TITLE' | translate }}</h3>
+        <p class="text-sm text-muted-foreground mt-1">{{ 'VEHICLES.DETAILS.NO_DRIVER_ASSIGNED_SUBTITLE' | translate }}</p>
       </div>
     }
   </div>
 </div>
 } @else {
 <div class="p-8 text-center text-muted-foreground">
-  Cargando detalles del vehículo...
+  {{ 'VEHICLES.DETAILS.LOADING' | translate }}
 </div>
 }

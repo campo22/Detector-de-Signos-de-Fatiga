@@ -39,8 +39,6 @@ export class Settings implements OnInit {
   currentLanguage = signal<string>('es');
 
   constructor() {
-    console.log('Constructor del componente Settings ejecutado');
-
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
@@ -49,7 +47,6 @@ export class Settings implements OnInit {
       validator: this.passwordMatchValidator
     });
 
-    // Inicializamos con valores por defecto primero
     this.generalForm = this.fb.group({
       theme: ['light'],
       language: ['es']
@@ -57,31 +54,20 @@ export class Settings implements OnInit {
   }
 
   ngOnInit() {
-    console.log('ngOnInit ejecutado');
+    // Actualizar las señales que usa el HTML
+    this.currentTheme.set(this.themeService.currentTheme());
+    this.currentLanguage.set(this.languageService.currentLanguage());
 
-    // Luego actualizamos con los valores reales después de que los servicios estén disponibles
-    setTimeout(() => {
-      // Actualizar las señales que usa el HTML
-      this.currentTheme.set(this.themeService.currentTheme());
-      this.currentLanguage.set(this.languageService.currentLanguage());
-
-      // Actualizar el formulario con los valores actuales
-      this.generalForm.patchValue({
-        theme: this.themeService.currentTheme(),
-        language: this.languageService.currentLanguage()
-      });
-
-      console.log('Formulario actualizado con valores actuales:', {
-        theme: this.themeService.currentTheme(),
-        language: this.languageService.currentLanguage()
-      });
-    }, 0);
+    // Actualizar el formulario con los valores actuales
+    this.generalForm.patchValue({
+      theme: this.themeService.currentTheme(),
+      language: this.languageService.currentLanguage()
+    });
   }
 
   // Métodos para el HTML
   changeTheme(event: any) {
     const newTheme = event.target.value;
-    console.log('Cambiando tema a:', newTheme);
     this.themeService.setTheme(newTheme as 'light' | 'dark');
     this.currentTheme.set(newTheme);
 
@@ -91,39 +77,11 @@ export class Settings implements OnInit {
 
   changeLanguage(event: any) {
     const newLanguage = event.target.value;
-    console.log('Cambiando idioma a:', newLanguage);
-    
-    // Cambiar el idioma y forzar la actualización global
     this.languageService.setLanguage(newLanguage);
     this.currentLanguage.set(newLanguage);
 
     // Actualizar el formulario también
     this.generalForm.patchValue({ language: newLanguage });
-
-    // Forzar una actualización global de la aplicación para que
-    // todos los componentes reflejen el nuevo idioma
-    setTimeout(() => {
-      console.log('Idioma actualizado en toda la aplicación:', newLanguage);
-      
-      // Opción: Forzar recarga de la vista para que todos los componentes
-      // se actualicen con el nuevo idioma
-      this.forceGlobalRefresh();
-    }, 100);
-  }
-
-  // Método para forzar un refresh global de la vista
-  private forceGlobalRefresh() {
-    // Solución: Recargar la página actual para aplicar el cambio de idioma
-    // a todos los componentes, simulando un refresh sin perder estado
-    setTimeout(() => {
-      // Mostrar mensaje antes de recargar
-      const successMessage = this.translate.instant('SETTINGS.SETTINGS_SAVED_SUCCESS') || 'Idioma actualizado correctamente.';
-      alert(successMessage);
-      
-      // Forzar actualización de la vista para que se aplique el nuevo idioma
-      // Recargar componentes con el nuevo idioma
-      location.reload(); // Esta es la solución más efectiva para aplicar cambio de idioma global
-    }, 200);
   }
 
   testFunctionality() {
@@ -137,7 +95,6 @@ export class Settings implements OnInit {
   }
 
   selectSection(section: 'cuenta' | 'general' | 'notificaciones' | 'facturacion' | 'reglas' | 'api'): void {
-    console.log('Seleccionando sección:', section);
     this.selectedSection.set(section);
     // Cerrar sidebar en móviles después de seleccionar una sección
     if (window.innerWidth < 768) {
@@ -156,21 +113,17 @@ export class Settings implements OnInit {
   }
 
   savePassword() {
-    console.log('Intentando guardar contraseña');
     if (this.passwordForm.valid) {
       const userId = this.authService.getUserId();
       if (!userId) {
-        console.error('No se pudo obtener el ID del usuario');
         alert(this.translate.instant('SETTINGS.USER_ID_ERROR') || 'Error: No se pudo obtener el ID del usuario');
         return;
       }
 
       const { currentPassword, newPassword } = this.passwordForm.value;
-      console.log('Datos para cambio de contraseña:', { currentPassword, newPassword });
 
       this.userService.changePassword(userId, { currentPassword, newPassword }).subscribe({
         next: (response) => {
-          console.log('Contraseña actualizada con éxito', response);
           alert(this.translate.instant('SETTINGS.PASSWORD_UPDATED_SUCCESS') || 'Contraseña actualizada con éxito');
           this.passwordForm.reset();
         },
@@ -180,18 +133,13 @@ export class Settings implements OnInit {
         }
       });
     } else {
-      console.log('Formulario de contraseña no válido:', this.passwordForm.errors);
       alert('Por favor, complete todos los campos correctamente.');
     }
   }
 
   saveGeneral() {
-    console.log('Intentando guardar configuración general');
     if (this.generalForm.valid) {
-      console.log('Formulario general válido, valores:', this.generalForm.value);
       const { theme, language } = this.generalForm.value;
-
-      console.log('Aplicando tema:', theme, 'e idioma:', language);
 
       // Aplicar los cambios
       if (theme) {
@@ -213,10 +161,8 @@ export class Settings implements OnInit {
 
       // Mostrar mensaje de éxito
       const successMessage = this.translate.instant('SETTINGS.SETTINGS_SAVED_SUCCESS');
-      console.log('Mensaje de éxito:', successMessage);
       alert(successMessage || 'Configuración general guardada con éxito.');
     } else {
-      console.log('Formulario general no válido:', this.generalForm.errors);
       alert('Por favor, complete todos los campos correctamente.');
     }
   }

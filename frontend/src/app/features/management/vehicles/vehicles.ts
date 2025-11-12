@@ -12,10 +12,11 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { MenuModule } from 'primeng/menu'; // Importar MenuModule
+import { MenuModule } from 'primeng/menu';
 import { VehicleFilterService } from './services/vehicle-filter.service';
 import { Vehicle } from '../../../core/models/vehicle.models';
-import { ExportService } from '../../../core/services/export.service'; // Importar ExportService
+import { ExportService } from '../../../core/services/export.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vehicles',
@@ -30,7 +31,8 @@ import { ExportService } from '../../../core/services/export.service'; // Import
     ButtonModule,
     ToastModule,
     ConfirmDialogModule,
-    MenuModule // Añadir MenuModule
+    MenuModule,
+    TranslateModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './vehicles.html',
@@ -43,21 +45,19 @@ export class Vehicles {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
   private vehicleFilterService = inject(VehicleFilterService);
-  private exportService = inject(ExportService); // Inyectar ExportService
+  private exportService = inject(ExportService);
+  private translate = inject(TranslateService);
 
-  // --- Signals para diálogos ---
   isDialogVisible = signal(false);
   isEditMode = signal(false);
   selectedVehicle = signal<Vehicle | null>(null);
-  dialogHeader = computed(() => this.isEditMode() ? 'Editar Vehículo' : 'Añadir Nuevo Vehículo');
+  dialogHeader = computed(() => this.isEditMode() ? this.translate.instant('VEHICLES.EDIT_VEHICLE_HEADER') : this.translate.instant('VEHICLES.ADD_VEHICLE_HEADER'));
 
   isDetailsDialogVisible = signal(false);
   selectedVehicleForDetails = signal<Vehicle | null>(null);
 
-  // --- Items para el menú de exportación ---
   exportMenuItems: MenuItem[];
 
-  // --- Métodos para diálogos ---
   openAddDialog(): void {
     this.isEditMode.set(false);
     this.selectedVehicle.set(null);
@@ -86,8 +86,10 @@ export class Vehicles {
     this.isDialogVisible.set(false);
     this.vehicleFilterService.triggerRefresh();
 
-    const summary = 'Operación Exitosa';
-    const detail = `Vehículo ${savedVehicle.placa} ${this.isEditMode() ? 'actualizado' : 'creado'} correctamente.`;
+    const summary = this.translate.instant('VEHICLES.SUCCESS_OPERATION_SUMMARY');
+    const detailKey = this.isEditMode() ? 'VEHICLES.SUCCESS_UPDATE_DETAIL' : 'VEHICLES.SUCCESS_CREATE_DETAIL';
+    const detail = this.translate.instant(detailKey, { placa: savedVehicle.placa });
+    
     this.messageService.add({
       severity: 'success',
       summary: summary,
@@ -102,14 +104,13 @@ export class Vehicles {
     this.selectedVehicle.set(null);
   }
 
-  // --- Métodos de eliminación ---
   confirmDeleteVehicle(vehicle: Vehicle): void {
     this.confirmationService.confirm({
-      header: `Eliminar Vehículo ${vehicle.placa}`,
-      message: `Se eliminarán todos los datos asociados al vehículo con placa <strong>${vehicle.placa}</strong>. Esta acción es irreversible. ¿Deseas continuar?`,
+      header: this.translate.instant('VEHICLES.DELETE_CONFIRM_HEADER', { placa: vehicle.placa }),
+      message: this.translate.instant('VEHICLES.DELETE_CONFIRM_MESSAGE', { placa: vehicle.placa }),
       icon: 'pi pi-exclamation-triangle text-orange-500',
-      acceptLabel: 'Sí, eliminar',
-      rejectLabel: 'No, cancelar',
+      acceptLabel: this.translate.instant('VEHICLES.DELETE_CONFIRM_ACCEPT'),
+      rejectLabel: this.translate.instant('VEHICLES.DELETE_CONFIRM_REJECT'),
       acceptButtonStyleClass: 'p-button-primary',
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
@@ -120,8 +121,8 @@ export class Vehicles {
       reject: () => {
         this.messageService.add({
           severity: 'info',
-          summary: 'Cancelado',
-          detail: 'La eliminación del vehículo ha sido cancelada.',
+          summary: this.translate.instant('VEHICLES.DELETE_CANCEL_SUMMARY'),
+          detail: this.translate.instant('VEHICLES.DELETE_CANCEL_DETAIL'),
           life: 3000,
         });
       },
@@ -131,33 +132,31 @@ export class Vehicles {
   private deleteVehicle(id: string): void {
     this.vehicleService.deleteVehicle(id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Vehículo eliminado correctamente' });
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('VEHICLES.DELETE_SUCCESS_SUMMARY'), detail: this.translate.instant('VEHICLES.DELETE_SUCCESS_DETAIL') });
         this.vehicleFilterService.triggerRefresh();
         this.loadVehicleStats();
       },
       error: (err) => {
         console.error('Error al eliminar vehículo:', err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el vehículo' });
+        this.messageService.add({ severity: 'error', summary: this.translate.instant('VEHICLES.DELETE_ERROR_SUMMARY'), detail: this.translate.instant('VEHICLES.DELETE_ERROR_DETAIL') });
       }
     });
   }
 
-  // --- Señales para estadísticas ---
   totalVehicles = signal<number | string>('--');
   activeVehicles = signal<number | string>('--');
   unassignedVehicles = signal<number | string>('--');
 
   constructor() {
     this.loadVehicleStats();
-    // Inicializar los items del menú de exportación
     this.exportMenuItems = [
       {
-        label: 'Exportar a Excel (.xlsx)',
+        label: this.translate.instant('VEHICLES.EXPORT_EXCEL'),
         icon: 'pi pi-file-excel export-excel-icon',
         command: () => this.exportVehicles('excel')
       },
       {
-        label: 'Exportar a PDF',
+        label: this.translate.instant('VEHICLES.EXPORT_PDF'),
         icon: 'pi pi-file-pdf export-pdf-icon',
         command: () => this.exportVehicles('pdf')
       }
@@ -165,36 +164,24 @@ export class Vehicles {
   }
 
   private loadVehicleStats(): void {
-    this.vehicleService
-      .getVehicles({})
-      .pipe(take(1))
-      .subscribe((page) => {
-        this.totalVehicles.set(page.totalElements);
-      });
-
-    this.vehicleService
-      .getVehicles({ activo: true })
-      .pipe(take(1))
-      .subscribe((page) => {
-        this.activeVehicles.set(page.totalElements);
-      });
-
-    this.vehicleService
-      .getVehicles({ asignado: false })
-      .pipe(take(1))
-      .subscribe((page) => {
-        this.unassignedVehicles.set(page.totalElements);
-      });
+    this.vehicleService.getVehicles({}).pipe(take(1)).subscribe((page) => {
+      this.totalVehicles.set(page.totalElements);
+    });
+    this.vehicleService.getVehicles({ activo: true }).pipe(take(1)).subscribe((page) => {
+      this.activeVehicles.set(page.totalElements);
+    });
+    this.vehicleService.getVehicles({ asignado: false }).pipe(take(1)).subscribe((page) => {
+      this.unassignedVehicles.set(page.totalElements);
+    });
   }
 
-  // --- Método de Exportación ---
   exportVehicles(format: 'excel' | 'pdf'): void {
-    this.messageService.add({ severity: 'info', summary: 'Exportando', detail: `Preparando la exportación a ${format.toUpperCase()}...`, life: 3000 });
+    this.messageService.add({ severity: 'info', summary: this.translate.instant('VEHICLES.EXPORTING_SUMMARY'), detail: this.translate.instant('VEHICLES.EXPORTING_DETAIL', { format: format.toUpperCase() }), life: 3000 });
 
     this.vehicleService.getVehicles(this.vehicleFilterService.filters$(), 0, 10000, 'placa', 'asc').pipe(take(1)).subscribe({
       next: (page) => {
         if (!page.content || page.content.length === 0) {
-          this.messageService.add({ severity: 'warn', summary: 'Sin datos', detail: 'No hay vehículos para exportar.' });
+          this.messageService.add({ severity: 'warn', summary: this.translate.instant('VEHICLES.EXPORT_NO_DATA_SUMMARY'), detail: this.translate.instant('VEHICLES.EXPORT_NO_DATA_DETAIL') });
           return;
         }
 
@@ -204,23 +191,31 @@ export class Vehicles {
           marca: vehicle.marca,
           modelo: vehicle.modelo,
           anio: vehicle.anio,
-          activo: vehicle.activo ? 'Activo' : 'Inactivo',
-          conductor: vehicle.driver ? vehicle.driver.nombre : 'Sin Asignar'
+          activo: vehicle.activo ? this.translate.instant('VEHICLES.STATUS_ACTIVE') : this.translate.instant('VEHICLES.STATUS_INACTIVE'),
+          conductor: vehicle.driver ? vehicle.driver.nombre : this.translate.instant('VEHICLES.UNASSIGNED')
         }));
 
         const filename = `vehiculos_${new Date().toISOString().split('T')[0]}`;
 
         if (format === 'excel') {
-          this.exportService.exportToExcel(dataToExport, filename, 'Vehículos');
+          this.exportService.exportToExcel(dataToExport, filename, this.translate.instant('VEHICLES.EXPORT_SHEET_NAME'));
         } else if (format === 'pdf') {
-          const headers = ['ID', 'Placa', 'Marca', 'Modelo', 'Año', 'Estado', 'Conductor'];
+          const headers = [
+            'ID', 
+            this.translate.instant('VEHICLES.TABLE.HEADER_PLATE'), 
+            this.translate.instant('VEHICLES.TABLE.HEADER_BRAND'), 
+            this.translate.instant('VEHICLES.TABLE.HEADER_MODEL'), 
+            this.translate.instant('VEHICLES.TABLE.HEADER_YEAR'), 
+            this.translate.instant('VEHICLES.TABLE.HEADER_STATUS'), 
+            this.translate.instant('VEHICLES.TABLE.HEADER_DRIVER')
+          ];
           const dataKeys = ['id', 'placa', 'marca', 'modelo', 'anio', 'activo', 'conductor'];
-          this.exportService.exportToPdf(dataToExport, headers, dataKeys, filename, 'Lista de Vehículos');
+          this.exportService.exportToPdf(dataToExport, headers, dataKeys, filename, this.translate.instant('VEHICLES.EXPORT_PDF_TITLE'));
         }
       },
       error: (err) => {
         console.error('Error al obtener datos para exportación:', err);
-        this.messageService.add({ severity: 'error', summary: 'Error de Exportación', detail: 'No se pudieron obtener los datos para la exportación.' });
+        this.messageService.add({ severity: 'error', summary: this.translate.instant('VEHICLES.EXPORT_ERROR_SUMMARY'), detail: this.translate.instant('VEHICLES.EXPORT_ERROR_DETAIL') });
       }
     });
   }

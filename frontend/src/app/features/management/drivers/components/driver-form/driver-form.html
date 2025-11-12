@@ -15,23 +15,23 @@
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">person</span>
-        Nombre Completo
+        {{ 'DRIVERS.FORM.NAME_LABEL' | translate }}
       </label>
       <input
         id="nombre"
         type="text"
         pInputText
         formControlName="nombre"
-        placeholder="Ej: Juan Pérez"
+        [placeholder]="'DRIVERS.FORM.NAME_PLACEHOLDER' | translate"
         class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
       />
       @if (isInvalid('nombre')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
         @if (driverForm.controls['nombre'].errors?.['required']) {
-        <span>Nombre es requerido.</span> } @if
+        <span>{{ 'DRIVERS.FORM.NAME_REQUIRED' | translate }}</span> } @if
         (driverForm.controls['nombre'].errors?.['minlength']) {
-        <span>Debe tener al menos 3 caracteres.</span> }
+        <span>{{ 'DRIVERS.FORM.NAME_MINLENGTH' | translate }}</span> }
       </div>
       }
     </div>
@@ -43,20 +43,20 @@
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">pin</span>
-        Número de Licencia
+        {{ 'DRIVERS.FORM.LICENSE_LABEL' | translate }}
       </label>
       <input
         id="licencia"
         type="text"
         pInputText
         formControlName="licencia"
-        placeholder="X123-456-789"
+        [placeholder]="'DRIVERS.FORM.LICENSE_PLACEHOLDER' | translate"
         class="font-mono flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
       />
       @if (isInvalid('licencia')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Licencia es requerida.</span>
+        <span>{{ 'DRIVERS.FORM.LICENSE_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -70,7 +70,7 @@
         <span class="material-symbols-outlined text-lg transition-all duration-300"
           >calendar_month</span
         >
-        Fecha de Nacimiento
+        {{ 'DRIVERS.FORM.BIRTHDATE_LABEL' | translate }}
       </label>
       <p-datePicker
         id="fechaNacimiento"
@@ -84,7 +84,7 @@
       @if (isInvalid('fechaNacimiento')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Fecha de nacimiento es requerida.</span>
+        <span>{{ 'DRIVERS.FORM.BIRTHDATE_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -96,21 +96,21 @@
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>
-        Estado
+        {{ 'DRIVERS.FORM.STATUS_LABEL' | translate }}
       </label>
       <p-select
         id="activo"
         formControlName="activo"
         [options]="statusOptions"
         optionLabel="label"
-        placeholder="Seleccione un estado"
+        [placeholder]="'DRIVERS.FORM.STATUS_PLACEHOLDER' | translate"
         dataKey="value"
         styleClass="w-full h-11 rounded-md"
       ></p-select>
       @if (isInvalid('activo')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Estado es requerido.</span>
+        <span>{{ 'DRIVERS.FORM.STATUS_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -123,7 +123,7 @@
       [disabled]="isLoading()"
       class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-accent-foreground hover:bg-accent h-11 px-6 py-2"
     >
-      Cancelar
+      {{ 'DRIVERS.FORM.CANCEL_BUTTON' | translate }}
     </button>
     <button
       type="submit"

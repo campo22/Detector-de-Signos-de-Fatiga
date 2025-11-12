@@ -12,6 +12,7 @@ import { FilterBar } from './components/filter-bar/filter-bar';
 import { CriticalEventsTimeline } from './components/critical-events-timeline/critical-events-timeline';
 import { FleetSummaryTable } from './components/fleet-summary-table/fleet-summary-table';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +24,8 @@ import { RouterModule } from '@angular/router';
     FilterBar,
     CriticalEventsTimeline,
     FleetSummaryTable,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'

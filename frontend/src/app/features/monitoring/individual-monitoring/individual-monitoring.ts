@@ -7,12 +7,14 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, filter, map, startWith, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { TimeAgoPipe } from '../../shared/pipes/time-ago-pipe';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-individual-monitoring',
   imports: [
     CommonModule,
-    TimeAgoPipe
+    TimeAgoPipe,
+    TranslateModule
   ],
   templateUrl: './individual-monitoring.html',
   styleUrl: './individual-monitoring.scss'
@@ -23,6 +25,7 @@ export class IndividualMonitoring {
   private driverService = inject(DriverService);
   private eventService = inject(EventService);
   private webSocketService = inject(WebSocketService);
+  private translate = inject(TranslateService);
 
 
   private driverId = toSignal(

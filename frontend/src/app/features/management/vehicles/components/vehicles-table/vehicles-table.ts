@@ -9,10 +9,10 @@ import { Vehicle } from '../../../../../core/models/vehicle.models';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { merge, switchMap, startWith, catchError, tap } from 'rxjs';
 import { Page } from '../../../../../core/models/event.models';
-import { ClipboardModule } from '@angular/cdk/clipboard'; // Import ClipboardModule
-import { MessageService } from 'primeng/api'; // Import MessageService
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MessageService } from 'primeng/api';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-// Define el tipo para el estado de ordenamiento
 type SortState = {
   column: string;
   direction: 'asc' | 'desc';
@@ -25,45 +25,37 @@ type SortState = {
     ButtonModule,
     TagModule,
     TooltipModule,
-    ClipboardModule, // Add ClipboardModule
+    ClipboardModule,
+    TranslateModule
   ],
   templateUrl: './vehicles-table.html',
   styleUrl: './vehicles-table.scss',
 })
 export class VehiclesTable {
 
-  // --- 2. Inyección de dependencias de VEHÍCULO ---
   private vehicleService = inject(VehicleService);
   private vehicleFilterService = inject(VehicleFilterService);
-  private messageService = inject(MessageService); // Inject MessageService
-
-  //  los eventos de edición y eliminación de vehículos se emitirán al padre osea el componente padre ejemnplo:
-  // <app-vehicles-table
-  // (editVehicle)="onEditVehicle($event)"
-  // (deleteVehicle)="onDeleteVehicle($event)">
-  // </app-vehicles-table>
+  private messageService = inject(MessageService);
+  private translate = inject(TranslateService);
 
   @Output() editVehicle = new EventEmitter<Vehicle>();
   @Output() deleteVehicle = new EventEmitter<Vehicle>();
   @Output() viewDetails = new EventEmitter<Vehicle>();
 
-  // --- 4. Signals para estado local (paginación y orden) ---
   public currentPage = signal(0);
   public sortState = signal<SortState>({
-    column: 'placa', // Default sort por 'placa'
+    column: 'placa',
     direction: 'asc'
   });
 
-  // --- 5. Computed signal para los parámetros de consulta ---
   private queryParams = computed(() => ({
-    filters: this.vehicleFilterService.filters$(), // Escucha los filtros de vehículo
+    filters: this.vehicleFilterService.filters$(),
     page: this.currentPage(),
     sort: this.sortState()
   }));
 
 
   public vehiclesPage = toSignal(
-    // Combina el observable de queryParams con el gatillo de refresco
     merge(
       toObservable(this.queryParams),
       this.vehicleFilterService.refreshTrigger$
@@ -76,46 +68,36 @@ export class VehiclesTable {
         }
       }),
       switchMap(() => {
-        // Obtiene el estado más reciente de los params
         const params = this.queryParams();
-        // Llama al servicio de VEHÍCULO
         return this.vehicleService.getVehicles(
           params.filters,
           params.page,
-          10, // Tamaño de página
+          10,
           params.sort.column,
           params.sort.direction
         );
       }),
-      startWith(null), // Estado inicial (cargando)
+      startWith(null),
       catchError(error => {
         console.error('Error al obtener los vehículos:', error);
-        return [null]; // Maneja el error
+        return [null];
       })
     ),
     { initialValue: null as Page<Vehicle> | null }
   );
 
-  /**
-   * Emite el evento al padre para editar un vehículo
-   * @param vehicle Vehículo a editar
-   */
   onEditVehicle(vehicle: Vehicle): void {
-    console.log('Solicitando editar vehículo:', vehicle.id);
-    this.editVehicle.emit(vehicle); // Emite el evento al padre
+    this.editVehicle.emit(vehicle);
   }
 
   onDeleteVehicle(vehicle: Vehicle): void {
-    console.log('Solicitando eliminar vehículo:', vehicle.id);
-    this.deleteVehicle.emit(vehicle); // Emite el evento al padre
+    this.deleteVehicle.emit(vehicle);
   }
 
   onViewDetails(vehicle: Vehicle): void {
-    console.log('Solicitando ver detalles del vehículo:', vehicle.id);
-    this.viewDetails.emit(vehicle); // Emite el evento al padre
+    this.viewDetails.emit(vehicle);
   }
 
-  // --- 8. Métodos de Paginación y Ordenamiento ---
   nextPage(): void {
     if (this.vehiclesPage()?.last === false) {
       this.currentPage.update(page => page + 1);
@@ -127,10 +109,7 @@ export class VehiclesTable {
       this.currentPage.update(page => page - 1);
     }
   }
-  /**
-   * Cambia la columna y la dirección de ordenamiento
-   * @param column columna por la que se ordenará
-   */
+
   changeSort(column: string): void {
     const currentSort = this.sortState();
     let newDirection: 'asc' | 'desc' = 'asc';
@@ -138,15 +117,15 @@ export class VehiclesTable {
       newDirection = currentSort.direction === 'asc' ? 'desc' : 'asc';
     }
     this.sortState.set({ column, direction: newDirection });
-    this.currentPage.set(0); // Volver a página 1 al reordenar
+    this.currentPage.set(0);
   }
 
   onIdCopied(id: string): void {
     this.messageService.add({
       severity: 'success',
-      summary: 'Copiado',
-      detail: `ID ${id.substring(0, 8)}... copiado al portapapeles.`,
-      life: 2000 // El mensaje desaparecerá después de 2 segundos
+      summary: this.translate.instant('VEHICLES.TABLE.ID_COPIED_SUMMARY'),
+      detail: this.translate.instant('VEHICLES.TABLE.ID_COPIED_DETAIL', { id: id.substring(0, 8) }),
+      life: 2000
     });
   }
 }

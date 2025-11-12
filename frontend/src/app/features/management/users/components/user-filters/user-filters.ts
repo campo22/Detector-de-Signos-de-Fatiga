@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Role } from '../../../../../core/models/enums';
 import { UserFilterService } from '../../services/user-filter.service';
 import { UserFilterRequest } from '../../../../../core/models/user.models';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-filters',
@@ -15,6 +16,7 @@ import { UserFilterRequest } from '../../../../../core/models/user.models';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './user-filters.html',
   styleUrls: ['./user-filters.scss']
@@ -22,6 +24,7 @@ import { UserFilterRequest } from '../../../../../core/models/user.models';
 export class UserFiltersComponent implements OnInit {
   private fb = inject(FormBuilder);
   private userFilterService = inject(UserFilterService);
+  private translate = inject(TranslateService);
 
   filterForm = this.fb.group({
     name: [''],
@@ -33,8 +36,8 @@ export class UserFiltersComponent implements OnInit {
   roles: { label: string; value: Role }[] = [];
 
   statusOptions = [
-    { label: 'Activo', value: true },
-    { label: 'Inactivo', value: false }
+    { label: this.translate.instant('USERS.STATUS_ACTIVE'), value: true },
+    { label: this.translate.instant('USERS.STATUS_INACTIVE'), value: false }
   ];
 
   public filters = toSignal(
@@ -59,10 +62,13 @@ export class UserFiltersComponent implements OnInit {
   ngOnInit(): void {
     this.roles = Object.keys(Role)
       .filter(key => key !== 'CONDUCTOR')
-      .map(key => ({
-        label: key.charAt(0).toUpperCase() + key.slice(1).toLowerCase(),
-        value: Role[key as keyof typeof Role]
-      }));
+      .map(key => {
+        const roleEnum = Role[key as keyof typeof Role];
+        return {
+          label: this.translate.instant(`USERS.ROLES.${key}`),
+          value: roleEnum
+        };
+      });
   }
 
   clearFilters(): void {

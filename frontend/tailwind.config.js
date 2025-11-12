@@ -48,7 +48,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['Inter', 'sans-serif'],
+        display: ['Roboto', 'sans-serif'],
         mono: ['Roboto Mono', 'monospace'],
       },
       borderRadius: {

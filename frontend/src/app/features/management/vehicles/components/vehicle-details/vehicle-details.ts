@@ -2,11 +2,12 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Vehicle } from '../../../../../core/models/vehicle.models';
 import { TagModule } from 'primeng/tag';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vehicle-details',
   standalone: true,
-  imports: [CommonModule, TagModule],
+  imports: [CommonModule, TagModule, TranslateModule],
   templateUrl: './vehicle-details.html',
 })
 export class VehicleDetailsComponent {

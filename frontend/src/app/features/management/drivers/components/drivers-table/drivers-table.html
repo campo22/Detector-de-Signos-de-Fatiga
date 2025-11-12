@@ -17,7 +17,7 @@
             class="px-6 py-3 cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('nombre')"
           >
-            Nombre
+            {{ 'DRIVERS.TABLE.HEADER_NAME' | translate }}
             <!-- Muestra un ícono de flecha para indicar el orden si esta columna está activa -->
             @if(sortState().column === 'nombre'){
             <span class="material-symbols-outlined text-sm align-middle ml-1">
@@ -26,14 +26,14 @@
             }
           </th>
           <!-- Columna: ID -->
-          <th scope="col" class="px-6 py-3">ID</th>
+          <th scope="col" class="px-6 py-3">{{ 'DRIVERS.TABLE.HEADER_ID' | translate }}</th>
           <!-- Columna: Licencia. Permite ordenar los datos al hacer clic. -->
           <th
             scope="col"
             class="px-6 py-3 cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('licencia')"
           >
-            Licencia
+            {{ 'DRIVERS.TABLE.HEADER_LICENSE' | translate }}
             <!-- Muestra un ícono de flecha para indicar el orden si esta columna está activa -->
             @if(sortState().column === 'licencia'){
             <span class="material-symbols-outlined text-sm align-middle ml-1">
@@ -47,7 +47,7 @@
             class="px-6 py-3 cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('activo')"
           >
-            Estado
+            {{ 'DRIVERS.TABLE.HEADER_STATUS' | translate }}
             <!-- Muestra un ícono de flecha para indicar el orden si esta columna está activa -->
             @if(sortState().column === 'activo'){
             <span class="material-symbols-outlined text-sm align-middle ml-1">
@@ -58,7 +58,7 @@
           <!-- Columna: Vehículo Asignado -->
           <!-- <th scope="col" class="px-6 py-3">Vehículo Asignado</th> -->
           <!-- Columna: Acciones -->
-          <th scope="col" class="px-6 py-3 text-center">Acciones</th>
+          <th scope="col" class="px-6 py-3 text-center">{{ 'DRIVERS.TABLE.HEADER_ACTIONS' | translate }}</th>
         </tr>
       </thead>
 
@@ -82,7 +82,7 @@
               <button
                 [cdkCopyToClipboard]="driver.id"
                 (cdkCopyToClipboardCopied)="onIdCopied(driver.id)"
-                pTooltip="Copiar ID completo"
+                [pTooltip]="'DRIVERS.TABLE.COPY_ID_TOOLTIP' | translate"
                 tooltipPosition="top"
                 class="p-1 rounded-md hover:bg-primary/10 text-primary transition-colors"
               >
@@ -108,7 +108,7 @@
                 [ngClass]="driver.activo ? 'bg-success' : 'bg-destructive'"
               ></span>
               <!-- Texto del estado -->
-              {{ driver.activo ? 'Activo' : 'Inactivo' }}
+              {{ driver.activo ? ('DRIVERS.STATUS_ACTIVE' | translate) : ('DRIVERS.STATUS_INACTIVE' | translate) }}
             </span>
           </td>
           <!-- Celda: Vehículo Asignado (actualmente un valor estático) -->
@@ -120,7 +120,7 @@
               <div class="group relative flex items-center">
                 <button
                   (click)="onEditDriver(driver)"
-                  title="Editar"
+                  [title]="'DRIVERS.TABLE.EDIT_TOOLTIP' | translate"
                   class="p-3 rounded-full text-primary hover:bg-primary/10 transition-all duration-200"
                 >
                   <span class="material-symbols-outlined text-xl">edit</span>
@@ -128,14 +128,14 @@
                 <div
                   class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nowrap z-50"
                 >
-                  Editar Conductor
+                  {{ 'DRIVERS.TABLE.EDIT_TOOLTIP' | translate }}
                 </div>
               </div>
               <!-- Botón para ver los detalles del conductor -->
               <div class="group relative flex items-center">
                 <button
                   (click)="viewDriverDetails(driver.id)"
-                  title="Ver Detalles"
+                  [title]="'DRIVERS.TABLE.VIEW_DETAILS_TOOLTIP' | translate"
                   class="p-3 rounded-full text-success hover:bg-success/10 transition-all duration-200"
                 >
                   <span class="material-symbols-outlined text-xl">visibility</span>
@@ -143,14 +143,14 @@
                 <div
                   class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nownowrap z-50"
                 >
-                  Ver Detalles
+                  {{ 'DRIVERS.TABLE.VIEW_DETAILS_TOOLTIP' | translate }}
                 </div>
               </div>
               <!-- Botón para eliminar el conductor -->
               <div class="group relative flex items-center">
                 <button
                   (click)="onDeleteDriver(driver)"
-                  title=" Eliminar"
+                  [title]="'DRIVERS.TABLE.DELETE_TOOLTIP' | translate"
                   class="p-3 rounded-full text-destructive hover:bg-destructive/10 transition-all duration-200"
                 >
                   <span class="material-symbols-outlined text-xl">delete</span>
@@ -158,7 +158,7 @@
                 <div
                   class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-auto px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-700 whitespace-nowrap z-50"
                 >
-                  Eliminar
+                  {{ 'DRIVERS.TABLE.DELETE_TOOLTIP' | translate }}
                 </div>
               </div>
             </div>
@@ -174,8 +174,8 @@
     <div class="text-center text-muted-foreground p-20">
       <div class="flex flex-col items-center justify-center gap-4">
         <span class="material-symbols-outlined text-6xl text-primary">person_search</span>
-        <h3 class="text-xl font-semibold">No se encontraron conductores</h3>
-        <p>Intenta ajustar los filtros para encontrar lo que buscas.</p>
+        <h3 class="text-xl font-semibold">{{ 'DRIVERS.TABLE.NO_DRIVERS_FOUND_TITLE' | translate }}</h3>
+        <p>{{ 'DRIVERS.TABLE.NO_DRIVERS_FOUND_SUBTITLE' | translate }}</p>
       </div>
     </div>
     }
@@ -185,7 +185,7 @@
       <span class="material-symbols-outlined text-6xl animate-spin text-primary"
         >progress_activity</span
       >
-      <p class="text-lg">Cargando conductores...</p>
+      <p class="text-lg">{{ 'DRIVERS.TABLE.LOADING' | translate }}</p>
     </div>
     }
   </div>
@@ -198,7 +198,7 @@
   >
     <!-- Muestra el recuento de elementos actuales y totales -->
     <span class="text-sm font-normal text-muted-foreground">
-      Mostrando <span class="font-semibold text-foreground">{{ page.numberOfElements }}</span> de
+      {{ 'DRIVERS.TABLE.PAGINATION_SHOWING' | translate }} <span class="font-semibold text-foreground">{{ page.numberOfElements }}</span> {{ 'DRIVERS.TABLE.PAGINATION_OF' | translate }}
       <span class="font-semibold text-foreground">{{ page.totalElements }}</span>
     </span>
     <!-- Lista de controles de paginación -->
@@ -215,7 +215,7 @@
       </li>
       <!-- Muestra el número de página actual y el total de páginas -->
       <li class="px-3 h-8 flex items-center text-muted-foreground bg-card border-y border-border">
-        Pág {{ page.number + 1 }} de {{ page.totalPages }}
+        {{ 'DRIVERS.TABLE.PAGINATION_PAGE' | translate }} {{ page.number + 1 }} {{ 'DRIVERS.TABLE.PAGINATION_OF' | translate }} {{ page.totalPages }}
       </li>
       <li>
         <!-- Botón para ir a la página siguiente -->

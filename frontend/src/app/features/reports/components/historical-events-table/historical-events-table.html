@@ -3,29 +3,29 @@
     class="p-6 border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
   >
     <div>
-      <h3 class="font-bold text-xl text-foreground">Historial Detallado de Eventos</h3>
+      <h3 class="font-bold text-xl text-foreground">{{ 'HISTORICAL_EVENTS_TABLE.TITLE' | translate }}</h3>
       <p class="text-sm text-muted-foreground mt-1">
-        Eventos registrados según los filtros aplicados.
+        {{ 'HISTORICAL_EVENTS_TABLE.SUBTITLE' | translate }}
       </p>
     </div>
     <div class="flex items-center space-x-3 flex-shrink-0">
       <button
         (click)="exportExcel()"
-        title="Exportar a Excel"
+        [title]="'HISTORICAL_EVENTS_TABLE.EXPORT_EXCEL_TOOLTIP' | translate"
         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-700 hover:bg-green-800 text-white text-sm font-medium transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         [disabled]="(eventsPage()?.content?.length || 0) === 0"
       >
         <span class="material-symbols-outlined text-base">grid_on</span>
-        Excel
+        {{ 'HISTORICAL_EVENTS_TABLE.EXPORT_EXCEL_BUTTON' | translate }}
       </button>
       <button
         (click)="exportPdf()"
-        title="Exportar a PDF"
+        [title]="'HISTORICAL_EVENTS_TABLE.EXPORT_PDF_TOOLTIP' | translate"
         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         [disabled]="(eventsPage()?.content?.length || 0) === 0"
       >
         <span class="material-symbols-outlined text-base">picture_as_pdf</span>
-        PDF
+        {{ 'HISTORICAL_EVENTS_TABLE.EXPORT_PDF_BUTTON' | translate }}
       </button>
     </div>
   </div>
@@ -38,7 +38,7 @@
             class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('timestamp')"
           >
-            Fecha y Hora @if(sortState().column === 'timestamp'){
+            {{ 'HISTORICAL_EVENTS_TABLE.HEADER_DATE_TIME' | translate }} @if(sortState().column === 'timestamp'){
             <span class="material-symbols-outlined text-xs align-middle ml-1">
               {{ sortState().direction === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
             </span>
@@ -48,7 +48,7 @@
             class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('fatigueType')"
           >
-            Tipo de Evento @if(sortState().column === 'fatigueType'){
+            {{ 'HISTORICAL_EVENTS_TABLE.HEADER_EVENT_TYPE' | translate }} @if(sortState().column === 'fatigueType'){
             <span class="material-symbols-outlined text-xs align-middle ml-1">
               {{ sortState().direction === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
             </span>
@@ -58,17 +58,17 @@
             class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('fatigueLevel')"
           >
-            Nivel @if(sortState().column === 'fatigueLevel'){
+            {{ 'HISTORICAL_EVENTS_TABLE.HEADER_LEVEL' | translate }} @if(sortState().column === 'fatigueLevel'){
             <span class="material-symbols-outlined text-xs align-middle ml-1">
               {{ sortState().direction === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
             </span>
             }
           </th>
           <th class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider">
-            Conductor
+            {{ 'HISTORICAL_EVENTS_TABLE.HEADER_DRIVER' | translate }}
           </th>
           <th class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider">
-            Vehículo
+            {{ 'HISTORICAL_EVENTS_TABLE.HEADER_VEHICLE' | translate }}
           </th>
         </tr>
       </thead>
@@ -107,7 +107,7 @@
     @if (!eventsPage()?.content?.length && eventsPage() !== null) {
     <div class="text-center text-muted-foreground p-10">
       <span class="material-symbols-outlined text-4xl mb-2">search_off</span>
-      <p>No se encontraron eventos para los filtros seleccionados.</p>
+      <p>{{ 'HISTORICAL_EVENTS_TABLE.NO_EVENTS_FOUND' | translate }}</p>
     </div>
     }
   </div>
@@ -117,32 +117,32 @@
     class="p-4 mt-auto border-t border-border flex flex-col sm:flex-row justify-between items-center gap-3"
   >
     <span class="text-sm text-muted-foreground">
-      Mostrando {{ page.numberOfElements }} de {{ page.totalElements }} resultados
+      {{ 'HISTORICAL_EVENTS_TABLE.SHOWING' | translate }} {{ page.numberOfElements }} {{ 'HISTORICAL_EVENTS_TABLE.OF' | translate }} {{ page.totalElements }} {{ 'HISTORICAL_EVENTS_TABLE.RESULTS' | translate }}
     </span>
     <div class="flex items-center space-x-2">
       <span class="text-sm text-muted-foreground hidden sm:inline"
-        >Página {{ page.number + 1 }} de {{ page.totalPages }}</span
+        >{{ 'HISTORICAL_EVENTS_TABLE.PAGE' | translate }} {{ page.number + 1 }} {{ 'HISTORICAL_EVENTS_TABLE.OF' | translate }} {{ page.totalPages }}</span
       >
       <button
         (click)="previousPage()"
         [disabled]="page.first"
         class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
       >
-        <span class="material-symbols-outlined text-base">chevron_left</span> Anterior
+        <span class="material-symbols-outlined text-base">chevron_left</span> {{ 'HISTORICAL_EVENTS_TABLE.PREVIOUS' | translate }}
       </button>
       <button
         (click)="nextPage()"
         [disabled]="page.last"
         class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
       >
-        Siguiente <span class="material-symbols-outlined text-base">chevron_right</span>
+        {{ 'HISTORICAL_EVENTS_TABLE.NEXT' | translate }} <span class="material-symbols-outlined text-base">chevron_right</span>
       </button>
     </div>
   </div>
   } @else {
   <div class="flex-1 flex items-center justify-center text-muted-foreground p-10">
     <span class="material-symbols-outlined text-4xl animate-spin mr-2">progress_activity</span>
-    Cargando eventos...
+    {{ 'HISTORICAL_EVENTS_TABLE.LOADING_EVENTS' | translate }}
   </div>
   }
 </div>

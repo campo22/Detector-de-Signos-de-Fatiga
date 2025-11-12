@@ -12,7 +12,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">dashboard</span>
-        Dashboard
+        {{ 'SIDEBAR.DASHBOARD' | translate }}
       </a>
       <a
         routerLink="/monitoring/individual"
@@ -20,7 +20,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">person</span>
-        Monitoreo
+        {{ 'SIDEBAR.MONITORING' | translate }}
       </a>
       <a
         routerLink="/monitoring/live-events"
@@ -28,7 +28,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">notifications_active</span>
-        Eventos en Vivo
+        {{ 'SIDEBAR.LIVE_EVENTS' | translate }}
       </a>
       <a
         routerLink="/reports"
@@ -36,7 +36,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">analytics</span>
-        Analítica
+        {{ 'SIDEBAR.ANALYTICS' | translate }}
       </a>
       <a
         routerLink="/management/drivers"
@@ -44,7 +44,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">badge</span>
-        Conductores
+        {{ 'SIDEBAR.DRIVERS' | translate }}
       </a>
       <a
         routerLink="/management/vehicles"
@@ -52,7 +52,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">local_shipping</span>
-        Vehículos
+        {{ 'SIDEBAR.VEHICLES' | translate }}
       </a>
       <a
         routerLink="/management/rules"
@@ -60,7 +60,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">rule</span>
-        Reglas
+        {{ 'SIDEBAR.RULES' | translate }}
       </a>
       <a
         routerLink="/management/users"
@@ -68,7 +68,7 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">group</span>
-        Usuarios
+        {{ 'SIDEBAR.USERS' | translate }}
       </a>
     </div>
 
@@ -79,14 +79,14 @@
         class="flex items-center px-4 py-2 text-lg font-medium rounded-md"
       >
         <span class="material-symbols-outlined mr-3">settings</span>
-        Configuración
+        {{ 'SIDEBAR.SETTINGS' | translate }}
       </a>
       <button
         (click)="logout()"
         class="w-full flex items-center px-4 py-2 text-lg font-medium rounded-md text-left mt-2"
       >
         <span class="material-symbols-outlined mr-3">logout</span>
-        Cerrar Sesión
+        {{ 'SIDEBAR.LOGOUT' | translate }}
       </button>
     </div>
   </nav>

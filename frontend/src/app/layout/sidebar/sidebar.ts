@@ -3,13 +3,15 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { SidebarService } from './sidebar.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sidebar',
   imports: [
     CommonModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    TranslateModule
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss'

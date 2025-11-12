@@ -9,6 +9,7 @@ import { EventService } from '../../../shared/services/event.service';
 import { ExportService } from '../../../../core/services/export.service';
 import { Page, FatigueEvent } from '../../../../core/models/event.models';
 import { FatigueLevel } from '../../../../core/models/enums';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 // Definimos un tipo para el estado del ordenamiento
 type SortState = {
@@ -19,7 +20,7 @@ type SortState = {
 @Component({
   selector: 'app-historical-events-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './historical-events-table.html',
   styleUrls: ['./historical-events-table.scss']
 })
@@ -29,6 +30,7 @@ export class HistoricalEventsTableComponent {
   private eventService = inject(EventService);
   private filterService = inject(DashboardFilter);
   private exportService = inject(ExportService);
+  private translate = inject(TranslateService);
 
   // 2. Signals de estado local para paginación y ordenamiento
   public currentPage = signal(0);
@@ -50,7 +52,7 @@ export class HistoricalEventsTableComponent {
       ),
       startWith(null), // Estado inicial mientras carga
       catchError(err => {
-        console.error('❌ Error al cargar el historial de eventos:', err);
+        console.error(this.translate.instant('HISTORICAL_EVENTS_TABLE.ERROR_LOADING_EVENTS'), err);
         return [null]; // Devuelve null en caso de error para no romper la cadena
       })
     ),
@@ -93,17 +95,17 @@ export class HistoricalEventsTableComponent {
     if (dataToExport && dataToExport.length > 0) {
       // Prepara los datos como objetos simples para Excel
       const simplifiedData = dataToExport.map(event => ({
-        'ID Evento': event.id,
-        'Fecha y Hora': new Date(event.timestamp).toLocaleString('es-CO'), // Ajusta la localización si es necesario
-        'Tipo Evento': event.fatigueType,
-        'Nivel Riesgo': event.fatigueLevel,
-        'Nombre Conductor': event.driverName || 'N/A',
-        'Identif. Vehículo': event.vehicleIdentifier || 'N/A',
+        [this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_ID_EVENT')]: event.id,
+        [this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_DATE_TIME')]: new Date(event.timestamp).toLocaleString('es-CO'), // Ajusta la localización si es necesario
+        [this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_EVENT_TYPE')]: event.fatigueType,
+        [this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_RISK_LEVEL')]: event.fatigueLevel,
+        [this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_DRIVER_NAME')]: event.driverName || 'N/A',
+        [this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_VEHICLE_IDENTIFIER')]: event.vehicleIdentifier || 'N/A'
 
       }));
-      this.exportService.exportToExcel(simplifiedData, 'Reporte_Historico_Eventos');
+      this.exportService.exportToExcel(simplifiedData, this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_FILE_NAME'));
     } else {
-      console.warn('No hay datos para exportar a Excel.');
+      console.warn(this.translate.instant('HISTORICAL_EVENTS_TABLE.NO_DATA_EXCEL'));
       // Considera mostrar una notificación al usuario aquí
     }
   }
@@ -112,7 +114,13 @@ export class HistoricalEventsTableComponent {
     const dataToExport = this.eventsPage()?.content;
     if (dataToExport && dataToExport.length > 0) {
       // Define las cabeceras visibles y las claves de datos correspondientes
-      const headers = ['Fecha/Hora', 'Tipo Evento', 'Nivel', 'Conductor', 'Vehículo'];
+      const headers = [
+        this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_DATE_TIME_SHORT'),
+        this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_EVENT_TYPE_SHORT'),
+        this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_LEVEL_SHORT'),
+        this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_DRIVER_SHORT'),
+        this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_VEHICLE_SHORT')
+      ];
       const headerKeys = ['timestamp', 'fatigueType', 'fatigueLevel', 'driverName', 'vehicleIdentifier'];
 
       // Prepara los datos, formateando la fecha y asegurando valores
@@ -128,12 +136,12 @@ export class HistoricalEventsTableComponent {
         formattedData,
         headers,
         headerKeys,// Cabeceras de las columnas
-        'Reporte_Historico_Eventos',
-        'Reporte_Historico_Eventos'
+        this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_FILE_NAME'),
+        this.translate.instant('HISTORICAL_EVENTS_TABLE.EXPORT_PDF_TITLE')
 
       );
     } else {
-      console.warn('No hay datos para exportar a PDF.');
+      console.warn(this.translate.instant('HISTORICAL_EVENTS_TABLE.NO_DATA_PDF'));
       // Considera mostrar una notificación al usuario aquí
     }
   }

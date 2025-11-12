@@ -2,13 +2,14 @@ import { Component, EventEmitter, Output, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../../core/models/user.models';
 import { Page } from '../../../../../core/models/event.models';
+import { TranslateModule } from '@ngx-translate/core';
 
 type SortColumn = 'name' | 'email' | 'rol' | 'activo';
 
 @Component({
   selector: 'app-user-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './user-table.html',
   styleUrls: ['./user-table.scss']
 })

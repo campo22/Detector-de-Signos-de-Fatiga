@@ -5,6 +5,7 @@ import { VehicleFilterService } from '../../services/vehicle-filter.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { VehicleFilterRequest } from '../../../../../core/models/vehicle.models';
 import { debounceTime, map, startWith } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface FilterOption {
   label: string;
@@ -14,7 +15,8 @@ interface FilterOption {
   selector: 'app-vehicle-filters',
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './vehicle-filters.html',
   styleUrl: './vehicle-filters.scss',
@@ -23,21 +25,21 @@ export class VehicleFilters {
 
   private fb = inject(FormBuilder);
   private vehicleFilterService = inject(VehicleFilterService);
+  private translate = inject(TranslateService);
 
 
   statusOptions: FilterOption[] = [
-    { label: 'Activo', value: true },
-    { label: 'Inactivo', value: false },
-    { label: 'Todos', value: null }
+    { label: this.translate.instant('VEHICLES.STATUS_ACTIVE'), value: true },
+    { label: this.translate.instant('VEHICLES.STATUS_INACTIVE'), value: false },
+    { label: this.translate.instant('VEHICLES.FILTERS.ALL'), value: null }
   ];
 
   assignmentOptions: FilterOption[] = [
-    { label: 'Asignado', value: true },
-    { label: 'Libre', value: false },
-    { label: 'Todos', value: null }
+    { label: this.translate.instant('VEHICLES.FILTERS.ASSIGNED'), value: true },
+    { label: this.translate.instant('VEHICLES.FILTERS.UNASSIGNED'), value: false },
+    { label: this.translate.instant('VEHICLES.FILTERS.ALL'), value: null }
   ];
 
-  // Los nombres (placa, marca, etc.) coinciden con el HTML y el modelo VehicleFilterRequest
   public filterForm = this.fb.group({
     placa: [''],
     marca: [''],
@@ -51,30 +53,21 @@ export class VehicleFilters {
     this.filterForm.valueChanges.pipe(
       debounceTime(350),
       startWith(this.filterForm.value),
-      // Convierte el valor a VehicleFilterRequest para pasarlo al servicio
       map(value => value as VehicleFilterRequest)
     ),
-    // Valor inicial
     { initialValue: this.filterForm.value as VehicleFilterRequest }
   );
 
-  // --- 6. Computed signal para filtros activos ---
   public hasActiveFilters = computed(() => {
     const f = this.filters();
     return !!(f.placa || f.marca || f.modelo || f.activo !== null || f.asignado !== null);
   });
 
-  // --- 7. Efecto para sincronizar con el servicio (clonado del patrón) ---
   private syncFiltersEffect = effect(() => {
     const currentFilters = this.filters();
-    console.log('Filtros de Vehículo actualizados:', currentFilters);
-    // Llama al servicio de Vehículos
     this.vehicleFilterService.updateFilters(currentFilters);
   });
 
-  /**
-   * Resetea todos los filtros a sus valores iniciales
-   */
   clearFilters(): void {
     this.filterForm.reset({
       placa: '',

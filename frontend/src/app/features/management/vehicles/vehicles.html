@@ -2,26 +2,26 @@
 <p-confirmDialog [style]="{ width: '450px' }" styleClass="custom-confirm-dialog"></p-confirmDialog>
 
 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-  <h2 class="text-2xl font-bold text-foreground">Gestión de Vehículos</h2>
+  <h2 class="text-2xl font-bold text-foreground">{{ 'VEHICLES.TITLE' | translate }}</h2>
   <div class="flex items-center gap-4">
     <!-- Menú de Exportación -->
     <p-menu #exportMenu [model]="exportMenuItems" [popup]="true"></p-menu>
     <button
       (click)="exportMenu.toggle($event)"
       class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary bg-primary/10 rounded-md border border-primary/20 hover:bg-primary/20 transition-colors"
-      aria-label="Opciones de exportación"
+      [attr.aria-label]="'VEHICLES.EXPORT_ARIA_LABEL' | translate"
     >
       <span class="material-symbols-outlined text-base">ios_share</span>
-      <span>Exportar</span>
+      <span>{{ 'VEHICLES.EXPORT_BUTTON' | translate }}</span>
       <span class="material-symbols-outlined text-base">expand_more</span>
     </button>
     <button
       (click)="openAddDialog()"
       class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
-      aria-label="Añadir nuevo vehículo"
+      [attr.aria-label]="'VEHICLES.ADD_VEHICLE_ARIA_LABEL' | translate"
     >
       <span class="material-symbols-outlined text-base">add</span>
-      <span>Añadir Vehículo</span>
+      <span>{{ 'VEHICLES.ADD_VEHICLE_BUTTON' | translate }}</span>
     </button>
   </div>
 </div>
@@ -36,7 +36,7 @@
       <span class="material-symbols-outlined text-3xl">local_shipping</span>
     </div>
     <div>
-      <p class="text-sm text-muted-foreground">Vehículos Totales</p>
+      <p class="text-sm text-muted-foreground">{{ 'VEHICLES.TOTAL_VEHICLES_STAT' | translate }}</p>
       <p class="text-3xl font-bold text-foreground">{{ totalVehicles() }}</p>
     </div>
   </div>
@@ -49,7 +49,7 @@
       <span class="material-symbols-outlined text-3xl">check_circle</span>
     </div>
     <div>
-      <p class="text-sm text-muted-foreground">Vehículos Activos</p>
+      <p class="text-sm text-muted-foreground">{{ 'VEHICLES.ACTIVE_VEHICLES_STAT' | translate }}</p>
       <p class="text-3xl font-bold text-foreground">{{ activeVehicles() }}</p>
     </div>
   </div>
@@ -62,7 +62,7 @@
       <span class="material-symbols-outlined text-3xl">no_key</span>
     </div>
     <div>
-      <p class="text-sm text-muted-foreground">Vehículos Libres</p>
+      <p class="text-sm text-muted-foreground">{{ 'VEHICLES.UNASSIGNED_VEHICLES_STAT' | translate }}</p>
       <p class="text-3xl font-bold text-foreground">{{ unassignedVehicles() }}</p>
     </div>
   </div>
@@ -70,7 +70,7 @@
 
 <div class="bg-card rounded-lg shadow-lg border border-border flex flex-col">
   <div class="p-6 border-b border-border">
-    <h3 class="text-lg font-semibold text-foreground mb-4">Lista de Vehículos</h3>
+    <h3 class="text-lg font-semibold text-foreground mb-4">{{ 'VEHICLES.VEHICLE_LIST_TITLE' | translate }}</h3>
     <app-vehicle-filters></app-vehicle-filters>
   </div>
   <app-vehicles-table
@@ -96,7 +96,7 @@
             {{ dialogHeader() }}
           </h2>
           <p class="text-sm text-muted-foreground">
-            Registre un nuevo vehículo en la flota de SafeTrack.
+            {{ 'VEHICLES.DIALOG_SUBHEADER' | translate }}
           </p>
         </div>
         <app-vehicle-form
@@ -122,12 +122,12 @@
   >
     <div class="flex items-center justify-between p-4 border-b border-border">
       <h2 class="font-display text-xl font-bold tracking-tight text-primary">
-        Detalles del Vehículo
+        {{ 'VEHICLES.DETAILS_DIALOG_HEADER' | translate }}
       </h2>
       <button
         (click)="closeDetailsDialog()"
         class="p-2 rounded-full hover:bg-muted transition-colors"
-        aria-label="Cerrar diálogo de detalles"
+        [attr.aria-label]="'VEHICLES.DETAILS_DIALOG_CLOSE_ARIA' | translate"
       >
         <span class="material-symbols-outlined">close</span>
       </button>
@@ -138,7 +138,7 @@
         (click)="closeDetailsDialog()"
         class="px-4 py-2 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
       >
-        Cerrar
+        {{ 'VEHICLES.DETAILS_DIALOG_CLOSE_BUTTON' | translate }}
       </button>
     </div>
   </div>

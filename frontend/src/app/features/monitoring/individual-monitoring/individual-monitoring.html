@@ -1,7 +1,7 @@
 @if (!driver()) {
 <div class="text-center p-20 text-muted-foreground">
   <span class="material-symbols-outlined text-6xl animate-spin">progress_activity</span>
-  <p class="mt-4 text-lg">Cargando datos del conductor...</p>
+  <p class="mt-4 text-lg">{{ 'INDIVIDUAL_MONITORING.LOADING_DRIVER' | translate }}</p>
 </div>
 } @else {
 <div class="flex flex-col h-full gap-6">
@@ -12,12 +12,12 @@
         <div class="flex items-center flex-wrap gap-x-6 gap-y-2 text-muted-foreground">
           <span class="flex items-center gap-2">
             <span class="material-symbols-outlined text-sm">badge</span>
-            Licencia: {{ driver()!.licencia }}
+            {{ 'INDIVIDUAL_MONITORING.LICENSE' | translate }}: {{ driver()!.licencia }}
           </span>
         </div>
       </div>
       <div class="text-left md:text-right flex-shrink-0">
-        <p class="text-sm text-muted-foreground">Estado</p>
+        <p class="text-sm text-muted-foreground">{{ 'INDIVIDUAL_MONITORING.STATUS' | translate }}</p>
         <div class="flex items-center gap-2 mt-1">
           <span
             class="w-3 h-3 rounded-full"
@@ -27,7 +27,7 @@
             class="font-semibold text-lg"
             [ngClass]="driver()!.activo ? 'text-success' : 'text-destructive'"
           >
-            {{ driver()!.activo ? 'Activo' : 'Inactivo' }}
+            {{ driver()!.activo ? ('INDIVIDUAL_MONITORING.ACTIVE' | translate) : ('INDIVIDUAL_MONITORING.INACTIVE' | translate) }}
           </p>
         </div>
       </div>
@@ -37,19 +37,19 @@
   @if(eventsPage(); as page) {
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
     <div class="bg-card p-5 rounded-lg border border-border">
-      <p class="text-sm text-muted-foreground">Eventos Totales (Período)</p>
+      <p class="text-sm text-muted-foreground">{{ 'INDIVIDUAL_MONITORING.TOTAL_EVENTS' | translate }}</p>
       <p class="text-3xl font-bold font-mono">{{ page.totalElements }}</p>
     </div>
     <div class="bg-card p-5 rounded-lg border border-border">
-      <p class="text-sm text-muted-foreground">Puntuación de Riesgo</p>
-      <p class="text-3xl font-bold font-mono text-destructive">Alto</p>
+      <p class="text-sm text-muted-foreground">{{ 'INDIVIDUAL_MONITORING.RISK_SCORE' | translate }}</p>
+      <p class="text-3xl font-bold font-mono text-destructive">{{ 'INDIVIDUAL_MONITORING.HIGH' | translate }}</p>
     </div>
     <div class="bg-card p-5 rounded-lg border border-border">
-      <p class="text-sm text-muted-foreground">Vehículo Asignado</p>
+      <p class="text-sm text-muted-foreground">{{ 'INDIVIDUAL_MONITORING.ASSIGNED_VEHICLE' | translate }}</p>
       <p class="text-2xl font-semibold">RTX-3090</p>
     </div>
     <div class="bg-card p-5 rounded-lg border border-border">
-      <p class="text-sm text-muted-foreground">Último Evento</p>
+      <p class="text-sm text-muted-foreground">{{ 'INDIVIDUAL_MONITORING.LAST_EVENT' | translate }}</p>
       <p class="text-2xl font-semibold">
         {{ (page.content[0]?.fatigueType | titlecase) || 'N/A' }}
       </p>
@@ -71,10 +71,10 @@
             style="text-shadow: 0 0 10px hsl(var(--primary-glow) / 0.7)"
             >rss_feed</span
           >
-          Eventos
+          {{ 'INDIVIDUAL_MONITORING.EVENTS_TITLE' | translate }}
         </h3>
         <p class="text-muted-foreground text-sm mt-1">
-          Alertas de fatiga y distracción detectadas para este conductor.
+          {{ 'INDIVIDUAL_MONITORING.EVENTS_SUBTITLE' | translate }}
         </p>
       </div>
 
@@ -200,14 +200,14 @@
             </div>
           </div>
           } } @if (!page.content.length && !liveEvent()) {
-          <div class="text-center text-muted-foreground p-10">No hay eventos para mostrar.</div>
+          <div class="text-center text-muted-foreground p-10">{{ 'INDIVIDUAL_MONITORING.NO_EVENTS' | translate }}</div>
           }
         </div>
       </div>
 
       <div class="p-4 mt-auto border-t border-border flex justify-between items-center">
         <span class="text-sm text-muted-foreground"
-          >Página {{ page.number + 1 }} de {{ page.totalPages }}</span
+          >{{ 'INDIVIDUAL_MONITORING.PAGE' | translate }} {{ page.number + 1 }} {{ 'INDIVIDUAL_MONITORING.OF' | translate }} {{ page.totalPages }}</span
         >
         <div class="flex items-center space-x-2">
           <button
@@ -215,21 +215,21 @@
             [disabled]="page.first"
             class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Anterior
+            {{ 'INDIVIDUAL_MONITORING.PREVIOUS' | translate }}
           </button>
           <button
             (click)="nextPage()"
             [disabled]="page.last"
             class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Siguiente
+            {{ 'INDIVIDUAL_MONITORING.NEXT' | translate }}
           </button>
         </div>
       </div>
       } @else {
       <div class="flex-1 flex items-center justify-center text-muted-foreground">
         <span class="material-symbols-outlined text-6xl animate-spin">progress_activity</span>
-        <p class="mt-4 text-lg">Cargando eventos...</p>
+        <p class="mt-4 text-lg">{{ 'INDIVIDUAL_MONITORING.LOADING_EVENTS' | translate }}</p>
       </div>
       }
     </div>

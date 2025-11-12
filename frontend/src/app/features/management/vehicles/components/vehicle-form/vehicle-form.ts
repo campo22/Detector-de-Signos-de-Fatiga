@@ -1,27 +1,26 @@
 import { Component, inject, input, Output, EventEmitter, signal, effect, computed, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { startWith, map, take } from 'rxjs/operators'; // Add take
+import { startWith, map, take } from 'rxjs/operators';
 
-// Importaciones PrimeNG
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select'; // Change SelectModule to DropdownModule
+import { SelectModule } from 'primeng/select';
 
-// Modelos y Servicios
 import { Vehicle, VehicleRequest } from '../../../../../core/models/vehicle.models';
 import { VehicleService } from '../../../../shared/services/Vehicle.service';
 import { DriverService } from '../../../../shared/services/driver.service';
-import { Driver } from '../../../../../core/models/driver.models'; // Add Driver import
-import { Page } from '../../../../../core/models/event.models'; // Add Page import
+import { Driver } from '../../../../../core/models/driver.models';
+import { Page } from '../../../../../core/models/event.models';
 
 interface StatusOption {
   label: string;
   value: boolean;
 }
 
-import { AutoCompleteModule } from 'primeng/autocomplete'; // New import
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -31,8 +30,9 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-    SelectModule, // Change SelectModule to DropdownModule
-    AutoCompleteModule // Add AutoCompleteModule
+    SelectModule,
+    AutoCompleteModule,
+    TranslateModule
   ],
   templateUrl: './vehicle-form.html',
   styleUrl: './vehicle-form.scss',
@@ -41,62 +41,48 @@ import { CommonModule } from '@angular/common';
 export class VehicleFormComponent implements OnChanges {
   private fb = inject(FormBuilder);
   private vehicleService = inject(VehicleService);
-  private driverService = inject(DriverService); // New injection
+  private driverService = inject(DriverService);
+  private translate = inject(TranslateService);
 
-  // --- Entradas como Signals ---
   @Input() vehicleData: Vehicle | null = null;
   @Input() isEditMode: boolean = false;
 
-  // --- Salidas ---
   @Output() save = new EventEmitter<Vehicle>();
   @Output() cancel = new EventEmitter<void>();
 
-  // --- Estado Interno ---
   isLoading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
-  availableDrivers = signal<Driver[]>([]); // New signal
-  filteredDrivers = signal<Driver[]>([]); // New signal
+  availableDrivers = signal<Driver[]>([]);
+  filteredDrivers = signal<Driver[]>([]);
 
   statusOptions: StatusOption[] = [
-    { label: 'Activo', value: true },
-    { label: 'Inactivo', value: false }
+    { label: this.translate.instant('VEHICLES.STATUS_ACTIVE'), value: true },
+    { label: this.translate.instant('VEHICLES.STATUS_INACTIVE'), value: false }
   ];
 
-  // --- FormGroup con validaciones ---
   vehicleForm: FormGroup = this.fb.group({
     placa: ['', [Validators.required, Validators.minLength(3)]],
     marca: ['', Validators.required],
     modelo: ['', Validators.required],
     anio: [null, [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear() + 1)]],
     activo: [this.statusOptions[0], Validators.required],
-    driver: [null as Driver | null] // Change driverId to driver object
+    driver: [null as Driver | null]
   });
 
-  // --- Señales para la reactividad del formulario ---
-  private formStatusSignal = toSignal(
-    this.vehicleForm.statusChanges.pipe(
-      startWith(this.vehicleForm.status)
-    )
-  );
-
-  private formPristineSignal = toSignal(this.vehicleForm.valueChanges.pipe(
-    startWith(this.vehicleForm.pristine),
-    map(() => this.vehicleForm.pristine)
-  ));
+  private formStatusSignal = toSignal(this.vehicleForm.statusChanges.pipe(startWith(this.vehicleForm.status)));
+  private formPristineSignal = toSignal(this.vehicleForm.valueChanges.pipe(startWith(this.vehicleForm.pristine), map(() => this.vehicleForm.pristine)));
 
   isFormValid = computed(() => this.formStatusSignal() === 'VALID');
   isFormPristine = computed(() => this.formPristineSignal());
 
-  canSubmit = computed(() =>
-    this.isFormValid() && !this.isLoading() && !this.isFormPristine()
-  );
+  canSubmit = computed(() => this.isFormValid() && !this.isLoading() && !this.isFormPristine());
 
   submitButtonLabel = computed(() => {
-    if (this.isLoading()) { return 'Guardando...'; }
-    if (!this.isFormValid()) { return 'Complete campos requeridos'; }
-    if (this.isFormPristine() && this.isEditMode) { return 'Sin cambios'; }
-    return this.isEditMode ? 'Actualizar Vehículo' : 'Crear Vehículo';
+    if (this.isLoading()) { return this.translate.instant('VEHICLES.FORM.SAVING_BUTTON'); }
+    if (!this.isFormValid()) { return this.translate.instant('VEHICLES.FORM.COMPLETE_FIELDS_BUTTON'); }
+    if (this.isFormPristine() && this.isEditMode) { return this.translate.instant('VEHICLES.FORM.NO_CHANGES_BUTTON'); }
+    return this.isEditMode ? this.translate.instant('VEHICLES.FORM.UPDATE_BUTTON') : this.translate.instant('VEHICLES.FORM.CREATE_BUTTON');
   });
 
   constructor() {
@@ -110,12 +96,8 @@ export class VehicleFormComponent implements OnChanges {
   }
 
   private populateForm(vehicle: Vehicle | null): void {
-    console.log('Populating form with vehicle data:', vehicle); // Debug log
     if (vehicle) {
-      const assignedDriver = vehicle.driver
-        ? this.availableDrivers().find(d => d.id === vehicle.driver?.id) || null
-        : null;
-
+      const assignedDriver = vehicle.driver ? this.availableDrivers().find(d => d.id === vehicle.driver?.id) || null : null;
       this.vehicleForm.patchValue({
         placa: vehicle.placa,
         marca: vehicle.marca,
@@ -132,16 +114,12 @@ export class VehicleFormComponent implements OnChanges {
   }
 
   private loadAvailableDrivers(): void {
-    this.driverService.getDrivers({}, 0, 1000, 'nombre', 'asc') // Fetch all drivers
-      .pipe(take(1))
-      .subscribe((page: Page<Driver>) => {
-        this.availableDrivers.set(page.content);
-        // If we are in edit mode when drivers are loaded, re-populate the form
-        // to ensure the driver object is correctly assigned.
-        if (this.isEditMode && this.vehicleData) {
-          this.populateForm(this.vehicleData);
-        }
-      });
+    this.driverService.getDrivers({}, 0, 1000, 'nombre', 'asc').pipe(take(1)).subscribe((page: Page<Driver>) => {
+      this.availableDrivers.set(page.content);
+      if (this.isEditMode && this.vehicleData) {
+        this.populateForm(this.vehicleData);
+      }
+    });
   }
 
   searchDrivers(event: { originalEvent: Event; query: string }): void {
@@ -154,13 +132,13 @@ export class VehicleFormComponent implements OnChanges {
   }
 
   onDriverClear(): void {
-    this.vehicleForm.get('driver')?.setValue(null, { emitEvent: false }); // Prevent re-triggering the effect
+    this.vehicleForm.get('driver')?.setValue(null, { emitEvent: false });
   }
 
   resetForm(): void {
     this.vehicleForm.reset({
       activo: true,
-      driver: null // Reset driver field
+      driver: null
     });
     this.vehicleForm.markAsPristine();
     this.vehicleForm.markAsUntouched();
@@ -203,31 +181,28 @@ export class VehicleFormComponent implements OnChanges {
 
   private buildVehiclePayload(): VehicleRequest {
     const formValue = this.vehicleForm.getRawValue();
-    const driverId = formValue.driver ? formValue.driver.id : null; // Extract driverId from driver object
+    const driverId = formValue.driver ? formValue.driver.id : null;
 
     return {
       placa: formValue.placa,
       marca: formValue.marca,
       modelo: formValue.modelo,
       anio: formValue.anio,
-      activo: formValue.activo.value, // Extract the boolean value
+      activo: formValue.activo.value,
       driverId: driverId
     };
   }
 
   private handleSuccess(result: Vehicle): void {
-    console.log('✅ Operación exitosa:', result);
     this.save.emit(result);
   }
 
   private handleError(error: any): void {
-    console.error('❌ Error al guardar vehículo:', error);
-    const apiErrorMessage = error?.error?.message || error?.message || 'Ocurrió un error desconocido.';
-    this.errorMessage.set(`Error al guardar: ${apiErrorMessage}. Intenta de nuevo.`);
+    const apiErrorMessage = error?.error?.message || error?.message || this.translate.instant('VEHICLES.FORM.UNKNOWN_ERROR');
+    this.errorMessage.set(this.translate.instant('VEHICLES.FORM.SAVE_ERROR', { error: apiErrorMessage }));
     this.isLoading.set(false);
   }
 
-  // Función de comparación para p-select
   compareStatusOptions(option1: StatusOption, option2: StatusOption): boolean {
     return option1 && option2 ? option1.value === option2.value : option1 === option2;
   }

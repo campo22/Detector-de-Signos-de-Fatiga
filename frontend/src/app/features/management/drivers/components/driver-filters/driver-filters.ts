@@ -7,11 +7,12 @@ import { debounceTime, startWith, map } from 'rxjs/operators';
 
 import { DriverFilterRequest } from '../../../../../core/models/driver.models';
 import { DriverFilterService } from '../../services/driver-filter.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-driver-filters',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './driver-filters.html',
   styleUrl: './driver-filters.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

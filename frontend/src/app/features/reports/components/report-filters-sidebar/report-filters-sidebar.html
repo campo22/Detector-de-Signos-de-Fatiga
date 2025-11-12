@@ -1,11 +1,15 @@
 <aside
   class="w-full lg:w-[400px] bg-card border-r border-border flex flex-col p-6 rounded-lg shadow-lg h-full"
 >
-  <h2 class="text-white mb-6 text-xl font-semibold font-display">Panel de Filtros Históricos</h2>
+  <h2 class="text-white mb-6 text-xl font-semibold font-display">
+    {{ 'REPORTS_FILTERS.TITLE' | translate }}
+  </h2>
 
   <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="flex flex-col gap-5 flex-grow">
     <div class="space-y-4">
-      <p class="text-foreground/80 text-sm font-medium">Rango de Fechas</p>
+      <p class="text-foreground/80 text-sm font-medium">
+        {{ 'REPORTS_FILTERS.DATE_RANGE' | translate }}
+      </p>
       <div class="grid grid-cols-1 @[280px]:grid-cols-2 gap-3">
         <div class="relative date-input group">
           <span
@@ -16,8 +20,8 @@
             type="date"
             formControlName="startDate"
             class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
-            placeholder="Inicio"
-          />.
+            [placeholder]="'REPORTS_FILTERS.START_DATE' | translate"
+          />
         </div>
         <div class="relative date-input group">
           <span
@@ -28,7 +32,7 @@
             type="date"
             formControlName="endDate"
             class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
-            placeholder="Fin"
+            [placeholder]="'REPORTS_FILTERS.END_DATE' | translate"
           />
         </div>
       </div>
@@ -37,7 +41,9 @@
 
     <div class="space-y-4">
       <label class="flex flex-col gap-2">
-        <p class="text-foreground/80 text-sm font-medium">Nombre Conductor</p>
+        <p class="text-foreground/80 text-sm font-medium">
+          {{ 'REPORTS_FILTERS.DRIVER_NAME' | translate }}
+        </p>
         <div class="relative group">
           <span
             class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
@@ -47,12 +53,14 @@
             type="text"
             formControlName="driverName"
             class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
-            placeholder="Buscar por nombre..."
+            [placeholder]="'REPORTS_FILTERS.DRIVER_NAME_PLACEHOLDER' | translate"
           />
         </div>
       </label>
       <label class="flex flex-col gap-2">
-        <p class="text-foreground/80 text-sm font-medium">Placa Vehículo</p>
+        <p class="text-foreground/80 text-sm font-medium">
+          {{ 'REPORTS_FILTERS.VEHICLE_PLATE' | translate }}
+        </p>
         <div class="relative group">
           <span
             class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
@@ -62,7 +70,7 @@
             type="text"
             formControlName="vehiclePlate"
             class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
-            placeholder="Buscar por placa..."
+            [placeholder]="'REPORTS_FILTERS.VEHICLE_PLATE_PLACEHOLDER' | translate"
           />
         </div>
       </label>
@@ -70,7 +78,9 @@
     <hr class="border-border/50" />
 
     <div class="flex flex-col gap-2">
-      <p class="text-foreground/80 text-sm font-medium">Tipo de Evento</p>
+      <p class="text-foreground/80 text-sm font-medium">
+        {{ 'REPORTS_FILTERS.EVENT_TYPE' | translate }}
+      </p>
       <div class="relative group">
         <span
           class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
@@ -80,9 +90,9 @@
           formControlName="fatigueType"
           class="form-input w-full rounded-lg border bg-background pl-9 pr-10 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 appearance-none cursor-pointer"
         >
-          <option [ngValue]="null">Todos los Tipos</option>
+          <option [ngValue]="null">{{ 'REPORTS_FILTERS.ALL_TYPES' | translate }}</option>
           @for(type of fatigueTypes; track type[0]) {
-          <option [value]="type[1]">{{ type[0] | titlecase }}</option>
+          <option [value]="type[1]">{{ type[0] }}</option>
           }
         </select>
         <span
@@ -94,7 +104,9 @@
     <hr class="border-border/50" />
 
     <div class="flex flex-col gap-3">
-      <p class="text-foreground/80 text-sm font-medium">Nivel de Fatiga</p>
+      <p class="text-foreground/80 text-sm font-medium">
+        {{ 'REPORTS_FILTERS.FATIGUE_LEVEL' | translate }}
+      </p>
       <div class="grid grid-cols-3 gap-2">
         <button
           type="button"
@@ -106,7 +118,8 @@
           "
           class="fatigue-option flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold border-2 ring-2 ring-transparent transition-all duration-200 focus:outline-none"
         >
-          <span class="size-2 rounded-full bg-destructive"></span> ALTO
+          <span class="size-2 rounded-full bg-destructive"></span>
+          {{ 'REPORTS_FILTERS.LEVEL_HIGH' | translate }}
         </button>
         <button
           type="button"
@@ -118,7 +131,8 @@
           "
           class="fatigue-option flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold border-2 ring-2 ring-transparent transition-all duration-200 focus:outline-none"
         >
-          <span class="size-2 rounded-full bg-warning"></span> MEDIO
+          <span class="size-2 rounded-full bg-warning"></span>
+          {{ 'REPORTS_FILTERS.LEVEL_MEDIUM' | translate }}
         </button>
         <button
           type="button"
@@ -130,7 +144,8 @@
           "
           class="fatigue-option flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold border-2 ring-2 ring-transparent transition-all duration-200 focus:outline-none"
         >
-          <span class="size-2 rounded-full bg-success"></span> BAJO
+          <span class="size-2 rounded-full bg-success"></span>
+          {{ 'REPORTS_FILTERS.LEVEL_LOW' | translate }}
         </button>
       </div>
     </div>
@@ -144,7 +159,7 @@
         class="material-symbols-outlined transition-transform duration-300 group-hover:rotate-12 z-10"
         >filter_alt</span
       >
-      <span class="z-10">Aplicar Filtros</span>
+      <span class="z-10">{{ 'REPORTS_FILTERS.APPLY_BUTTON' | translate }}</span>
     </button>
   </form>
 </aside>

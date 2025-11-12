@@ -15,20 +15,20 @@
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">pin</span>
-        Placa
+        {{ 'VEHICLES.FORM.PLATE_LABEL' | translate }}
       </label>
       <input
         id="placa"
         type="text"
         pInputText
         formControlName="placa"
-        placeholder="Ej: ABC-123"
+        [placeholder]="'VEHICLES.FORM.PLATE_PLACEHOLDER' | translate"
         class="font-mono flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
       />
       @if (isInvalid('placa')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Placa es requerida.</span>
+        <span>{{ 'VEHICLES.FORM.PLATE_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -42,20 +42,20 @@
         <span class="material-symbols-outlined text-lg transition-all duration-300"
           >directions_car</span
         >
-        Marca
+        {{ 'VEHICLES.FORM.BRAND_LABEL' | translate }}
       </label>
       <input
         id="marca"
         type="text"
         pInputText
         formControlName="marca"
-        placeholder="Ej: Toyota"
+        [placeholder]="'VEHICLES.FORM.BRAND_PLACEHOLDER' | translate"
         class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
       />
       @if (isInvalid('marca')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Marca es requerida.</span>
+        <span>{{ 'VEHICLES.FORM.BRAND_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -67,20 +67,20 @@
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">rv_hookup</span>
-        Modelo
+        {{ 'VEHICLES.FORM.MODEL_LABEL' | translate }}
       </label>
       <input
         id="modelo"
         type="text"
         pInputText
         formControlName="modelo"
-        placeholder="Ej: Hilux"
+        [placeholder]="'VEHICLES.FORM.MODEL_PLACEHOLDER' | translate"
         class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
       />
       @if (isInvalid('modelo')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Modelo es requerido.</span>
+        <span>{{ 'VEHICLES.FORM.MODEL_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -94,20 +94,20 @@
         <span class="material-symbols-outlined text-lg transition-all duration-300"
           >calendar_today</span
         >
-        Año
+        {{ 'VEHICLES.FORM.YEAR_LABEL' | translate }}
       </label>
       <input
         id="anio"
         type="number"
         pInputText
         formControlName="anio"
-        placeholder="Ej: 2023"
+        [placeholder]="'VEHICLES.FORM.YEAR_PLACEHOLDER' | translate"
         class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
       />
       @if (isInvalid('anio')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Año es requerido.</span>
+        <span>{{ 'VEHICLES.FORM.YEAR_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -119,21 +119,21 @@
         class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>
-        Estado
+        {{ 'VEHICLES.FORM.STATUS_LABEL' | translate }}
       </label>
       <p-select
         id="activo"
         formControlName="activo"
         [options]="statusOptions"
         optionLabel="label"
-        placeholder="Seleccione un estado"
+        [placeholder]="'VEHICLES.FORM.STATUS_PLACEHOLDER' | translate"
         dataKey="value"
         styleClass="w-full h-11 rounded-md"
       ></p-select>
       @if (isInvalid('activo')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Estado es requerido.</span>
+        <span>{{ 'VEHICLES.FORM.STATUS_REQUIRED' | translate }}</span>
       </div>
       }
     </div>
@@ -147,7 +147,7 @@
         <span class="material-symbols-outlined text-lg transition-all duration-300"
           >person_pin</span
         >
-        Conductor Asignado (Opcional)
+        {{ 'VEHICLES.FORM.DRIVER_LABEL' | translate }}
       </label>
       <p-autoComplete
         id="driver"
@@ -156,7 +156,7 @@
         (completeMethod)="searchDrivers($event)"
         (onClear)="onDriverClear()"
         field="nombre"
-        placeholder="Buscar Conductor"
+        [placeholder]="'VEHICLES.FORM.DRIVER_PLACEHOLDER' | translate"
         [dropdown]="true"
         [forceSelection]="false"
         [showClear]="true"
@@ -168,8 +168,8 @@
         <ng-template let-driver pTemplate="item">
           <div class="flex flex-col p-2">
             <div class="font-bold text-foreground">{{ driver.nombre }}</div>
-            <div class="text-sm text-muted-foreground">Licencia: {{ driver.licencia }}</div>
-            <div class="text-xs text-muted-foreground">ID: {{ driver.id }}</div>
+            <div class="text-sm text-muted-foreground">{{ 'VEHICLES.FORM.DRIVER_LICENSE' | translate }}: {{ driver.licencia }}</div>
+            <div class="text-xs text-muted-foreground">{{ 'VEHICLES.FORM.DRIVER_ID' | translate }}: {{ driver.id }}</div>
           </div>
         </ng-template>
         <ng-template let-driver pTemplate="selectedItem">
@@ -179,7 +179,7 @@
       @if (isInvalid('driver')) {
       <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
-        <span>Selección de conductor inválida.</span>
+        <span>{{ 'VEHICLES.FORM.DRIVER_INVALID' | translate }}</span>
       </div>
       }
     </div>
@@ -192,7 +192,7 @@
       [disabled]="isLoading()"
       class="font-display inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-accent-foreground hover:bg-accent h-11 px-6 py-2"
     >
-      Cancelar
+      {{ 'VEHICLES.FORM.CANCEL_BUTTON' | translate }}
     </button>
     <button
       type="submit"

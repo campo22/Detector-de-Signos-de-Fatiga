@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ import { InputIconModule } from 'primeng/inputicon';
     ToastModule,
     CommonModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    TranslateModule
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
@@ -39,6 +41,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private messageService = inject(MessageService);
+  private translate = inject(TranslateService);
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -57,8 +60,8 @@ export class LoginComponent {
       next: () => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Éxito',
-          detail: 'Inicio de sesión correcto. Redirigiendo...'
+          summary: this.translate.instant('LOGIN.SUCCESS_SUMMARY'),
+          detail: this.translate.instant('LOGIN.SUCCESS_DETAIL')
         });
         setTimeout(() => {
           this.router.navigate(['/dashboard']); // Redirigir en caso de éxito
@@ -67,8 +70,8 @@ export class LoginComponent {
       error: (err) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error en el Login',
-          detail: 'Email o contraseña incorrectos. Por favor, inténtalo de nuevo.'
+          summary: this.translate.instant('LOGIN.ERROR_SUMMARY'),
+          detail: this.translate.instant('LOGIN.ERROR_DETAIL')
         });
         console.error('Error en el login:', err);
       }

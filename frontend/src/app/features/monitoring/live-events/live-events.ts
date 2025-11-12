@@ -10,8 +10,8 @@ import { TimeAgoPipe } from '../../shared/pipes/time-ago-pipe';
 import { Driver } from '../../../core/models/driver.models';
 import { DriverService } from '../../shared/services/driver.service';
 import { EventService } from '../../shared/services/event.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-// Aumentamos FatigueEvent con detalles opcionales del conductor para la plantilla
 interface LiveFatigueEvent extends FatigueEvent {
   driver?: Driver;
   isNewCritical?: boolean;
@@ -20,7 +20,7 @@ interface LiveFatigueEvent extends FatigueEvent {
 @Component({
   selector: 'app-live-events',
   standalone: true,
-  imports: [CommonModule, TimeAgoPipe],
+  imports: [CommonModule, TimeAgoPipe, TranslateModule],
   templateUrl: './live-events.html',
   styleUrl: './live-events.scss'
 })
@@ -29,13 +29,11 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   private driverService = inject(DriverService);
   private eventService = inject(EventService);
   private platformId = inject(PLATFORM_ID);
+  private translate = inject(TranslateService);
   private eventsSubscription: Subscription | undefined;
 
-  // el cache de conductores
   private driversCache = new Map<string, Driver>();
-  // el mapa
   private map!: L.Map;
-  // los marcadores de los eventos en vivo
   private markers = new Map<string, L.Marker>();
 
   public FatigueLevel = FatigueLevel;
@@ -48,7 +46,6 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
     const events = this.events();
     const filter = this.selectedFilter();
 
-    // actualizar la visibilidad de los marcadores
     this.updateMarkersVisibility(events, filter);
 
     if (filter === 'ALL') {
@@ -58,7 +55,6 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   });
 
   constructor() {
-    // No suscribirse a eventos de WebSocket en el servidor
     if (isPlatformBrowser(this.platformId)) {
       this.eventsSubscription = this.webSocketService.fatigueEvent$.subscribe(newEvent => {
         if (newEvent) {
@@ -75,7 +71,6 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    // Inicializar el mapa solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
       this.initMap();
     }
@@ -87,7 +82,7 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   }
 
   private initMap(): void {
-    this.map = L.map('live-map').setView([4.5709, -74.2973], 6); // Centrado en Colombia
+    this.map = L.map('live-map').setView([4.5709, -74.2973], 6);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -98,7 +93,6 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   private loadInitialEvents(): void {
     this.eventService.searchEvents({}, 0, 20).subscribe(page => {
       const initialEvents = page.content;
-      // Revertir para procesar los más antiguos primero y mantener el orden al agregar
       initialEvents.reverse().forEach(event => this.addEventWithDriver(event, false));
     });
   }
@@ -134,22 +128,25 @@ export class LiveEvents implements OnDestroy, AfterViewInit, OnInit {
   private addEventMarker(event: LiveFatigueEvent): void {
     if (!this.map) return;
 
-    // Para demostración, usamos coordenadas aleatorias alrededor de Colombia
     const lat = 4.5709 + (Math.random() - 0.5) * 4;
     const lng = -74.2973 + (Math.random() - 0.5) * 8;
     const location: L.LatLngTuple = [lat, lng];
 
     const icon = this.getIconForLevel(event.fatigueLevel, event.isNewCritical);
 
+    const popupContent = `
+      <b>${this.translate.instant('LIVE_EVENTS.POPUP_LEVEL')}:</b> ${event.fatigueLevel}<br>
+      <b>${this.translate.instant('LIVE_EVENTS.POPUP_TYPE')}:</b> ${event.fatigueType}<br>
+      <b>${this.translate.instant('LIVE_EVENTS.POPUP_DRIVER')}:</b> ${event.driver?.nombre || this.translate.instant('LIVE_EVENTS.UNKNOWN_DRIVER')}<br>
+      <b>${this.translate.instant('LIVE_EVENTS.POPUP_TIME')}:</b> ${new Date(event.timestamp).toLocaleTimeString()}`;
+
     const marker = L.marker(location, { icon }).addTo(this.map)
-      .bindPopup(`<b>Nivel:</b> ${event.fatigueLevel}<br><b>Tipo:</b> ${event.fatigueType}<br><b>Conductor:</b> ${event.driver?.nombre || 'Desconocido'}<br><b>Hora:</b> ${new Date(event.timestamp).toLocaleTimeString()}`, {
+      .bindPopup(popupContent, {
         className: 'custom-popup'
       });
 
-    // Guardar marcador para gestionarlo más tarde
     this.markers.set(event.id, marker);
 
-    // Centrar el mapa en el nuevo evento con una animación suave
     this.map.flyTo(location, 10);
   }
 

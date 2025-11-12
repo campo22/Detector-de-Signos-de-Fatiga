@@ -4,12 +4,14 @@ import { DashboardFilter } from '../../../dashboard/services/dashboard-filter.se
 import { FatigueLevel, FatigueType } from '../../../../core/models/enums';
 import { AnalyticsFilterRequest } from '../../../../core/models/analytics.models';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-report-filters-sidebar',
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './report-filters-sidebar.html',
   styleUrl: './report-filters-sidebar.scss'
@@ -18,11 +20,10 @@ export class ReportFiltersSidebar implements OnInit {
 
   private fb = inject(FormBuilder);
   private filterService = inject(DashboardFilter);
+  private translate = inject(TranslateService);
 
   public FatigueLevelEnum = FatigueLevel;
   public fatigueTypes!: [string, string][];
-
-
 
   filterForm = this.fb.group({
     startDate: [this.getDefaultStartDate()],
@@ -37,8 +38,10 @@ export class ReportFiltersSidebar implements OnInit {
 
 
   ngOnInit(): void {
-    // 3. Inicializar la lista de tipos de fatiga
-    this.fatigueTypes = Object.entries(FatigueType) as [string, string][];
+    this.fatigueTypes = Object.entries(FatigueType).map(([key, value]) => [
+      this.translate.instant(`REPORTS_FILTERS.FATIGUE_TYPES.${key}`),
+      value
+    ]);
   }
 
 
@@ -47,8 +50,6 @@ export class ReportFiltersSidebar implements OnInit {
 
     const filters: Partial<AnalyticsFilterRequest> = Object.entries(formValues)
       .reduce((acc, [key, value]) => {
-        // Verificar si el valor no es null o una cadena vacia
-        // y agregarlo al objeto de filtros si es necesario
         if (value !== null && value !== '') {
           acc[key as keyof AnalyticsFilterRequest] = value as any;
         }
@@ -58,9 +59,7 @@ export class ReportFiltersSidebar implements OnInit {
     this.filterService.updateFilters(filters);
   }
 
-  // 4. Método para manejar la selección del nivel de fatiga con botones
   selectFatigueLevel(level: FatigueLevel | null): void {
-    // Si se hace clic en el nivel ya seleccionado, se deselecciona
     if (this.filterForm.controls.fatigueLevel.value === level) {
       this.filterForm.controls.fatigueLevel.setValue(null);
     } else {
@@ -68,17 +67,13 @@ export class ReportFiltersSidebar implements OnInit {
     }
   }
 
-  // --- Métodos de ayuda para fechas iniciales ---
   private getCurrentDate(): string {
     return new Date().toISOString().split('T')[0];
   }
 
-  // Función privada para formatear la fecha a YYYY-MM-DD
   private getDefaultStartDate(): string {
     const date = new Date();
     date.setDate(date.getDate() - 2);
     return date.toISOString().split('T')[0];
   }
-
-
 }

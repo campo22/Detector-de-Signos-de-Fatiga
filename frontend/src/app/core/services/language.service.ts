@@ -15,9 +15,14 @@ export class LanguageService {
   }
 
   private initLanguage(): void {
+    console.log('LanguageService: Initializing...');
     this.translate.addLangs(['en', 'es']);
+    this.translate.setDefaultLang('es');
     const browserLang = this.translate.getBrowserLang();
     const savedLang = localStorage.getItem(this.LANG_KEY);
+
+    console.log(`LanguageService: Browser language: ${browserLang}`);
+    console.log(`LanguageService: Saved language: ${savedLang}`);
 
     let langToUse = 'es'; // Default language
 
@@ -27,37 +32,26 @@ export class LanguageService {
       langToUse = browserLang;
     }
 
+    console.log(`LanguageService: Language to use: ${langToUse}`);
     this.setLanguage(langToUse);
   }
 
   setLanguage(lang: string): void {
     if (this.translate.getLangs().includes(lang)) {
-      // Forzar la actualización del idioma
+      console.log(`LanguageService: Attempting to set language to: ${lang}`);
       this.translate.use(lang).subscribe({
-        next: () => {
+        next: (translations) => {
           this.currentLanguage.set(lang);
           localStorage.setItem(this.LANG_KEY, lang);
-          console.log('Idioma cambiado a:', lang);
-          // Para forzar la actualización de componentes ya renderizados,
-          // se puede intentar forzar un "soft reload" de la vista
-          // A veces es necesario forzar una actualización de la vista
-          this.forceViewUpdate();
+          console.log(`LanguageService: Language successfully changed to: ${lang}`);
+          // console.log('LanguageService: Loaded translations:', translations);
         },
         error: (error) => {
-          console.error('Error al cambiar de idioma:', error);
+          console.error(`LanguageService: Error changing language to ${lang}:`, error);
         }
       });
     } else {
-      console.warn(`Language '${lang}' is not supported.`);
+      console.warn(`LanguageService: Language '${lang}' is not supported.`);
     }
-  }
-
-  private forceViewUpdate(): void {
-    // Opción para forzar actualización de traducciones
-    // Simplemente reasignar el mismo idioma puede forzar un refresh en algunos casos
-    setTimeout(() => {
-      // Forzar actualización visual de traducciones existentes
-      console.log('Forzando actualización visual de traducciones');
-    }, 100);
   }
 }

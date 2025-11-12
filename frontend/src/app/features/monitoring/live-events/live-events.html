@@ -2,16 +2,16 @@
   <!-- Barra de Filtros -->
   <div class="filter-bar">
     <button (click)="setFilter('ALL')" [class.active]="selectedFilter() === 'ALL'">
-      Todos
+      {{ 'LIVE_EVENTS.FILTER_ALL' | translate }}
     </button>
     <button (click)="setFilter(FatigueLevel.ALTO)" [class.active]="selectedFilter() === FatigueLevel.ALTO">
-      Nivel Alto
+      {{ 'LIVE_EVENTS.FILTER_HIGH' | translate }}
     </button>
     <button (click)="setFilter(FatigueLevel.MEDIO)" [class.active]="selectedFilter() === FatigueLevel.MEDIO">
-      Nivel Medio
+      {{ 'LIVE_EVENTS.FILTER_MEDIUM' | translate }}
     </button>
     <button (click)="setFilter(FatigueLevel.BAJO)" [class.active]="selectedFilter() === FatigueLevel.BAJO">
-      Nivel Bajo
+      {{ 'LIVE_EVENTS.FILTER_LOW' | translate }}
     </button>
   </div>
 
@@ -23,7 +23,7 @@
     </div>
     <!-- Sección de Feed de Eventos -->
     <div class="events-feed">
-      <h3 class="feed-title">Feed de Eventos en Vivo</h3>
+      <h3 class="feed-title">{{ 'LIVE_EVENTS.FEED_TITLE' | translate }}</h3>
       <div class="event-list">
         @for (event of filteredEvents(); track event.id) {
         <div
@@ -35,14 +35,14 @@
             <span>{{ event.timestamp | timeAgo }}</span>
           </div>
           <div class="event-body">
-            <p><strong>Conductor:</strong> {{ event.driver?.nombre || 'Cargando...' }}</p>
-            <p><strong>Vehículo:</strong> {{ event.vehicleId }}</p>
-            <p><strong>Tipo:</strong> {{ event.fatigueType }}</p>
+            <p><strong>{{ 'LIVE_EVENTS.CARD_DRIVER' | translate }}:</strong> {{ event.driver?.nombre || ('LIVE_EVENTS.CARD_LOADING' | translate) }}</p>
+            <p><strong>{{ 'LIVE_EVENTS.CARD_VEHICLE' | translate }}:</strong> {{ event.vehicleId }}</p>
+            <p><strong>{{ 'LIVE_EVENTS.CARD_TYPE' | translate }}:</strong> {{ event.fatigueType }}</p>
           </div>
         </div>
         } @empty {
         <div class="empty-feed">
-          <p>Esperando nuevos eventos...</p>
+          <p>{{ 'LIVE_EVENTS.EMPTY_FEED' | translate }}</p>
         </div>
         }
       </div>

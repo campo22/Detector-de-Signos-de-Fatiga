@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { ClipboardModule } from '@angular/cdk/clipboard'; // Import ClipboardModule
-import { MessageService } from 'primeng/api'; // Import MessageService
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MessageService } from 'primeng/api';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 type SortState = {
   column: string;
@@ -25,7 +26,8 @@ type SortState = {
     ButtonModule,
     TagModule,
     TooltipModule,
-    ClipboardModule, // Add ClipboardModule
+    ClipboardModule,
+    TranslateModule
   ],
   templateUrl: './drivers-table.html',
   styleUrl: './drivers-table.scss',
@@ -35,7 +37,8 @@ export class DriversTable {
   private driverService = inject(DriverService);
   private driverFilterService = inject(DriverFilterService);
   private router = inject(Router);
-  private messageService = inject(MessageService); // Inject MessageService
+  private messageService = inject(MessageService);
+  private translate = inject(TranslateService);
 
   public currentPage = signal(0);
   public sortState = signal<SortState>({
@@ -55,89 +58,77 @@ export class DriversTable {
   ));
 
   public driversPage = toSignal(
-    // Combina dos observables. La tubería se ejecutará si CUALQUIERA de los dos emite.
     merge(
-      toObservable(this.queryParams),      // 1. El observable que reacciona a los cambios en los params
-      this.driverFilterService.refreshTrigger$ // 2. El observable que reacciona al gatillo manual
+      toObservable(this.queryParams),
+      this.driverFilterService.refreshTrigger$
     ).pipe(
-      tap((trigger) => { // (Opcional) Para ver qué disparó el refresco en la consola
+      tap((trigger) => {
         if (typeof trigger === 'object') {
           console.log('Disparador de refresco: Cambio de QueryParams', trigger);
         } else {
           console.log('Disparador de refresco: Manual (triggerRefresh)');
         }
       }),
-      // switchMap ahora no necesita el valor emitido (que podría ser un objeto o 'void')
-      // En su lugar, simplemente obtiene el valor MÁS RECIENTE del computed signal 'queryParams'
       switchMap(() => {
-        const params = this.queryParams(); // <-- Obtiene el estado actual
+        const params = this.queryParams();
         console.log('DriversTable: Recargando datos con:', params);
         return this.driverService.getDrivers(
           params.filters,
           params.page,
-          10, // Tamaño de página
+          10,
           params.sort.column,
           params.sort.direction
         );
       }),
-      startWith(null), // Muestra 'Cargando...' al inicio
+      startWith(null),
       catchError(error => {
         console.error('Error al obtener los conductores:', error);
-        return [null]; // Maneja el error
+        return [null];
       })
     ),
-    { initialValue: null as Page<Driver> | null } // Estado inicial
+    { initialValue: null as Page<Driver> | null }
   );
 
-
-  // --- MÉTODOS DE PAGINACIÓN ---
-
-  // Cambia la página actual
   nextPage(): void {
     if (this.driversPage()?.last === false) {
       this.currentPage.update(page => page + 1);
     }
   }
-  // Cambia la página actual
+
   previousPage(): void {
     if (this.driversPage()?.first === false) {
       this.currentPage.update(page => page - 1);
     }
   }
 
-  // Cambia la columna y la dirección de ordenamiento
   changeSort(column: string): void {
     const currentSort = this.sortState();
-    let newDirection: 'asc' | 'desc' = 'asc'; // Por defecto ascendente para nombres
+    let newDirection: 'asc' | 'desc' = 'asc';
     if (currentSort.column === column) {
       newDirection = currentSort.direction === 'asc' ? 'desc' : 'asc';
     }
     this.sortState.set({ column, direction: newDirection });
-    this.currentPage.set(0); // Volver a página 1 al reordenar
+    this.currentPage.set(0);
   }
 
-  // --- MÉTODOS CRUD (se conectarán a botones en el HTML) ---
   onEditDriver(driver: Driver): void {
-    console.log('Editar conductor con ID:', driver.id);
     this.editDriver.emit(driver);
   }
 
   onDeleteDriver(driver: Driver): void {
-    console.log('Eliminar conductor:', driver.id);
     this.deleteDriver.emit(driver);
   }
 
   viewDriverDetails(driverId: string): void {
-    console.log('Ver detalles del conductor con ID:', driverId);
     this.router.navigate(['/monitoring', driverId]);
   }
 
   onIdCopied(id: string): void {
     this.messageService.add({
       severity: 'success',
-      summary: 'Copiado',
-      detail: `ID ${id.substring(0, 8)}... copiado al portapapeles.`,
-      life: 2000 // El mensaje desaparecerá después de 2 segundos
+      summary: this.translate.instant('DRIVERS.TABLE.ID_COPIED_SUMMARY'),
+      detail: this.translate.instant('DRIVERS.TABLE.ID_COPIED_DETAIL', { id: id.substring(0, 8) }),
+      life: 2000
     });
   }
 }

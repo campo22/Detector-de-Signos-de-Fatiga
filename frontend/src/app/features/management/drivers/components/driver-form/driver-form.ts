@@ -5,15 +5,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith, map } from 'rxjs/operators';
 
-// Importaciones PrimeNG (Asegúrate de tener los módulos correctos)
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DatePickerModule } from 'primeng/datepicker'; // Para fechaNacimiento
-import { SelectModule } from 'primeng/select';       // Para estado activo
+import { DatePickerModule } from 'primeng/datepicker';
+import { SelectModule } from 'primeng/select';
 
-// Modelos y Servicios
 import { Driver, DriverRequest } from '../../../../../core/models/driver.models';
 import { DriverService } from '../../../../shared/services/driver.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface StatusOption {
   label: string;
@@ -29,7 +28,8 @@ interface StatusOption {
     ButtonModule,
     InputTextModule,
     DatePickerModule,
-    SelectModule // Change SelectModule to DropdownModule
+    SelectModule,
+    TranslateModule
   ],
   templateUrl: './driver-form.html',
   styleUrl: './driver-form.scss',
@@ -38,158 +38,66 @@ interface StatusOption {
 export class DriverFormComponent {
   private fb = inject(FormBuilder);
   private driverService = inject(DriverService);
+  private translate = inject(TranslateService);
 
-  // --- Entradas como Signals ---
+  driverData = input<Driver | null>(null);
+  isEditMode = input<boolean>(false);
 
-  driverData = input<Driver | null>(null); // Datos del conductor para edición
+  @Output() save = new EventEmitter<Driver>();
+  @Output() cancel = new EventEmitter<void>();
 
-  isEditMode = input<boolean>(false);       // Flag para modo edición
-
-
-
-  // --- Salidas ---
-
-  @Output() save = new EventEmitter<Driver>();   // Emite el conductor guardado
-
-  @Output() cancel = new EventEmitter<void>(); // Emite al cancelar
-
-
-
-  // --- Estado Interno ---
-
-  isLoading = signal<boolean>(false);        // Estado de carga para el botón
-
-  errorMessage = signal<string | null>(null); // Mensaje de error
-
-
-
-  // Opciones para el <p-select> de estado
+  isLoading = signal<boolean>(false);
+  errorMessage = signal<string | null>(null);
 
   statusOptions: StatusOption[] = [
-
-    { label: 'Activo', value: true },
-
-    { label: 'Inactivo', value: false }
-
+    { label: this.translate.instant('DRIVERS.STATUS_ACTIVE'), value: true },
+    { label: this.translate.instant('DRIVERS.STATUS_INACTIVE'), value: false }
   ];
 
-
-
-  // --- FormGroup con validaciones ---
-
   driverForm: FormGroup = this.fb.group({
-
     nombre: ['', [Validators.required, Validators.minLength(3)]],
-
     licencia: ['', Validators.required],
-
     fechaNacimiento: [null as Date | null, Validators.required],
-
-    activo: [this.statusOptions[0], Validators.required] // Initialize with StatusOption object
-
+    activo: [this.statusOptions[0], Validators.required]
   });
 
-
-
-  // --- Señales para la reactividad del formulario ---
-
-  private formStatusSignal = toSignal(
-    // Obtiene el estado actual del formulario
-    this.driverForm.statusChanges.pipe(
-      startWith(this.driverForm.status)
-    )
-  );
-
-  private formPristineSignal = toSignal(this.driverForm.valueChanges.pipe(
-
-    startWith(this.driverForm.pristine), // Valor inicial
-
-    map(() => this.driverForm.pristine) // Mapear a la propiedad pristine actual
-
-  ));
-
-
+  private formStatusSignal = toSignal(this.driverForm.statusChanges.pipe(startWith(this.driverForm.status)));
+  private formPristineSignal = toSignal(this.driverForm.valueChanges.pipe(startWith(this.driverForm.pristine), map(() => this.driverForm.pristine)));
 
   isFormValid = computed(() => this.formStatusSignal() === 'VALID');
-
   isFormPristine = computed(() => this.formPristineSignal());
 
-
-
-  canSubmit = computed(() =>
-
-    this.isFormValid() && !this.isLoading() && !this.isFormPristine()
-
-  );
-
-
-
-  // Etiqueta dinámica del botón guardar
+  canSubmit = computed(() => this.isFormValid() && !this.isLoading() && !this.isFormPristine());
 
   submitButtonLabel = computed(() => {
-
-    if (this.isLoading()) { return 'Guardando...'; }
-
-    if (!this.isFormValid()) { return 'Complete campos requeridos'; }
-
-    if (this.isFormPristine() && this.isEditMode()) { return 'Sin cambios'; }
-
-    return this.isEditMode() ? 'Actualizar Conductor' : 'Crear Conductor';
-
+    if (this.isLoading()) { return this.translate.instant('DRIVERS.FORM.SAVING_BUTTON'); }
+    if (!this.isFormValid()) { return this.translate.instant('DRIVERS.FORM.COMPLETE_FIELDS_BUTTON'); }
+    if (this.isFormPristine() && this.isEditMode()) { return this.translate.instant('DRIVERS.FORM.NO_CHANGES_BUTTON'); }
+    return this.isEditMode() ? this.translate.instant('DRIVERS.FORM.UPDATE_BUTTON') : this.translate.instant('DRIVERS.FORM.CREATE_BUTTON');
   });
 
-
-
-
-
-  // --- Efecto para rellenar el formulario en modo edición ---
-
   constructor() {
-
     effect(() => {
-
-      const driver = this.driverData(); // Reacciona a cambios en la entrada driverData
-
-
-
-      if (driver) { // Modo Edición: Rellena el formulario
-
-        const fechaNac = driver.fechaNacimiento
-
-          ? new Date(driver.fechaNacimiento) // Convierte string/timestamp a Date para DatePicker
-
-          : null;
-
-
-
+      const driver = this.driverData();
+      if (driver) {
+        const fechaNac = driver.fechaNacimiento ? new Date(driver.fechaNacimiento) : null;
         this.driverForm.patchValue({
-
           nombre: driver.nombre,
-
           licencia: driver.licencia,
-
           fechaNacimiento: fechaNac,
-
-          activo: this.statusOptions.find(option => option.value === driver.activo) // Find the StatusOption object
-
-        }, { emitEvent: false }); // Evita disparar valueChanges innecesariamente
-
-        this.errorMessage.set(null); // Limpia errores previos
-
-        this.driverForm.markAsPristine(); // Marca el formulario como limpio
-
+          activo: this.statusOptions.find(option => option.value === driver.activo)
+        }, { emitEvent: false });
+        this.errorMessage.set(null);
+        this.driverForm.markAsPristine();
       } else {
         this.errorMessage.set(null);
-
       }
-
     });
   }
 
-  // --- Método público para resetear el formulario (llamado desde el padre) ---
   resetForm(): void {
     this.driverForm.reset({
-      activo: this.statusOptions[0] // Valor por defecto para 'activo' al resetear
+      activo: this.statusOptions[0]
     });
     this.driverForm.markAsPristine();
     this.driverForm.markAsUntouched();
@@ -197,25 +105,22 @@ export class DriverFormComponent {
     this.isLoading.set(false);
   }
 
-  // --- Método de Envío ---
   onSubmit(): void {
     if (this.driverForm.invalid) {
-      this.driverForm.markAllAsTouched();  // Marca todos los campos como tocados
+      this.driverForm.markAllAsTouched();
       return;
     }
 
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    const payload = this.buildDriverPayload(); // Construye el DTO para el backend
-    const currentDriver = this.driverData();  // Obtiene los datos actuales (para ID en edición)
+    const payload = this.buildDriverPayload();
+    const currentDriver = this.driverData();
 
-    // Determina si crear o actualizar basado en isEditMode y si hay un ID
     const operation$ = this.isEditMode() && currentDriver?.id
       ? this.driverService.updateDriver(currentDriver.id, payload)
       : this.driverService.createDriver(payload);
 
-    // Ejecuta la operación y maneja la respuesta
     operation$.subscribe({
       next: (savedDriver) => this.handleSuccess(savedDriver),
       error: (err) => this.handleError(err),
@@ -223,24 +128,18 @@ export class DriverFormComponent {
     });
   }
 
-  // --- Método Cancelar ---
   onCancel(): void {
-
     this.errorMessage.set(null);
-    this.cancel.emit(); // Notifica al padre que se canceló
+    this.cancel.emit();
   }
 
-  // --- Helper para Validación en HTML ---
   isInvalid(fieldName: string): boolean {
     const control = this.driverForm.get(fieldName);
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 
-  // --- Construcción del Payload para la API ---
   private buildDriverPayload(): DriverRequest {
-    const formValue = this.driverForm.getRawValue(); // Obtiene todos los valores, incluso deshabilitados
-
-    // Convierte Date a string YYYY-MM-DD (u otro formato que espere tu API)
+    const formValue = this.driverForm.getRawValue();
     const fechaNacimientoISO = formValue.fechaNacimiento instanceof Date
       ? formValue.fechaNacimiento.toISOString().split('T')[0]
       : null;
@@ -249,26 +148,20 @@ export class DriverFormComponent {
       nombre: formValue.nombre,
       licencia: formValue.licencia,
       fechaNacimiento: fechaNacimientoISO!,
-      activo: formValue.activo.value // Extract the boolean value
+      activo: formValue.activo.value
     };
   }
 
-  // --- Manejador de Éxito ---
   private handleSuccess(result: Driver): void {
-    console.log('✅ Operación exitosa:', result);
     this.save.emit(result);
   }
 
-  // --- Manejador de Error ---
   private handleError(error: any): void {
-    console.error('❌ Error al guardar conductor:', error);
-    // Extrae un mensaje de error más útil si es posible (depende de cómo tu API devuelve errores)
-    const apiErrorMessage = error?.error?.message || error?.message || 'Ocurrió un error desconocido.';
-    this.errorMessage.set(`Error al guardar: ${apiErrorMessage}. Intenta de nuevo.`);
+    const apiErrorMessage = error?.error?.message || error?.message || this.translate.instant('DRIVERS.FORM.UNKNOWN_ERROR');
+    this.errorMessage.set(this.translate.instant('DRIVERS.FORM.SAVE_ERROR', { error: apiErrorMessage }));
     this.isLoading.set(false);
   }
 
-  // Función de comparación para p-dropdown
   compareStatusOptions(option1: StatusOption, option2: StatusOption): boolean {
     return option1 && option2 ? option1.value === option2.value : option1 === option2;
   }

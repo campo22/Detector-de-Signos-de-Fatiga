@@ -24,6 +24,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 type SortColumn = 'name' | 'email' | 'rol' | 'activo';
 
@@ -40,6 +41,7 @@ type SortColumn = 'name' | 'email' | 'rol' | 'activo';
     UserFiltersComponent,
     UserTableComponent,
     UserFormComponent,
+    TranslateModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './users.html',
@@ -50,7 +52,8 @@ export class UsersComponent {
   public userFilterService = inject(UserFilterService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
-  private router = inject(Router); // Inject Router
+  private router = inject(Router);
+  private translate = inject(TranslateService);
 
   // State Signals
   usersPage = signal<Page<User> | null>(null);
@@ -64,11 +67,19 @@ export class UsersComponent {
     return typeof selected === 'object' ? selected : null;
   });
 
+  dialogHeader = computed(() => {
+    const key = this.isEditMode() ? 'USERS.EDIT_USER_HEADER' : 'USERS.ADD_USER_HEADER';
+    return this.translate.instant(key);
+  });
 
+  dialogSubheader = computed(() => {
+    const key = this.isEditMode() ? 'USERS.EDIT_USER_SUBHEADER' : 'USERS.ADD_USER_SUBHEADER';
+    return this.translate.instant(key);
+  });
 
   private filters$ = toObservable(this.userFilterService.filters$);
   private refresh$ = this.userFilterService.refreshTrigger$;
-  private refreshSignal = toSignal(this.userFilterService.refreshTrigger$); // Convert Observable to Signal
+  private refreshSignal = toSignal(this.userFilterService.refreshTrigger$);
   private navigationEnd = toSignal(
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
   );
@@ -79,21 +90,16 @@ export class UsersComponent {
 
   constructor() {
     effect(() => {
-      // Register dependencies as signals
-      this.navigationEnd(); // Signal
-      this.userFilterService.filters$(); // Signal
-      this.refreshSignal(); // Signal
+      this.navigationEnd();
+      this.userFilterService.filters$();
+      this.refreshSignal();
 
-      // Call the loading methods
       this.loadUsers(0, 10, { field: 'name', order: 1 });
       this.loadUserStats();
     });
   }
 
-
-
   private loadUserStats(): void {
-    // Total users
     this.userService
       .getUsers({}, 0, 1, { field: 'name', order: 1 })
       .pipe(take(1))
@@ -101,7 +107,6 @@ export class UsersComponent {
         this.totalUsers.set(page.totalElements);
       });
 
-    // Active users
     this.userService
       .getUsers({ activo: true }, 0, 1, { field: 'name', order: 1 })
       .pipe(take(1))
@@ -109,7 +114,6 @@ export class UsersComponent {
         this.activeUsers.set(page.totalElements);
       });
 
-    // Inactive users
     this.userService
       .getUsers({ activo: false }, 0, 1, { field: 'name', order: 1 })
       .pipe(take(1))
@@ -118,13 +122,12 @@ export class UsersComponent {
       });
   }
 
-
   loadUsers(
     page: number = 0,
     size: number = 10,
     sort: { field: SortColumn; order: number } = { field: 'name', order: 1 }
   ): void {
-    this.usersPage.set(null); // Set to null to show loading state
+    this.usersPage.set(null);
 
     const filters = this.userFilterService.filters$();
 
@@ -134,8 +137,8 @@ export class UsersComponent {
         catchError((err) => {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudieron cargar los usuarios.',
+            summary: this.translate.instant('USERS.ERROR_SUMMARY'),
+            detail: this.translate.instant('USERS.LOAD_ERROR_DETAIL'),
           });
           return of({
             content: [],
@@ -164,8 +167,6 @@ export class UsersComponent {
       });
   }
 
-
-
   openNew(): void {
     this.selectedUser.set('new');
   }
@@ -176,25 +177,25 @@ export class UsersComponent {
 
   deleteUser(user: User): void {
     this.confirmationService.confirm({
-      message: `¿Estás seguro de que quieres eliminar al usuario ${user.name}?`,
-      header: 'Confirmar Eliminación',
+      message: this.translate.instant('USERS.DELETE_CONFIRM_MESSAGE', { name: user.name }),
+      header: this.translate.instant('USERS.DELETE_CONFIRM_HEADER'),
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.userService.deleteUser(user.id).subscribe({
           next: () => {
             this.messageService.add({
               severity: 'success',
-              summary: 'Éxito',
-              detail: 'Usuario eliminado correctamente.',
+              summary: this.translate.instant('USERS.SUCCESS_SUMMARY'),
+              detail: this.translate.instant('USERS.DELETE_SUCCESS_DETAIL'),
             });
             this.userFilterService.triggerRefresh();
-            this.loadUserStats(); // Update stats
+            this.loadUserStats();
           },
           error: () => {
             this.messageService.add({
               severity: 'error',
-              summary: 'Error',
-              detail: 'No se pudo eliminar el usuario.',
+              summary: this.translate.instant('USERS.ERROR_SUMMARY'),
+              detail: this.translate.instant('USERS.DELETE_ERROR_DETAIL'),
             });
           },
         });
@@ -207,15 +208,15 @@ export class UsersComponent {
   }
 
   handleSave(): void {
-    const summary = this.isEditMode() ? 'Usuario Actualizado' : 'Usuario Creado';
+    const detailKey = this.isEditMode() ? 'USERS.SUCCESS_UPDATE_DETAIL' : 'USERS.SUCCESS_CREATE_DETAIL';
     this.messageService.add({
       severity: 'success',
-      summary: 'Éxito',
-      detail: `${summary} correctamente.`,
+      summary: this.translate.instant('USERS.SUCCESS_SUMMARY'),
+      detail: this.translate.instant(detailKey),
     });
     this.selectedUser.set(null);
     this.userFilterService.triggerRefresh();
-    this.loadUserStats(); // Update stats
+    this.loadUserStats();
   }
 
   handleCancel(): void {
