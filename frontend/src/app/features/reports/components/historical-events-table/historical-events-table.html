@@ -1,0 +1,148 @@
+<div class="bg-card rounded-lg border border-border flex flex-col h-full shadow-lg overflow-hidden">
+  <div
+    class="p-6 border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  >
+    <div>
+      <h3 class="font-bold text-xl text-foreground">Historial Detallado de Eventos</h3>
+      <p class="text-sm text-muted-foreground mt-1">
+        Eventos registrados según los filtros aplicados.
+      </p>
+    </div>
+    <div class="flex items-center space-x-3 flex-shrink-0">
+      <button
+        (click)="exportExcel()"
+        title="Exportar a Excel"
+        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-700 hover:bg-green-800 text-white text-sm font-medium transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+        [disabled]="(eventsPage()?.content?.length || 0) === 0"
+      >
+        <span class="material-symbols-outlined text-base">grid_on</span>
+        Excel
+      </button>
+      <button
+        (click)="exportPdf()"
+        title="Exportar a PDF"
+        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+        [disabled]="(eventsPage()?.content?.length || 0) === 0"
+      >
+        <span class="material-symbols-outlined text-base">picture_as_pdf</span>
+        PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto flex-1">
+    <table class="w-full min-w-[800px] text-left">
+      <thead class="bg-secondary/30 backdrop-blur-sm sticky top-0 z-10">
+        <tr class="border-b border-border">
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
+            (click)="changeSort('timestamp')"
+          >
+            Fecha y Hora @if(sortState().column === 'timestamp'){
+            <span class="material-symbols-outlined text-xs align-middle ml-1">
+              {{ sortState().direction === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+            </span>
+            }
+          </th>
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
+            (click)="changeSort('fatigueType')"
+          >
+            Tipo de Evento @if(sortState().column === 'fatigueType'){
+            <span class="material-symbols-outlined text-xs align-middle ml-1">
+              {{ sortState().direction === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+            </span>
+            }
+          </th>
+          <th
+            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center cursor-pointer hover:text-primary transition-colors"
+            (click)="changeSort('fatigueLevel')"
+          >
+            Nivel @if(sortState().column === 'fatigueLevel'){
+            <span class="material-symbols-outlined text-xs align-middle ml-1">
+              {{ sortState().direction === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+            </span>
+            }
+          </th>
+          <th class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider">
+            Conductor
+          </th>
+          <th class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider">
+            Vehículo
+          </th>
+        </tr>
+      </thead>
+
+      @if (eventsPage(); as page) {
+      <tbody class="divide-y divide-border">
+        @for (event of page.content; track event.id) {
+        <tr class="hover:bg-muted/30 transition-colors duration-150 data-table-row">
+          <td class="p-4 text-foreground whitespace-nowrap">
+            {{ event.timestamp | date : 'dd/MM/yyyy h:mm:ss a' }}
+          </td>
+          <td class="p-4 text-muted-foreground">{{ event.fatigueType | titlecase }}</td>
+          <td class="p-4 text-center">
+            <span
+              class="px-3 py-1 text-xs rounded-full font-semibold border"
+              [ngClass]="{
+                'bg-destructive/20 text-destructive border-destructive/50':
+                  event.fatigueLevel === FatigueLevel.ALTO,
+                'bg-warning/20 text-warning border-warning/50':
+                  event.fatigueLevel === FatigueLevel.MEDIO,
+                'bg-success/20 text-success border-success/50':
+                  event.fatigueLevel === FatigueLevel.BAJO
+              }"
+            >
+              {{ event.fatigueLevel | titlecase }}
+            </span>
+          </td>
+          <td class="p-4 text-muted-foreground">{{ event.driverName || 'N/A' }}</td>
+          <td class="p-4 text-muted-foreground">{{ event.vehicleIdentifier || 'N/A' }}</td>
+        </tr>
+        }
+      </tbody>
+      }
+    </table>
+
+    @if (!eventsPage()?.content?.length && eventsPage() !== null) {
+    <div class="text-center text-muted-foreground p-10">
+      <span class="material-symbols-outlined text-4xl mb-2">search_off</span>
+      <p>No se encontraron eventos para los filtros seleccionados.</p>
+    </div>
+    }
+  </div>
+
+  @if (eventsPage(); as page) {
+  <div
+    class="p-4 mt-auto border-t border-border flex flex-col sm:flex-row justify-between items-center gap-3"
+  >
+    <span class="text-sm text-muted-foreground">
+      Mostrando {{ page.numberOfElements }} de {{ page.totalElements }} resultados
+    </span>
+    <div class="flex items-center space-x-2">
+      <span class="text-sm text-muted-foreground hidden sm:inline"
+        >Página {{ page.number + 1 }} de {{ page.totalPages }}</span
+      >
+      <button
+        (click)="previousPage()"
+        [disabled]="page.first"
+        class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+      >
+        <span class="material-symbols-outlined text-base">chevron_left</span> Anterior
+      </button>
+      <button
+        (click)="nextPage()"
+        [disabled]="page.last"
+        class="px-3 py-1 rounded-md bg-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+      >
+        Siguiente <span class="material-symbols-outlined text-base">chevron_right</span>
+      </button>
+    </div>
+  </div>
+  } @else {
+  <div class="flex-1 flex items-center justify-center text-muted-foreground p-10">
+    <span class="material-symbols-outlined text-4xl animate-spin mr-2">progress_activity</span>
+    Cargando eventos...
+  </div>
+  }
+</div>
