@@ -35,6 +35,36 @@
     --ring: 217 91% 60%;
     --radius: 0.75rem;
   }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 217 91% 60%;
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 32% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --destructive-glow: 0 71% 50%;
+    --warning: 40 84% 47%;
+    --warning-foreground: 210 40% 98%;
+    --warning-glow: 40 84% 47%;
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+    --success-glow: 142 76% 36%;
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 217 91% 60%;
+  }
 }
 
 /* Estilo base para el body, aplicando la fuente y el color de fondo a TODA la app */

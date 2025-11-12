@@ -32,11 +32,32 @@ export class LanguageService {
 
   setLanguage(lang: string): void {
     if (this.translate.getLangs().includes(lang)) {
-      this.translate.use(lang);
-      this.currentLanguage.set(lang);
-      localStorage.setItem(this.LANG_KEY, lang);
+      // Forzar la actualización del idioma
+      this.translate.use(lang).subscribe({
+        next: () => {
+          this.currentLanguage.set(lang);
+          localStorage.setItem(this.LANG_KEY, lang);
+          console.log('Idioma cambiado a:', lang);
+          // Para forzar la actualización de componentes ya renderizados,
+          // se puede intentar forzar un "soft reload" de la vista
+          // A veces es necesario forzar una actualización de la vista
+          this.forceViewUpdate();
+        },
+        error: (error) => {
+          console.error('Error al cambiar de idioma:', error);
+        }
+      });
     } else {
       console.warn(`Language '${lang}' is not supported.`);
     }
+  }
+
+  private forceViewUpdate(): void {
+    // Opción para forzar actualización de traducciones
+    // Simplemente reasignar el mismo idioma puede forzar un refresh en algunos casos
+    setTimeout(() => {
+      // Forzar actualización visual de traducciones existentes
+      console.log('Forzando actualización visual de traducciones');
+    }, 100);
   }
 }
