@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  width: 350px; /* Ancho del modal */
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+}
+
+.quick-settings-container {
+  display: flex;
+  flex-direction: column;
+}

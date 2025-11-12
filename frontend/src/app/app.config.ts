@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DialogService } from 'primeng/dynamicdialog';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -39,6 +40,7 @@ export const appConfig: ApplicationConfig = {
           deps: [HttpClient]
         }
       })
-    )
+    ),
+    DialogService
   ]
 };

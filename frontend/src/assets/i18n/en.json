@@ -41,7 +41,8 @@
     "NOTIFICATIONS_SUBTITLE": "Manage your notification preferences.",
     "NOTIFICATIONS_CONTENT": "Here you can configure your notifications.",
     "RULES_SUBTITLE": "Manage application rules and policies.",
-    "RULES_CONTENT": "Here you can configure the rules."
+    "RULES_CONTENT": "Here you can configure the rules.",
+    "ADVANCED_SETTINGS": "View advanced settings"
   },
   "DASHBOARD": {
     "ALERT_DISTRIBUTION": "Alert Distribution",
