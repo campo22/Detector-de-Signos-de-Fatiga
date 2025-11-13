@@ -3,10 +3,6 @@
     <button (click)="toggleSidebar()" class="p-2 rounded-full hover:bg-muted lg:hidden">
       <span class="material-symbols-outlined text-foreground">menu</span>
     </button>
-    <div>
-      <h2 class="text-lg sm:text-xl font-bold text-foreground">{{ 'HEADER.MAIN_DASHBOARD' | translate }}</h2>
-      <p class="text-xs text-muted-foreground hidden sm:block">{{ 'HEADER.WELCOME_ADMIN' | translate }}</p>
-    </div>
   </div>
 
   <div class="flex items-center space-x-2">
@@ -17,16 +13,12 @@
       ></span>
     </button>
 
-    <button (click)="showQuickSettings()" class="p-2 rounded-full hover:bg-muted relative transition-colors">
-      <span class="material-symbols-outlined text-foreground">settings</span>
-    </button>
-
-    <div class="flex items-center space-x-2">
+    <div class="flex items-center space-x-2" *ngIf="userProfile()">
       <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-blue-400"></div>
       <div>
-        <p class="font-semibold text-foreground text-sm hidden sm:block">{{ 'HEADER.FLEET_ADMIN' | translate }}</p>
-        <p class="font-semibold text-foreground text-sm sm:hidden">{{ 'HEADER.ADMIN' | translate }}</p>
-        <p class="text-xs text-muted-foreground hidden sm:block">admin@safetrack.com</p>
+        <p class="font-semibold text-foreground text-sm hidden sm:block">{{ userProfile()!.name }}</p>
+        <p class="font-semibold text-foreground text-sm sm:hidden">{{ userProfile()!.role | translate }}</p>
+        <p class="text-xs text-muted-foreground hidden sm:block">{{ userProfile()!.email }}</p>
       </div>
     </div>
   </div>

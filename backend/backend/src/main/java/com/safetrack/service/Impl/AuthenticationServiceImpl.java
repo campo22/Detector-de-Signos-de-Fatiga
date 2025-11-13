@@ -1,11 +1,14 @@
 package com.safetrack.service.Impl;
 
+import com.safetrack.domain.dto.request.ChangeOwnPasswordRequest;
 import com.safetrack.domain.dto.request.LoginRequest;
 import com.safetrack.domain.dto.request.RegisterRequest;
 import com.safetrack.domain.dto.response.AuthResponse;
 import com.safetrack.domain.dto.result.AuthResult;
 import com.safetrack.domain.entity.User;
 import com.safetrack.exception.DuplicateResourceException;
+import com.safetrack.exception.InvalidCredentialsException;
+import com.safetrack.exception.ResourceNotFoundException;
 import com.safetrack.exception.TokenRefreshException;
 import com.safetrack.repository.UserRepository;
 import com.safetrack.security.JwtUtils;
@@ -137,5 +140,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         log.info("Tokens refrescados exitosamente para el usuario: {}", userEmail);
         return new AuthResult(response, newRefreshToken);
+    }
+
+    @Override
+    @Transactional
+    public void changeOwnPassword(ChangeOwnPasswordRequest request, String userEmail) {
+        log.info("Iniciando cambio de contraseña para el usuario: {}", userEmail);
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
+
+        // 1. Verificar que la contraseña antigua es correcta
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("La contraseña actual es incorrecta.");
+        }
+
+        // 2. Codificar y guardar la nueva contraseña
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setUpdatedAt(Instant.now());
+
+        userRepository.save(user);
+        log.info("Contraseña actualizada exitosamente para el usuario: {}", userEmail);
     }
 }

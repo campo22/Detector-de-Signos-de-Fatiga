@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { QuickSettingsComponent } from './components/quick-settings/quick-settings.component';
+import { AuthService } from '../../features/auth/services/auth.service';
+import { UserProfile } from '../../core/models/auth.models';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +18,9 @@ export class Header {
 
   private sidebarService = inject(SidebarService);
   private dialogService = inject(DialogService);
+  private authService = inject(AuthService);
+
+  public userProfile = this.authService.userProfile;
 
   toggleSidebar(): void {
     this.sidebarService.toggleSidebar();

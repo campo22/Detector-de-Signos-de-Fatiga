@@ -65,7 +65,7 @@ export class UserFiltersComponent implements OnInit {
       .map(key => {
         const roleEnum = Role[key as keyof typeof Role];
         return {
-          label: this.translate.instant(`USERS.ROLES.${key}`),
+          label: `USERS.ROLES.${key}`,
           value: roleEnum
         };
       });

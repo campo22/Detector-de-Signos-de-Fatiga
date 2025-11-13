@@ -46,6 +46,6 @@ export interface UserFilterRequest {
  * Representa la estructura para cambiar la contraseña de un usuario.
  */
 export interface ChangePasswordRequest {
-  currentPassword?: string;
+  oldPassword?: string;
   newPassword?: string;
 }

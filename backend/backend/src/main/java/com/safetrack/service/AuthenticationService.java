@@ -1,5 +1,6 @@
 package com.safetrack.service;
 
+import com.safetrack.domain.dto.request.ChangeOwnPasswordRequest;
 import com.safetrack.domain.dto.request.LoginRequest;
 import com.safetrack.domain.dto.request.RegisterRequest;
 import com.safetrack.domain.dto.result.AuthResult;
@@ -26,4 +27,11 @@ public interface AuthenticationService {
      * @return Un AuthResult con un nuevo par de tokens.
      */
     AuthResult refresh(HttpServletRequest request);
+
+    /**
+     * Permite al usuario autenticado cambiar su propia contraseña.
+     * @param request DTO con la contraseña actual y la nueva.
+     * @param userEmail El email del usuario autenticado.
+     */
+    void changeOwnPassword(ChangeOwnPasswordRequest request, String userEmail);
 }

@@ -2,6 +2,8 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { UserService } from '../../features/shared/services/user.service';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
@@ -16,8 +18,10 @@ import { Router } from '@angular/router';
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
-    TranslateModule
+    TranslateModule,
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './settings.html',
   styleUrls: ['./settings.scss']
 })
@@ -29,6 +33,7 @@ export class Settings implements OnInit {
   private languageService = inject(LanguageService);
   private translate = inject(TranslateService);
   private router = inject(Router);
+  private messageService = inject(MessageService);
 
   passwordForm: FormGroup;
   generalForm: FormGroup;
@@ -41,7 +46,7 @@ export class Settings implements OnInit {
 
   constructor() {
     this.passwordForm = this.fb.group({
-      currentPassword: ['', Validators.required],
+      oldPassword: ['', [Validators.required, Validators.minLength(8)]],
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required]
     }, {
@@ -100,26 +105,20 @@ export class Settings implements OnInit {
 
   savePassword() {
     if (this.passwordForm.valid) {
-      const userId = this.authService.getUserId();
-      if (!userId) {
-        alert(this.translate.instant('SETTINGS.USER_ID_ERROR') || 'Error: No se pudo obtener el ID del usuario');
-        return;
-      }
+      const { oldPassword, newPassword } = this.passwordForm.value;
 
-      const { currentPassword, newPassword } = this.passwordForm.value;
-
-      this.userService.changePassword(userId, { currentPassword, newPassword }).subscribe({
+      this.userService.changePassword({ oldPassword, newPassword }).subscribe({
         next: (response) => {
-          alert(this.translate.instant('SETTINGS.PASSWORD_UPDATED_SUCCESS') || 'Contraseña actualizada con éxito');
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: this.translate.instant('SETTINGS.PASSWORD_UPDATED_SUCCESS') });
           this.passwordForm.reset();
         },
         error: (err) => {
           console.error('Error al cambiar la contraseña:', err);
-          alert(this.translate.instant('SETTINGS.PASSWORD_UPDATE_ERROR') || 'Error al cambiar la contraseña. Por favor, inténtelo de nuevo.');
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.translate.instant('SETTINGS.PASSWORD_UPDATE_ERROR') });
         }
       });
     } else {
-      alert('Por favor, complete todos los campos correctamente.');
+      this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Por favor, complete todos los campos correctamente.' });
     }
   }
 

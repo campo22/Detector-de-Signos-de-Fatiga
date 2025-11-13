@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AuthService } from './features/auth/services/auth.service';
 import { WebSocketService } from './features/auth/services/web-socket.service';
 import { LanguageService } from './core/services/language.service';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class App {
   private authService = inject(AuthService);
   private webSocketService = inject(WebSocketService);
   private languageService = inject(LanguageService);
+  private themeService = inject(ThemeService);
 
   constructor() {
 

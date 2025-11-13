@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { AuthResponse, LoginRequest, Role } from '../../../core/models/auth.models';
+import { AuthResponse, LoginRequest, Role, UserProfile } from '../../../core/models/auth.models';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
@@ -20,6 +20,9 @@ export class AuthService {
   public isAuthenticated = signal<boolean>(false);
   private isRefreshing = signal<boolean>(false);
   private currentUserId = signal<string | null>(null);
+  private currentUserProfile = signal<UserProfile | null>(null);
+
+  public readonly userProfile = this.currentUserProfile.asReadonly();
 
   constructor() {
     this.loadAuthDataFromStorage();
@@ -97,41 +100,53 @@ export class AuthService {
 
     try {
       const decodedToken: any = jwtDecode(response.accessToken);
-      this.currentUserId.set(decodedToken.sub || decodedToken.userId || null); // Asume 'sub' o 'userId' en el payload
+      this.currentUserId.set(decodedToken.sub || decodedToken.userId || null);
+
+      const userProfile: UserProfile = {
+        name: decodedToken.name || response.username, // Fallback to username from response
+        email: decodedToken.sub,
+        role: response.rol
+      };
+      this.currentUserProfile.set(userProfile);
+
+      // Guardar en localStorage
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('userRole', response.rol);
+      if (this.currentUserId()) {
+        localStorage.setItem('userId', this.currentUserId()!);
+      }
+      localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
     } catch (error) {
       console.error('Error decoding token:', error);
-      this.currentUserId.set(null);
-    }
-
-    // Guardar en localStorage
-    localStorage.setItem('accessToken', response.accessToken);
-    localStorage.setItem('userRole', response.rol);
-    if (this.currentUserId()) {
-      localStorage.setItem('userId', this.currentUserId()!);
+      this.clearAuthData();
     }
   }
 
   private clearAuthData(): void {
     this.accessToken.set(null);
     this.currentUserRole.set(null);
-    this.currentUserId.set(null); // Limpiar también el ID del usuario
+    this.currentUserId.set(null);
+    this.currentUserProfile.set(null);
     this.isAuthenticated.set(false);
 
     // Limpiar localStorage
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userRole');
-    localStorage.removeItem('userId'); // Limpiar también el ID del usuario
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userProfile');
   }
 
   private loadAuthDataFromStorage(): void {
     const token = localStorage.getItem('accessToken');
-    const role = localStorage.getItem('userRole');
-    const userId = localStorage.getItem('userId'); // Cargar el ID del usuario
+    const profileString = localStorage.getItem('userProfile');
 
-    if (token && role && userId && !this.isTokenExpired(token)) {
+    if (token && profileString && !this.isTokenExpired(token)) {
+      const profile: UserProfile = JSON.parse(profileString);
       this.accessToken.set(token);
-      this.currentUserRole.set(role as Role);
-      this.currentUserId.set(userId); // Establecer el ID del usuario
+      this.currentUserRole.set(profile.role);
+      this.currentUserProfile.set(profile);
+      this.currentUserId.set(profile.email); // Assuming email is the user id from sub
       this.isAuthenticated.set(true);
     } else {
       this.clearAuthData();

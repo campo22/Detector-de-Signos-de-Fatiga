@@ -1,5 +1,6 @@
 package com.safetrack.service.Impl;
 
+import com.safetrack.domain.dto.request.ChangePasswordRequest;
 import com.safetrack.domain.dto.request.UserFilterRequest;
 import com.safetrack.domain.dto.request.UserUpdateRequest;
 import com.safetrack.domain.dto.response.UserResponse;
@@ -15,11 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UserSpecification userSpecification;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -79,5 +83,19 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
         log.info("Usuario con ID: {} eliminado exitosamente", id);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(UUID id, ChangePasswordRequest request) {
+        log.info("Iniciando el cambio de contraseña para el usuario con ID: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID: " + id));
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setUpdatedAt(Instant.now());
+
+        userRepository.save(user);
+        log.info("Contraseña del usuario con ID: {} actualizada exitosamente", id);
     }
 }

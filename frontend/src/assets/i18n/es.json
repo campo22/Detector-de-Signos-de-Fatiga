@@ -335,9 +335,9 @@
     "STATUS_ACTIVE": "Activo",
     "STATUS_INACTIVE": "Inactivo",
     "ROLES": {
-      "ADMIN": "Administrador",
-      "SUPERVISOR": "Supervisor",
-      "OPERADOR": "Operador"
+      "ADMINISTRADOR": "Administrador",
+      "GESTOR": "Gestor",
+      "AUDITOR": "Auditor"
     },
     "FILTERS": {
       "NAME_LABEL": "Buscar por nombre...",

@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="fixed inset-0 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
   <div
     class="bg-card text-card-foreground w-full max-w-4xl min-h-[600px] rounded-lg shadow-2xl shadow-black/50 flex flex-col relative border border-white/10"
@@ -142,73 +143,71 @@
             </div>
 
             <div class="space-y-5">
-              <!-- Sección Cambiar Contraseña -->
-              <section
-                [formGroup]="passwordForm"
-                (ngSubmit)="savePassword()"
-                class="settings-section bg-card border border-border rounded-lg"
-              >
-                <div class="p-4 border-b border-border">
-                  <h3 class="text-lg font-semibold">{{ 'SETTINGS.CHANGE_PASSWORD' | translate }}</h3>
-                </div>
-                <div class="p-4 space-y-4 input-group">
-                  <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-2.5">
-                    <label class="font-medium text-muted-foreground text-sm">{{
-                      'SETTINGS.CURRENT_PASSWORD' | translate
-                    }}</label>
-                    <div class="md:col-span-2">
-                      <input
-                        class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary text-sm py-1.5"
-                        [placeholder]="'SETTINGS.CURRENT_PASSWORD' | translate"
-                        type="password"
-                        formControlName="currentPassword"
-                      />
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-2.5">
-                    <label class="font-medium text-muted-foreground text-sm">{{
-                      'SETTINGS.NEW_PASSWORD' | translate
-                    }}</label>
-                    <div class="md:col-span-2">
-                      <input
-                        class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary text-sm py-1.5"
-                        [placeholder]="'SETTINGS.NEW_PASSWORD' | translate"
-                        type="password"
-                        formControlName="newPassword"
-                      />
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-2.5">
-                    <label class="font-medium text-muted-foreground text-sm">{{
-                      'SETTINGS.CONFIRM_NEW_PASSWORD' | translate
-                    }}</label>
-                    <div class="md:col-span-2">
-                      <input
-                        class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary text-sm py-1.5"
-                        [placeholder]="'SETTINGS.CONFIRM_NEW_PASSWORD' | translate"
-                        type="password"
-                        formControlName="confirmPassword"
-                      />
-                      <div
-                        *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched"
-                        class="text-destructive text-xs mt-1"
-                      >
-                        {{ 'SETTINGS.PASSWORDS_DO_NOT_MATCH' | translate }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="p-4 bg-secondary/20 border-t border-border flex justify-end rounded-b-lg">
-                  <button
-                    class="px-4 py-1.5 bg-primary text-primary-foreground font-medium rounded-md hover:opacity-90 transition-opacity text-sm"
-                    type="submit"
-                    [disabled]="!passwordForm.valid"
-                  >
-                    {{ 'SETTINGS.SAVE_CHANGES' | translate }}
-                  </button>
-                </div>
-              </section>
-            </div>
+                            <!-- Sección Cambiar Contraseña -->
+                            <form [formGroup]="passwordForm" (ngSubmit)="savePassword()">
+                              <section
+                                class="settings-section bg-card border border-border rounded-lg"
+                              >
+                                <div class="p-4 border-b border-border">
+                                  <h3 class="text-lg font-semibold">{{ 'SETTINGS.CHANGE_PASSWORD' | translate }}</h3>
+                                </div>
+                                <div class="p-4 space-y-4 input-group">
+                                  <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-2.5">
+                                    <label class="font-medium text-muted-foreground text-sm">{{
+                                      'SETTINGS.CURRENT_PASSWORD' | translate
+                                    }}</label>
+                                    <div class="md:col-span-2">
+                                                            <input
+                                                              class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary text-sm py-1.5"
+                                                              [placeholder]="'SETTINGS.CURRENT_PASSWORD' | translate"
+                                                              type="password"
+                                                              formControlName="oldPassword"
+                                                            />                                    </div>
+                                  </div>
+                                  <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-2.5">
+                                    <label class="font-medium text-muted-foreground text-sm">{{
+                                      'SETTINGS.NEW_PASSWORD' | translate
+                                    }}</label>
+                                    <div class="md:col-span-2">
+                                      <input
+                                        class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary text-sm py-1.5"
+                                        [placeholder]="'SETTINGS.NEW_PASSWORD' | translate"
+                                        type="password"
+                                        formControlName="newPassword"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-2.5">
+                                    <label class="font-medium text-muted-foreground text-sm">{{
+                                      'SETTINGS.CONFIRM_NEW_PASSWORD' | translate
+                                    }}</label>
+                                    <div class="md:col-span-2">
+                                      <input
+                                        class="form-input w-full bg-input border-border rounded-md focus:ring-primary focus:border-primary text-sm py-1.5"
+                                        [placeholder]="'SETTINGS.CONFIRM_NEW_PASSWORD' | translate"
+                                        type="password"
+                                        formControlName="confirmPassword"
+                                      />
+                                      <div
+                                        *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched"
+                                        class="text-destructive text-xs mt-1"
+                                      >
+                                        {{ 'SETTINGS.PASSWORDS_DO_NOT_MATCH' | translate }}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="p-4 bg-secondary/20 border-t border-border flex justify-end rounded-b-lg">
+                                  <button
+                                    class="px-4 py-1.5 bg-primary text-primary-foreground font-medium rounded-md hover:opacity-90 transition-opacity text-sm"
+                                    type="submit"
+                                    [disabled]="!passwordForm.valid"
+                                  >
+                                    {{ 'SETTINGS.SAVE_CHANGES' | translate }}
+                                  </button>
+                                </div>
+                              </section>
+                            </form>            </div>
           </div>
 
           <!-- Sección Notificaciones (Placeholder) -->

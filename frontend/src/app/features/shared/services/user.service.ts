@@ -56,7 +56,7 @@ export class UserService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  changePassword(id: string, request: ChangePasswordRequest): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/change-password`, request);
+  changePassword(request: ChangePasswordRequest): Observable<void> {
+    return this.http.put<void>(`${this.authUrl}/change-password`, request);
   }
 }

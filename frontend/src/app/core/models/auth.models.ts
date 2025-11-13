@@ -18,3 +18,12 @@ export interface AuthResponse {
   username: string;
   rol: Role;
 }
+
+/**
+ * Representa el perfil básico de un usuario autenticado.
+ */
+export interface UserProfile {
+  name: string;
+  email: string;
+  role: Role;
+}

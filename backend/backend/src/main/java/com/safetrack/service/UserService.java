@@ -1,5 +1,6 @@
 package com.safetrack.service;
 
+import com.safetrack.domain.dto.request.ChangePasswordRequest;
 import com.safetrack.domain.dto.request.UserFilterRequest;
 import com.safetrack.domain.dto.request.UserUpdateRequest;
 import com.safetrack.domain.dto.response.UserResponse;
@@ -38,4 +39,11 @@ public interface UserService {
      * @param id El UUID del usuario a eliminar.
      */
     void deleteUser(UUID id);
+
+    /**
+     * Cambia la contraseña de un usuario.
+     * @param id El UUID del usuario.
+     * @param request DTO con la nueva contraseña.
+     */
+    void changePassword(UUID id, ChangePasswordRequest request);
 }
