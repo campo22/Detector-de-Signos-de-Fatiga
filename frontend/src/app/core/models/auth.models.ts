@@ -23,7 +23,9 @@ export interface AuthResponse {
  * Representa el perfil básico de un usuario autenticado.
  */
 export interface UserProfile {
+  id?: string; // Made id optional
   name: string;
   email: string;
   role: Role;
+  activo?: boolean; // Made activo optional
 }

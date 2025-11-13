@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, tap, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthResponse, LoginRequest, Role, UserProfile } from '../../../core/models/auth.models';
 import { jwtDecode } from 'jwt-decode';
+import { UserService } from '../../shared/services/user.service'; // Added import
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
   private http = inject(HttpClient);
   private router = inject(Router);
+  private userService = inject(UserService); // Injected UserService
 
 
   private accessToken = signal<string | null>(null);
@@ -32,7 +34,12 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(response => this.setAuthData(response)) // Pasamos la respuesta completa
+      tap(response => this.setAuthData(response)),
+      switchMap(response => 
+        this.fetchAndSetUserProfile().pipe(
+          map(() => response) // Return the original response
+        )
+      )
     );
   }
 
@@ -51,7 +58,12 @@ export class AuthService {
           this.clearAuthData();
         }
       }),
-      map(response => response.ok && !!response.body),
+      switchMap(response => {
+        if (response.ok) {
+          return this.fetchAndSetUserProfile().pipe(map(() => true));
+        }
+        return of(false);
+      }),
       catchError(() => {
         this.clearAuthData();
         return of(false);
@@ -92,6 +104,19 @@ export class AuthService {
 
   // --- MÉTODOS PRIVADOS ---
 
+  private fetchAndSetUserProfile(): Observable<UserProfile> {
+    return this.userService.getCurrentUserProfile().pipe(
+      tap(profile => {
+        this.currentUserProfile.set(profile);
+        localStorage.setItem('userProfile', JSON.stringify(profile));
+      }),
+      catchError(error => {
+        console.error('Error fetching user profile:', error);
+        // If fetching profile fails, we still have the basic info from the token
+        return of(this.currentUserProfile()!);
+      })
+    );
+  }
 
   private setAuthData(response: AuthResponse): void {
     this.accessToken.set(response.accessToken);
@@ -141,13 +166,17 @@ export class AuthService {
     const token = localStorage.getItem('accessToken');
     const profileString = localStorage.getItem('userProfile');
 
-    if (token && profileString && !this.isTokenExpired(token)) {
-      const profile: UserProfile = JSON.parse(profileString);
+    if (token && !this.isTokenExpired(token)) {
       this.accessToken.set(token);
-      this.currentUserRole.set(profile.role);
-      this.currentUserProfile.set(profile);
-      this.currentUserId.set(profile.email); // Assuming email is the user id from sub
       this.isAuthenticated.set(true);
+      if (profileString) {
+        const profile: UserProfile = JSON.parse(profileString);
+        this.currentUserProfile.set(profile);
+        this.currentUserRole.set(profile.role);
+        this.currentUserId.set(profile.email); // Assuming email is the user id from sub
+      }
+      // Always fetch fresh profile on load
+      this.fetchAndSetUserProfile().subscribe();
     } else {
       this.clearAuthData();
     }

@@ -111,7 +111,8 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .name(user.getName()) // Changed from firstName/lastName to name
                 .email(user.getEmail())
-                .rol(user.getRol()) // Changed from role to rol
+                .role(user.getRol()) // Changed from rol to role
+                .activo(user.isActivo()) // Added activo
                 .build();
     }
 }

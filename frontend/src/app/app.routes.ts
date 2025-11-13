@@ -69,6 +69,10 @@ export const routes: Routes = [
         data: { requiredRole: Role.ADMINISTRADOR } // Le pasamos el rol requerido
       },
       {
+        path: 'profile',
+        loadComponent: () => import('./features/user/profile/profile').then(m => m.Profile)
+      },
+      {
         path: 'profile/settings',
         loadComponent: () => import('./features/user/profile/profile').then(m => m.Profile)
       },

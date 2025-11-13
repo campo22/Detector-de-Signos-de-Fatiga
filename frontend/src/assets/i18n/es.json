@@ -504,6 +504,9 @@
     "ROLE": "Rol:",
     "STATUS": "Estado:",
     "ACTIVE": "Activo",
-    "INACTIVE": "Inactivo"
+    "INACTIVE": "Inactivo",
+    "CANCEL": "Cancelar",
+    "SAVE": "Guardar",
+    "EDIT": "Editar"
   }
 }

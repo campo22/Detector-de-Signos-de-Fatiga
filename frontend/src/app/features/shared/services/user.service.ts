@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User, UserFilterRequest, UserRequest, UserUpdateRequest, ChangePasswordRequest } from '../../../core/models/user.models';
 import { Page } from '../../../core/models/event.models';
+import { UserProfile } from '../../../core/models/auth.models'; // Added import
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,10 @@ export class UserService {
 
   getUserById(id: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
+  }
+
+  getCurrentUserProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.apiUrl}/me`);
   }
 
   createUser(user: UserRequest): Observable<string> {
