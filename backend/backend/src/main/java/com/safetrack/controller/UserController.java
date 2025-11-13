@@ -2,6 +2,7 @@ package com.safetrack.controller;
 
 import com.safetrack.domain.dto.request.UserFilterRequest;
 import com.safetrack.domain.dto.request.UserUpdateRequest;
+import com.safetrack.domain.dto.response.UserProfileResponse; // Added import
 import com.safetrack.domain.dto.response.UserResponse;
 import com.safetrack.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication; // Added import
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -58,5 +60,13 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Obtener el perfil del usuario autenticado")
+    public ResponseEntity<UserProfileResponse> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName(); // El nombre de autenticación es el email
+        UserProfileResponse userProfile = userService.getUserProfileByEmail(email);
+        return ResponseEntity.ok(userProfile);
     }
 }

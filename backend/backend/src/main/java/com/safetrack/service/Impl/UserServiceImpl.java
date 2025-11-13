@@ -3,6 +3,7 @@ package com.safetrack.service.Impl;
 import com.safetrack.domain.dto.request.ChangePasswordRequest;
 import com.safetrack.domain.dto.request.UserFilterRequest;
 import com.safetrack.domain.dto.request.UserUpdateRequest;
+import com.safetrack.domain.dto.response.UserProfileResponse; // Added import
 import com.safetrack.domain.dto.response.UserResponse;
 import com.safetrack.domain.entity.User;
 import com.safetrack.exception.DuplicateResourceException;
@@ -97,5 +98,20 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         log.info("Contraseña del usuario con ID: {} actualizada exitosamente", id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserProfileResponse getUserProfileByEmail(String email) {
+        log.info("Buscando perfil de usuario por email: {}", email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con email: " + email));
+
+        return UserProfileResponse.builder()
+                .id(user.getId())
+                .name(user.getName()) // Changed from firstName/lastName to name
+                .email(user.getEmail())
+                .rol(user.getRol()) // Changed from role to rol
+                .build();
     }
 }

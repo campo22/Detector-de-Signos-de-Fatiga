@@ -13,13 +13,19 @@
       ></span>
     </button>
 
-    <div class="flex items-center space-x-2" *ngIf="userProfile()">
-      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-blue-400"></div>
-      <div>
-        <p class="font-semibold text-foreground text-sm hidden sm:block">{{ userProfile()!.name }}</p>
-        <p class="font-semibold text-foreground text-sm sm:hidden">{{ userProfile()!.role | translate }}</p>
-        <p class="text-xs text-muted-foreground hidden sm:block">{{ userProfile()!.email }}</p>
-      </div>
+    <!-- User Profile Dropdown -->
+    <div *ngIf="userProfile()">
+      <button type="button" pButton pRipple class="p-button-text p-button-plain" (click)="menu.toggle($event)">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-blue-400"></div>
+          <div>
+            <p class="font-semibold text-foreground text-sm hidden sm:block">{{ userProfile()!.name }}</p>
+            <p class="font-semibold text-foreground text-sm sm:hidden">{{ userProfile()!.role | translate }}</p>
+            <p class="text-xs text-muted-foreground hidden sm:block">{{ userProfile()!.email }}</p>
+          </div>
+        </div>
+      </button>
+      <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
     </div>
   </div>
 </header>

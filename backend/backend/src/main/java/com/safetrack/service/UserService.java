@@ -3,6 +3,7 @@ package com.safetrack.service;
 import com.safetrack.domain.dto.request.ChangePasswordRequest;
 import com.safetrack.domain.dto.request.UserFilterRequest;
 import com.safetrack.domain.dto.request.UserUpdateRequest;
+import com.safetrack.domain.dto.response.UserProfileResponse;
 import com.safetrack.domain.dto.response.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,4 +47,11 @@ public interface UserService {
      * @param request DTO con la nueva contraseña.
      */
     void changePassword(UUID id, ChangePasswordRequest request);
+
+    /**
+     * Obtiene el perfil de un usuario por su email.
+     * @param email El email del usuario.
+     * @return DTO del perfil del usuario.
+     */
+    UserProfileResponse getUserProfileByEmail(String email);
 }
