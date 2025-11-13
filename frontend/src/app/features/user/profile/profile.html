@@ -1,46 +1,380 @@
-<div class="container mx-auto p-6">
-  @if (!currentUser()) {
-  <div class="text-center p-20 text-muted-foreground">
-    <span class="material-symbols-outlined text-6xl animate-spin">progress_activity</span>
-    <p class="mt-4 text-lg">{{ 'USER_PROFILE.LOADING_PROFILE' | translate }}</p>
-  </div>
-  } @else if (currentUser() === undefined) {
-  <div class="text-center p-20 text-destructive">
-    <span class="material-symbols-outlined text-6xl">error</span>
-    <p class="mt-4 text-lg">{{ 'USER_PROFILE.ERROR_LOADING_PROFILE' | translate }}</p>
-  </div>
-  } @else {
-  <p-card header="{{ 'USER_PROFILE.TITLE' | translate }}" styleClass="max-w-2xl mx-auto">
-    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-      <div class="p-fluid">
-        <div class="field">
-          <label for="name">{{ 'USER_PROFILE.NAME' | translate }}</label>
-          <input id="name" type="text" pInputText formControlName="name" [readonly]="!isEditMode">
+<div class="py-8 px-4">
+  <div class="container mx-auto max-w-4xl">
+    <!-- Loading State -->
+    @if (!currentUser()) {
+    <div class="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+      <div class="relative">
+        <div
+          class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"
+        ></div>
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400 animate-pulse">
+        {{ 'USER_PROFILE.LOADING_PROFILE' | translate }}
+      </p>
+    </div>
+    }
+
+    <!-- Error State -->
+    @else if (currentUser() === undefined) {
+    <div class="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+      <div class="bg-red-100 dark:bg-red-900/20 p-6 rounded-full">
+        <span class="material-symbols-outlined text-6xl text-red-600 dark:text-red-400">error</span>
+      </div>
+      <p class="text-lg text-red-600 dark:text-red-400 font-medium">
+        {{ 'USER_PROFILE.ERROR_LOADING_PROFILE' | translate }}
+      </p>
+      <button
+        pButton
+        type="button"
+        label="{{ 'RETRY' | translate }}"
+        icon="pi pi-refresh"
+        (click)="retryLoad()"
+        class="p-button-outlined p-button-danger"
+      ></button>
+    </div>
+    }
+
+    <!-- Profile Content -->
+    @else {
+    <div class="space-y-8">
+      <!-- Header Card -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div class="h-36 bg-gradient-to-r from-blue-600 to-cyan-500 relative">
+          <div class="absolute inset-0 bg-black/20"></div>
         </div>
-        <div class="field">
-          <label for="email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
-          <input id="email" type="text" pInputText formControlName="email" readonly>
-        </div>
-        <div class="field">
-          <label for="role">{{ 'USER_PROFILE.ROLE' | translate }}</label>
-          <input id="role" type="text" pInputText formControlName="role" readonly>
-        </div>
-        <div class="field">
-          <label for="status">{{ 'USER_PROFILE.STATUS' | translate }}</label>
-          <input id="status" type="text" pInputText [value]="currentUser()!.activo ? ('USER_PROFILE.ACTIVE' | translate) : ('USER_PROFILE.INACTIVE' | translate)" readonly>
+        <div class="px-8 pb-8">
+          <div class="flex flex-col sm:flex-row items-center sm:items-end -mt-20 sm:-mt-16 gap-6">
+            <!-- Avatar -->
+            <div class="relative group shrink-0">
+              <div
+                class="w-36 h-36 rounded-full border-4 border-white dark:border-gray-800 bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white text-5xl font-bold shadow-lg"
+              >
+                {{ getInitials(currentUser()!.name) }}
+              </div>
+              @if (isEditMode) {
+              <button
+                class="absolute bottom-1 right-1 bg-white dark:bg-gray-700 p-3 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-110"
+              >
+                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400"
+                  >photo_camera</span
+                >
+              </button>
+              }
+            </div>
+
+            <!-- User Info -->
+            <div class="flex-1 text-center sm:text-left mt-4 sm:mt-0">
+              <h1 class="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
+                {{ currentUser()!.name }}
+              </h1>
+              <p class="text-gray-500 dark:text-gray-400 mt-1 text-lg">
+                {{ currentUser()!.email }}
+              </p>
+              <div class="flex items-center justify-center sm:justify-start gap-3 mt-3">
+                <span
+                  class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                >
+                  <span class="material-symbols-outlined text-base mr-1.5">badge</span>
+                  {{ currentUser()!.role | titlecase }}
+                </span>
+                <span
+                  [ngClass]="{
+                    'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300 border-green-200 dark:border-green-800': currentUser()!.activo,
+                    'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600': !currentUser()!.activo
+                  }"
+                  class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold border"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full mr-2"
+                    [ngClass]="{'bg-green-500': currentUser()!.activo, 'bg-gray-500': !currentUser()!.activo}"
+                  >
+                  </span>
+                  {{
+                    currentUser()!.activo
+                      ? ('USER_PROFILE.ACTIVE' | translate)
+                      : ('USER_PROFILE.INACTIVE' | translate)
+                  }}
+                </span>
+              </div>
+            </div>
+
+           
+          </div>
         </div>
       </div>
-    </form>
-    <ng-template pTemplate="footer">
-      <div class="flex justify-end gap-2">
-        @if (isEditMode) {
-        <button pButton type="button" label="{{ 'CANCEL' | translate }}" icon="pi pi-times" (click)="toggleEditMode()" class="p-button-secondary"></button>
-        <button pButton type="submit" label="{{ 'SAVE' | translate }}" icon="pi pi-check" (click)="saveProfile()" [disabled]="profileForm.invalid"></button>
-        } @else {
-        <button pButton type="button" label="{{ 'EDIT' | translate }}" icon="pi pi-pencil" (click)="toggleEditMode()"></button>
-        }
-      </div>
-    </ng-template>
-  </p-card>
-  }
+
+            <!-- Form Section -->
+
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
+
+              <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
+
+                  <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">account_circle</span>
+
+                  {{ 'USER_PROFILE.PERSONAL_INFO' | translate }}
+
+                </h2>
+
+              </div>
+
+              <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="p-6">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+
+                                          <!-- Name Field -->
+
+                                          <div class="field space-y-2">
+
+                                            <label for="name" class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+
+                                              <span class="material-symbols-outlined text-base">person</span>
+
+                                              {{ 'USER_PROFILE.NAME' | translate }}
+
+                                              <span class="text-red-500">*</span>
+
+                                            </label>
+
+                                            <input
+
+                                              id="name"
+
+                                              type="text"
+
+                                              pInputText
+
+                                              formControlName="name"
+
+                                              [readonly]="!isEditMode"
+
+                                              [ngClass]="{
+
+                                                'bg-gray-100 dark:bg-gray-700 cursor-not-allowed': !isEditMode,
+
+                                                'bg-white dark:bg-gray-800 border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/50': isEditMode
+
+                                              }"
+
+                                              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none transition-all duration-200 shadow-sm"
+
+                                              placeholder="{{ 'USER_PROFILE.ENTER_NAME' | translate }}"
+
+                                            />
+
+                                            @if (profileForm.get('name')?.invalid && profileForm.get('name')?.touched) {
+
+                                            <small class="text-red-600 dark:text-red-400 flex items-center gap-1 mt-1">
+
+                                              <span class="material-symbols-outlined text-sm">error</span>
+
+                                              {{ 'USER_PROFILE.NAME_REQUIRED' | translate }}
+
+                                            </small>
+
+                                            }
+
+                                          </div>
+
+                              
+
+                                          <!-- Email Field -->
+
+                                          <div class="field space-y-2">
+
+                                            <label for="email" class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+
+                                              <span class="material-symbols-outlined text-base">email</span>
+
+                                              {{ 'USER_PROFILE.EMAIL' | translate }}
+
+                                            </label>
+
+                                            <input
+
+                                              id="email"
+
+                                              type="email"
+
+                                              pInputText
+
+                                              formControlName="email"
+
+                                              readonly
+
+                                              class="w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-700 cursor-not-allowed border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm"
+
+                                            />
+
+                                          </div>
+
+                              
+
+                                          <!-- Role Field -->
+
+                                          <div class="field space-y-2">
+
+                                            <label for="role" class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+
+                                              <span class="material-symbols-outlined text-base">work</span>
+
+                                              {{ 'USER_PROFILE.ROLE' | translate }}
+
+                                            </label>
+
+                                            <input
+
+                                              id="role"
+
+                                              type="text"
+
+                                              pInputText
+
+                                              formControlName="role"
+
+                                              readonly
+
+                                              class="w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-700 cursor-not-allowed border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm"
+
+                                            />
+
+                                          </div>
+
+                              
+
+                                          <!-- Status Field -->
+
+                                          <div class="field space-y-2">
+
+                                            <label for="status" class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+
+                                              <span class="material-symbols-outlined text-base">toggle_on</span>
+
+                                              {{ 'USER_PROFILE.STATUS' | translate }}
+
+                                            </label>
+
+                                            <input
+
+                                              id="status"
+
+                                              type="text"
+
+                                              pInputText
+
+                                              [value]="
+
+                                                currentUser()!.activo
+
+                                                  ? ('USER_PROFILE.ACTIVE' | translate)
+
+                                                  : ('USER_PROFILE.INACTIVE' | translate)
+
+                                              "
+
+                                              readonly
+
+                                              class="w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-700 cursor-not-allowed border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm"
+
+                                            />
+
+                                          </div>
+
+                </div>
+
+              </form>
+
+              <div class="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 pb-6 pt-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 rounded-b-2xl">
+
+                <!-- Info Text -->
+
+                <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
+
+                  <span class="material-symbols-outlined text-base">info</span>
+
+                  @if (isEditMode) {
+
+                  <span>{{ 'USER_PROFILE.EDIT_MODE_INFO' | translate }}</span>
+
+                  } @else {
+
+                  <span>{{ 'USER_PROFILE.VIEW_MODE_INFO' | translate }}</span>
+
+                  }
+
+                </p>
+
+      
+
+                <!-- Action Buttons -->
+
+                <div class="flex gap-3">
+
+                  @if (isEditMode) {
+
+                  <button
+
+                    pButton
+
+                    type="button"
+
+                    label="{{ 'CANCEL' | translate }}"
+
+                    icon="pi pi-times"
+
+                    (click)="toggleEditMode()"
+
+                    class="p-button-text p-button-secondary"
+
+                  ></button>
+
+                  <button
+
+                    pButton
+
+                    type="submit"
+
+                    label="{{ 'SAVE' | translate }}"
+
+                    icon="pi pi-check"
+
+                    (click)="saveProfile()"
+
+                    [disabled]="profileForm.invalid || !profileForm.dirty"
+
+                    [loading]="isSaving"
+
+                    class="p-button-raised"
+
+                  ></button>
+
+                  } @else {
+
+                  <button
+
+                    pButton
+
+                    type="button"
+
+                    label="{{ 'EDIT' | translate }}"
+
+                    icon="pi pi-pencil"
+
+                    (click)="toggleEditMode()"
+
+                    class="p-button-raised p-button-info"
+
+                  ></button>
+
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+    </div>
+    }
+  </div>
 </div>

@@ -507,6 +507,15 @@
     "INACTIVE": "Inactivo",
     "CANCEL": "Cancelar",
     "SAVE": "Guardar",
-    "EDIT": "Editar"
+    "EDIT": "Editar",
+    "RETRY": "Reintentar",
+    "PERSONAL_INFO": "Información Personal",
+    "ENTER_NAME": "Introduce tu nombre completo",
+    "NAME_REQUIRED": "El nombre es obligatorio.",
+    "EDIT_MODE_INFO": "Estás en modo de edición. Haz clic en Guardar para aplicar los cambios.",
+    "VIEW_MODE_INFO": "Haz clic en Editar para modificar tu información.",
+    "FORM_INVALID": "El formulario no es válido. Por favor, revisa los campos.",
+    "UPDATE_SUCCESS": "Perfil actualizado con éxito.",
+    "UPDATE_ERROR": "Error al actualizar el perfil."
   }
 }
