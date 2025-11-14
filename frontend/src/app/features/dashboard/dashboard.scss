@@ -1,0 +1,241 @@
+/* Estilos específicos para el dashboard en tema claro */
+.dashboard-container {
+  @apply bg-background;
+}
+
+/* Mejoras para formularios de filtro */
+.filter-bar {
+  @apply bg-card border-border shadow-sm;
+
+  label {
+    @apply text-sm font-semibold text-foreground;
+  }
+
+  input {
+    @apply bg-background border-border text-foreground;
+  }
+
+  input:focus {
+    @apply focus:ring-1 focus:ring-primary focus:border-primary;
+  }
+
+  button {
+    @apply bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg shadow-sm hover:shadow-primary/30 transition-all duration-300;
+  }
+}
+
+/* Contenedores de gráficos */
+.chart-container {
+  @apply bg-card border-border;
+
+  h3 {
+    @apply font-bold text-xl mb-4 text-foreground;
+    text-shadow: none; /* Eliminar sombra de texto en tema claro */
+  }
+
+  /* Fondo de gradiente modificado para tema claro */
+  .chart-background {
+    @apply absolute inset-0 bg-gradient-to-br from-card to-secondary/30 opacity-30; /* Reducir opacidad del gradiente */
+  }
+}
+
+/* Contenedor de eventos recientes */
+.recent-events-container {
+  @apply bg-card border-border;
+
+  h3 {
+    @apply font-bold text-xl text-foreground;
+    text-shadow: none; /* Eliminar sombra de texto en tema claro */
+  }
+
+  .event-item {
+    @apply flex items-start space-x-4;
+  }
+
+  .event-icon {
+    @apply w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center border;
+    background-color: hsl(var(--secondary)/0.4); /* Fondo semi-transparente para mejor visibilidad */
+    border-color: hsl(var(--border));
+  }
+
+  .material-symbols-outlined {
+    filter: none !important; /* Asegurar visibilidad de los iconos */
+  }
+
+  .event-content {
+    @apply flex-1 min-w-0;
+  }
+
+  .event-title {
+    @apply font-semibold text-foreground truncate;
+  }
+
+  .event-subtitle {
+    @apply text-sm text-muted-foreground truncate;
+  }
+
+  .event-time {
+    @apply text-xs text-muted-foreground/80 mt-1;
+  }
+}
+
+/* Botón de vista de todos los alertas */
+.view-all-button {
+  @apply w-full text-center text-primary hover:text-primary/80 font-semibold transition-colors;
+}
+
+/* Tabla de resumen de flota */
+.fleet-summary-table {
+  @apply bg-card border-border shadow-sm;
+
+  h3 {
+    text-shadow: none !important; /* Eliminar sombras de texto */
+  }
+
+  thead {
+    @apply bg-secondary/20; /* Reducir contraste en encabezados */
+  }
+
+  .risk-badge {
+    @apply px-2 py-1 rounded-full text-xs font-semibold;
+
+    &.risk-alto {
+      @apply bg-destructive/20 text-destructive border border-destructive/30;
+    }
+
+    &.risk-medio {
+      @apply bg-warning/20 text-warning border border-warning/30;
+    }
+
+    &.risk-bajo {
+      @apply bg-success/20 text-success border border-success/30;
+    }
+  }
+}
+
+/* Ajustes para gráficos en tema claro */
+.apexcharts-text,
+.apexcharts-title-text,
+.apexcharts-subtitle-text,
+.apexcharts-legend-text {
+  fill: hsl(var(--foreground)) !important;
+}
+
+.apexcharts-gridline {
+  stroke: hsl(var(--border)) !important;
+}
+
+/* Estilos para tooltips de ApexCharts en ambos modos */
+.apexcharts-tooltip {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+  box-shadow: 0 4px 6px -1px hsl(var(--border)/0.1), 0 2px 4px -1px hsl(var(--border)/0.06) !important;
+}
+
+.apexcharts-tooltip-title {
+  background: hsl(var(--secondary)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.apexcharts-tooltip-series-group {
+  color: hsl(var(--foreground)) !important;
+}
+
+.apexcharts-tooltip-text {
+  color: hsl(var(--foreground)) !important;
+}
+
+.apexcharts-tooltip-text-y-label,
+.apexcharts-tooltip-text-y-value {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Estilos para elementos interactivos */
+.apexcharts-xaxistooltip,
+.apexcharts-yaxistooltip {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.apexcharts-xaxistooltip-text,
+.apexcharts-yaxistooltip-text {
+  color: hsl(var(--foreground)) !important;
+}
+
+.apexcharts-marker {
+  filter: none !important; /* Asegurar visibilidad del marcador */
+}
+
+/* Estilos específicos para modo oscuro */
+.dark .apexcharts-tooltip {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .apexcharts-tooltip-title {
+  background: hsl(var(--secondary)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .apexcharts-tooltip-series-group {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .apexcharts-tooltip-text {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .apexcharts-tooltip-text-y-label,
+.dark .apexcharts-tooltip-text-y-value {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Estilos para los marcadores de tooltips */
+.apexcharts-tooltip-marker {
+  border-radius: 50% !important;
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  border: 0 !important;
+  margin-right: 6px !important;
+  /* Usar el color directamente para asegurar visibilidad */
+}
+
+/* Estilos para ambos modos */
+:root .apexcharts-tooltip-marker,
+.dark .apexcharts-tooltip-marker {
+  border-radius: 50% !important;
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  border: 0 !important;
+  margin-right: 6px !important;
+}
+
+/* Efectos específicos para tema claro */
+:root {
+  .dashboard-container {
+    .chart-container {
+      h3 {
+        color: hsl(var(--foreground));
+      }
+    }
+
+    .recent-events-container {
+      h3 {
+        color: hsl(var(--foreground));
+      }
+    }
+  }
+}
+
+/* Estilos específicos para inputs de fecha */
+input[type="date"] {
+  @apply bg-background border-border text-foreground rounded-lg px-3 py-2 text-sm;
+  min-height: 40px; /* Asegurar altura adecuada */
+}

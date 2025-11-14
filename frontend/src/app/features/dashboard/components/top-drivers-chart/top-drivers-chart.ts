@@ -53,7 +53,7 @@ export class TopDriversChart {
       height: 160,
       toolbar: { show: false },
       fontFamily: 'Inter, sans-serif',
-      foreColor: 'hsl(var(--muted-foreground))',
+      foreColor: undefined, // Dejar que ApexCharts use el color predeterminado del tema
     },
     plotOptions: { bar: { horizontal: true, borderRadius: 10, barHeight: '55%', distributed: true } },
     colors: [
@@ -64,18 +64,52 @@ export class TopDriversChart {
       enabled: true,
       textAnchor: 'start' as const,
       formatter: (val: any, opt: any) => `${opt.w.globals.labels[opt.dataPointIndex]} - ${val}`,
-      style: { colors: ['#fff'], fontWeight: '600', fontSize: '13px' },
+      style: { colors: ['hsl(var(--foreground))'], fontWeight: '600', fontSize: '13px' },
       offsetX: 10,
     },
     yaxis: { show: false },
     grid: {
-      borderColor: 'rgba(255, 255, 255, 0.1)',
+      borderColor: 'hsl(var(--border))',
       strokeDashArray: 4,
       xaxis: { lines: { show: true } },
       yaxis: { lines: { show: false } },
     },
     legend: { show: false },
-    tooltip: { theme: 'dark' as const, y: { formatter: (val: any) => `${val} alertas` } },
+    tooltip: {
+      y: { formatter: (val: any) => `${val} alertas` },
+      style: {
+        fontSize: '12px',
+        fontFamily: 'Inter, sans-serif',
+      },
+      custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+        const driverName = w.globals.labels[dataPointIndex];
+        const alertCount = series[seriesIndex][dataPointIndex];
+        const color = w.globals.colors[seriesIndex];
+        return `
+          <div class="apexcharts-custom-tooltip"
+               style="background: hsl(var(--card));
+                      color: hsl(var(--foreground));
+                      border: 1px solid hsl(var(--border));
+                      padding: 8px;
+                      border-radius: 4px;
+                      font-family: Inter, sans-serif;
+                      font-size: 12px;
+                      display: flex;
+                      align-items: center;">
+            <span style="display: inline-block;
+                         width: 10px;
+                         height: 10px;
+                         border-radius: 50%;
+                         background: ${color};
+                         margin-right: 8px;"></span>
+            <div>
+              <strong>${driverName}</strong><br>
+              Alertas: ${alertCount}
+            </div>
+          </div>
+        `;
+      }
+    },
   };
 
   // Convertir el signal de filtros a un observable y obtener los datos
@@ -146,7 +180,7 @@ export class TopDriversChart {
         tickAmount: 5,
         labels: {
           show: true,
-          style: { colors: 'rgba(255,255,255,0.6)', fontSize: '12px', fontFamily: 'Inter, sans-serif' },
+          style: { colors: 'hsl(var(--muted-foreground))', fontSize: '12px', fontFamily: 'Inter, sans-serif' },
           formatter: (val: any) => Math.round(Number(val)).toString(),
         },
         axisBorder: { show: false },

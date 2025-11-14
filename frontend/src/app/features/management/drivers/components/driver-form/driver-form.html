@@ -9,10 +9,10 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
     <!-- Nombre Completo -->
-    <div class="space-y-2 input-field">
+    <div class="form-field space-y-2 input-field">
       <label
         for="nombre"
-        class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
+        class="form-label flex items-center gap-2 font-display text-sm font-medium leading-none transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">person</span>
         {{ 'DRIVERS.FORM.NAME_LABEL' | translate }}
@@ -23,10 +23,10 @@
         pInputText
         formControlName="nombre"
         [placeholder]="'DRIVERS.FORM.NAME_PLACEHOLDER' | translate"
-        class="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
+        class="form-input font-display flex h-11 w-full transition-all duration-300"
       />
       @if (isInvalid('nombre')) {
-      <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
+      <div class="form-error flex items-center gap-2 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
         @if (driverForm.controls['nombre'].errors?.['required']) {
         <span>{{ 'DRIVERS.FORM.NAME_REQUIRED' | translate }}</span> } @if
@@ -37,10 +37,10 @@
     </div>
 
     <!-- Número de Licencia -->
-    <div class="space-y-2 input-field">
+    <div class="form-field space-y-2 input-field">
       <label
         for="licencia"
-        class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
+        class="form-label flex items-center gap-2 font-display text-sm font-medium leading-none transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">pin</span>
         {{ 'DRIVERS.FORM.LICENSE_LABEL' | translate }}
@@ -51,10 +51,10 @@
         pInputText
         formControlName="licencia"
         [placeholder]="'DRIVERS.FORM.LICENSE_PLACEHOLDER' | translate"
-        class="font-mono flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
+        class="form-input font-mono flex h-11 w-full transition-all duration-300"
       />
       @if (isInvalid('licencia')) {
-      <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
+      <div class="form-error flex items-center gap-2 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
         <span>{{ 'DRIVERS.FORM.LICENSE_REQUIRED' | translate }}</span>
       </div>
@@ -62,10 +62,10 @@
     </div>
 
     <!-- Fecha de Nacimiento -->
-    <div class="space-y-2 input-field">
+    <div class="form-field space-y-2 input-field">
       <label
         for="fechaNacimiento"
-        class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
+        class="form-label flex items-center gap-2 font-display text-sm font-medium leading-none transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300"
           >calendar_month</span
@@ -79,10 +79,10 @@
         dateFormat="yy-mm-dd"
         [showIcon]="true"
         [appendTo]="'body'"
-        inputStyleClass="font-display flex h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-sm placeholder:text-muted-foreground/60 transition-all duration-300 focus:border-primary/60 focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-offset-2 focus:ring-offset-background"
+        inputStyleClass="form-input font-display flex h-11 w-full transition-all duration-300"
       />
       @if (isInvalid('fechaNacimiento')) {
-      <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
+      <div class="form-error flex items-center gap-2 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
         <span>{{ 'DRIVERS.FORM.BIRTHDATE_REQUIRED' | translate }}</span>
       </div>
@@ -90,10 +90,10 @@
     </div>
 
     <!-- Estado -->
-    <div class="space-y-2 input-field">
+    <div class="form-field space-y-2 input-field">
       <label
         for="activo"
-        class="flex items-center gap-2 font-display text-sm font-medium leading-none text-muted-foreground transition-colors duration-300"
+        class="form-label flex items-center gap-2 font-display text-sm font-medium leading-none transition-colors duration-300"
       >
         <span class="material-symbols-outlined text-lg transition-all duration-300">toggle_on</span>
         {{ 'DRIVERS.FORM.STATUS_LABEL' | translate }}
@@ -108,7 +108,7 @@
         styleClass="w-full h-11 rounded-md"
       ></p-select>
       @if (isInvalid('activo')) {
-      <div class="flex items-center gap-2 text-red-600 text-xs mt-1">
+      <div class="form-error flex items-center gap-2 text-xs mt-1">
         <span class="material-symbols-outlined text-sm">error</span>
         <span>{{ 'DRIVERS.FORM.STATUS_REQUIRED' | translate }}</span>
       </div>

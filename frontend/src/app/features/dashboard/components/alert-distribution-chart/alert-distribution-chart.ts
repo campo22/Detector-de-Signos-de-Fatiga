@@ -78,7 +78,38 @@ export class AlertDistributionChart {
     tooltip: {
       enabled: true,
       y: { formatter: (val) => `${val} alertas` },
-      theme: 'dark'
+      style: {
+        fontSize: '12px',
+        fontFamily: 'Inter, sans-serif',
+      },
+      custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+        const label = w.globals.labels[dataPointIndex];
+        const value = series[seriesIndex];
+        const color = w.globals.colors[seriesIndex];
+        return `
+          <div class="apexcharts-custom-tooltip"
+               style="background: hsl(var(--card));
+                      color: hsl(var(--foreground));
+                      border: 1px solid hsl(var(--border));
+                      padding: 8px;
+                      border-radius: 4px;
+                      font-family: Inter, sans-serif;
+                      font-size: 12px;
+                      display: flex;
+                      align-items: center;">
+            <span style="display: inline-block;
+                         width: 10px;
+                         height: 10px;
+                         border-radius: 50%;
+                         background: ${color};
+                         margin-right: 8px;"></span>
+            <div>
+              <strong>${label}</strong><br>
+              Alertas: ${value}
+            </div>
+          </div>
+        `;
+      }
     }
   };
 
@@ -113,11 +144,11 @@ export class AlertDistributionChart {
     const colors: string[] = [];
 
     const colorMap: Record<FatigueType, string> = {
-      [FatigueType.MICROSUEÑO]: 'hsl(var(--destructive))',
-      [FatigueType.CABECEO]: 'hsl(var(--destructive))',
-      [FatigueType.BOSTEZO]: 'hsl(var(--warning))',
-      [FatigueType.CANSANCIO_VISUAL]: 'hsl(var(--primary))',
-      [FatigueType.NINGUNO]: 'hsl(var(--success))',
+      [FatigueType.MICROSUEÑO]: 'hsl(var(--alert-fatiga-critica))',
+      [FatigueType.CABECEO]: 'hsl(var(--alert-fatiga-critica))',
+      [FatigueType.BOSTEZO]: 'hsl(var(--alert-fatiga-alta))',
+      [FatigueType.CANSANCIO_VISUAL]: 'hsl(var(--alert-fatiga-media))',
+      [FatigueType.NINGUNO]: 'hsl(var(--alert-fatiga-baja))',
     };
 
     for (const key in data) {

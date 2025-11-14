@@ -1,4 +1,4 @@
-<div class="flex flex-col h-full gap-6">
+<div class="dashboard-container flex flex-col h-full gap-6">
   <div>
     <app-filter-bar></app-filter-bar>
   </div>
@@ -6,13 +6,13 @@
   <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
     <div class="xl:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div
-        class="lg:col-span-1 bg-card p-6 rounded-lg border border-border relative overflow-hidden"
+        class="chart-container lg:col-span-1 bg-card p-6 rounded-lg border border-border relative overflow-hidden"
       >
-        <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/20 opacity-50"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/15 opacity-30"></div>
         <div class="relative z-10">
           <h3
             class="font-bold text-xl mb-4 text-foreground"
-            style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
+            style="text-shadow: none;"
           >
             {{ 'DASHBOARD.ALERT_DISTRIBUTION' | translate }}
           </h3>
@@ -21,13 +21,13 @@
       </div>
 
       <div
-        class="bg-card p-6 rounded-lg border border-border lg:col-span-2 relative overflow-hidden"
+        class="chart-container bg-card p-6 rounded-lg border border-border lg:col-span-2 relative overflow-hidden"
       >
-        <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/20 opacity-50"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/15 opacity-30"></div>
         <div class="relative z-10">
           <h3
             class="font-bold text-xl mb-4 text-foreground"
-            style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
+            style="text-shadow: none;"
           >
             {{ 'DASHBOARD.TOP_DRIVERS' | translate }}
           </h3>
@@ -36,13 +36,13 @@
       </div>
 
       <div
-        class="bg-card p-6 rounded-lg border border-border lg:col-span-3 relative overflow-hidden"
+        class="chart-container bg-card p-6 rounded-lg border border-border lg:col-span-3 relative overflow-hidden"
       >
-        <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/20 opacity-50"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/15 opacity-30"></div>
         <div class="relative z-10">
           <h3
             class="font-bold text-xl mb-4 text-foreground"
-            style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)"
+            style="text-shadow: none;"
           >
             {{ 'DASHBOARD.CRITICAL_EVENTS_TIMELINE' | translate }}
           </h3>
@@ -53,47 +53,47 @@
 
     <div class="xl:col-span-1">
       <div
-        class="bg-card rounded-lg border border-border overflow-hidden relative flex flex-col h-full"
+        class="recent-events-container bg-card rounded-lg border border-border overflow-hidden relative flex flex-col h-full"
       >
-        <div class="absolute inset-0 bg-gradient-to-b from-secondary/10 to-card"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-secondary/5 to-card opacity-20"></div>
         <div class="relative z-10 p-6">
           <h3
             class="font-bold text-xl text-foreground"
-            style="text-shadow: 0 1px 3px rgba(0, 0, a, 0.5)"
+            style="text-shadow: none;"
           >
             {{ 'DASHBOARD.RECENT_EVENTS' | translate }}
           </h3>
         </div>
         <div class="relative z-10 flex-1 overflow-y-auto px-6 pb-6 space-y-4 min-h-0" style="max-height: 500px;">
           @for (event of recentEvents(); track event.id) {
-          <div class="flex items-start space-x-4">
+          <div class="event-item">
             <div
-              class="w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center border"
+              class="event-icon"
               [ngClass]="
                 getEventAppearance(event).colorClass +
-                '/10 ' +
+                '/20 ' +
                 getEventAppearance(event).colorClass.replace('text-', 'border-') +
-                '/30'
+                '/40'
               "
             >
               <span
                 class="material-symbols-outlined text-xl"
                 [ngClass]="getEventAppearance(event).colorClass"
-                [style.text-shadow]="
-                  '0 0 8px hsl(var(--' +
+                [style.filter]="
+                  'drop-shadow(0 0 4px hsl(var(--' +
                   getEventAppearance(event).colorClass.replace('text-', '') +
-                  '-glow) / 0.7)'
+                  ')/0.5))'
                 "
               >
                 {{ getEventAppearance(event).icon }}
               </span>
             </div>
-            <div>
-              <p class="font-semibold text-foreground">{{ event.fatigueType | titlecase }}</p>
-              <p class="text-sm text-muted-foreground">
+            <div class="event-content">
+              <p class="event-title">{{ event.fatigueType | titlecase }}</p>
+              <p class="event-subtitle">
                 {{ event.driverName }} | {{ event.vehicleIdentifier }}
               </p>
-              <p class="text-xs text-muted-foreground/70 mt-1">{{ event.timestamp | timeAgo }}</p>
+              <p class="event-time">{{ event.timestamp | timeAgo }}</p>
             </div>
           </div>
           } @empty {
@@ -106,7 +106,7 @@
         <div class="relative z-10 p-6 mt-auto border-t border-border">
           <button
             [routerLink]="['/monitoring/live']"
-            class="w-full text-center text-primary hover:text-primary/80 font-semibold transition-colors"
+            class="view-all-button"
           >
             {{ 'DASHBOARD.VIEW_ALL_ALERTS' | translate }}
           </button>

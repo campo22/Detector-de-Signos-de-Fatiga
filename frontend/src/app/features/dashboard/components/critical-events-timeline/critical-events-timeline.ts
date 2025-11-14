@@ -124,7 +124,7 @@ export class CriticalEventsTimeline {
       type: 'area',
       height: 250,
       toolbar: { show: false },
-      foreColor: 'hsl(var(--muted-foreground))'
+      foreColor: undefined
     },
     dataLabels: { enabled: false },
     stroke: {
@@ -164,8 +164,39 @@ export class CriticalEventsTimeline {
       yaxis: { lines: { show: true } },
     },
     tooltip: {
-      theme: 'dark',
-      y: { formatter: (val) => `${val} Eventos` }
+      y: { formatter: (val) => `${val} Eventos` },
+      style: {
+        fontSize: '12px',
+        fontFamily: 'Inter, sans-serif',
+      },
+      custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+        const date = w.globals.categories[dataPointIndex];
+        const value = series[seriesIndex][dataPointIndex];
+        const color = w.globals.colors[seriesIndex];
+        return `
+          <div class="apexcharts-custom-tooltip"
+               style="background: hsl(var(--card));
+                      color: hsl(var(--foreground));
+                      border: 1px solid hsl(var(--border));
+                      padding: 8px;
+                      border-radius: 4px;
+                      font-family: Inter, sans-serif;
+                      font-size: 12px;
+                      display: flex;
+                      align-items: center;">
+            <span style="display: inline-block;
+                         width: 10px;
+                         height: 10px;
+                         border-radius: 50%;
+                         background: ${color};
+                         margin-right: 8px;"></span>
+            <div>
+              <strong>${date}</strong><br>
+              Eventos: ${value}
+            </div>
+          </div>
+        `;
+      }
     }
   };
 

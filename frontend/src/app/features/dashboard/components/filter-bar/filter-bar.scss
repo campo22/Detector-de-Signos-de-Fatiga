@@ -1,0 +1,46 @@
+/* Estilos mejorados para el componente de filtro de fechas */
+.filter-bar {
+  @apply flex items-center gap-6 p-4 bg-card border border-border rounded-xl shadow-sm;
+
+  label {
+    @apply text-sm font-semibold text-foreground;
+  }
+
+  .input-container {
+    @apply relative flex items-center;
+  }
+
+  input[type="date"] {
+    @apply w-full bg-background border border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 appearance-none;
+    
+    /* Estilo para el texto dentro del input */
+    color: hsl(var(--foreground));
+  }
+
+  .calendar-icon {
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none;
+  }
+
+  .calendar-icon-inner {
+    @apply text-foreground/70;
+  }
+
+  button {
+    @apply px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg shadow-sm hover:shadow-primary/30 transition-all duration-300;
+  }
+
+  /* Estilo para el botón cuando está deshabilitado */
+  button:disabled {
+    @apply bg-muted text-muted-foreground cursor-not-allowed hover:shadow-none;
+  }
+
+  /* Ajustes para dispositivos móviles */
+  @media (max-width: 768px) {
+    @apply flex-col gap-4;
+    align-items: stretch;
+
+    .input-group {
+      @apply flex flex-col gap-2 w-full;
+    }
+  }
+}
