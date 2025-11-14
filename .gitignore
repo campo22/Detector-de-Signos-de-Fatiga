@@ -78,10 +78,11 @@ Thumbs.db
 *.wav
 
 # Reports and logs
-reports/
-# Excluir específicamente el directorio de componentes Angular para que no se ignoren sus archivos
-!frontend/src/app/features/reports/
-*.csv
-*.png
 app.log
 *.log
+
+# Generated files
+*.csv
+*.png
+edge/reports/
+backend/reports/
