@@ -6,6 +6,9 @@
   </div>
 
   <div class="flex items-center space-x-2">
+    <button (click)="toggleTheme()" class="p-2 rounded-full hover:bg-muted relative transition-colors">
+      <span class="material-symbols-outlined text-foreground">{{ currentTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</span>
+    </button>
     <button class="p-2 rounded-full hover:bg-muted relative transition-colors">
       <span class="material-symbols-outlined text-foreground">notifications</span>
       <span

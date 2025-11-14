@@ -11,6 +11,7 @@ import { MenuItem } from 'primeng/api'; // Added
 import { Router } from '@angular/router'; // Added for navigation
 import { ButtonModule } from 'primeng/button'; // Added
 import { RippleModule } from 'primeng/ripple'; // Added
+import { ThemeService } from '../../core/services/theme.service'; // Import ThemeService
 
 @Component({
   selector: 'app-header',
@@ -25,9 +26,11 @@ export class Header {
   private dialogService = inject(DialogService);
   private authService = inject(AuthService);
   private router = inject(Router); // Injected Router
+  private themeService = inject(ThemeService); // Inject ThemeService
 
   public userProfile = this.authService.userProfile;
   public menuItems: MenuItem[] = []; // Added for menu items
+  public currentTheme = this.themeService.currentTheme; // Expose current theme
 
   constructor() {
     this.initializeMenuItems();
@@ -54,6 +57,10 @@ export class Header {
 
   toggleSidebar(): void {
     this.sidebarService.toggleSidebar();
+  }
+
+  toggleTheme(): void {
+    this.themeService.setTheme(this.currentTheme() === 'dark' ? 'light' : 'dark');
   }
 
   showQuickSettings(): void {

@@ -14,42 +14,11 @@
   @apply bg-primary/10 text-primary shadow-glow-primary border border-primary/50 font-semibold;
 }
 
-/* Animación de flotar */
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-/* Animación de resplandor */
-@keyframes pulse-glow {
-  0% {
-    filter: drop-shadow(0 0 6px rgba(6, 168, 249, 0.3));
-  }
-  50% {
-    filter: drop-shadow(0 0 16px rgba(6, 168, 249, 0.7));
-  }
-  100% {
-    filter: drop-shadow(0 0 6px rgba(6, 168, 249, 0.3));
-  }
-}
-
-/* Logo dentro del login */
-.login-logo {
-  width: 130px; /* ajusta según tamaño que quieras */
-  margin: 0 auto 10px; /* centrado + espacio abajo */
+.sidebar-logo {
+  width: 130px;
+  margin: 0 auto 10px;
   margin-bottom: -25px;
   display: block;
-
-  animation: float 4s ease-in-out infinite, pulse-glow 3s ease-in-out infinite;
-
-  /* evitar que se pixelee */
   image-rendering: auto;
   -webkit-user-drag: none;
   user-select: none;
