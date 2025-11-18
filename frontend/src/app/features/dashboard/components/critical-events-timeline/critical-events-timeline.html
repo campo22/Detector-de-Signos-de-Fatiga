@@ -1,8 +1,6 @@
 <div class="chart-container bg-card p-6 rounded-lg border border-border relative overflow-hidden">
   <div class="absolute inset-0 bg-gradient-to-br from-card to-secondary/15 opacity-30"></div>
   <div class="relative z-10">
-    <h3 class="font-bold text-xl mb-4 text-foreground" style="text-shadow: none;">Línea de Tiempo de Eventos Críticos</h3>
-
     @if (chartOptions().series.length) {
       <apx-chart
         [series]="chartOptions().series!"

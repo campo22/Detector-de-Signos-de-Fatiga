@@ -147,12 +147,14 @@ export class AlertDistributionChart {
     // Wait for the view to be initialized before getting CSS variables
     setTimeout(() => {
       // Map fatigue types to appropriate color variables with consistency across the dashboard
+      // Aligning with the same color scheme used in Top Drivers Chart for consistency
+      // Using the same pattern: destructive, destructive-dimmed, warning, primary-dimmed, primary-more-dimmed
       this.colorsSignal.set({
-        [FatigueType.MICROSUEÑO]: this.getCssVariableValue('--destructive'), // Critical fatigue
-        [FatigueType.CABECEO]: this.getCssVariableValue('--destructive-secondary') || this.getCssVariableValue('--destructive'), // Critical fatigue
-        [FatigueType.BOSTEZO]: this.getCssVariableValue('--warning'), // Medium fatigue
-        [FatigueType.CANSANCIO_VISUAL]: this.getCssVariableValue('--primary'), // Low fatigue
-        [FatigueType.NINGUNO]: this.getCssVariableValue('--success') || this.getCssVariableValue('--muted-foreground'), // No fatigue
+        [FatigueType.MICROSUEÑO]: this.getCssVariableValue('--destructive'), // Critical fatigue - like top alerts in Top Drivers
+        [FatigueType.CABECEO]: this.getCssVariableValue('--destructive-secondary') || `${this.getCssVariableValue('--destructive')} / 0.8`, // Critical fatigue - dimmed variant
+        [FatigueType.BOSTEZO]: this.getCssVariableValue('--warning'), // Medium fatigue - like medium alerts in Top Drivers
+        [FatigueType.CANSANCIO_VISUAL]: `${this.getCssVariableValue('--primary')} / 0.8`, // Low fatigue - dimmed primary like lower alerts
+        [FatigueType.NINGUNO]: `${this.getCssVariableValue('--primary')} / 0.6`, // No fatigue - even more dimmed like lowest alerts
       });
     }, 0);
   }

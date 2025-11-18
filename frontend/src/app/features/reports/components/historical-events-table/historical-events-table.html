@@ -1,4 +1,4 @@
-<div class="bg-card rounded-lg border border-border flex flex-col h-full shadow-lg overflow-hidden">
+<div class="bg-card rounded-xl border border-border flex flex-col h-full shadow-md overflow-hidden">
   <div
     class="p-6 border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
   >
@@ -35,7 +35,7 @@
       <thead class="bg-secondary/30 backdrop-blur-sm sticky top-0 z-10">
         <tr class="border-b border-border">
           <th
-            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
+            class="p-4 text-muted-foreground font-bold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('timestamp')"
           >
             {{ 'HISTORICAL_EVENTS_TABLE.HEADER_DATE_TIME' | translate }} @if(sortState().column === 'timestamp'){
@@ -45,7 +45,7 @@
             }
           </th>
           <th
-            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
+            class="p-4 text-muted-foreground font-bold uppercase text-sm tracking-wider cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('fatigueType')"
           >
             {{ 'HISTORICAL_EVENTS_TABLE.HEADER_EVENT_TYPE' | translate }} @if(sortState().column === 'fatigueType'){
@@ -55,7 +55,7 @@
             }
           </th>
           <th
-            class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider text-center cursor-pointer hover:text-primary transition-colors"
+            class="p-4 text-muted-foreground font-bold uppercase text-sm tracking-wider text-center cursor-pointer hover:text-primary transition-colors"
             (click)="changeSort('fatigueLevel')"
           >
             {{ 'HISTORICAL_EVENTS_TABLE.HEADER_LEVEL' | translate }} @if(sortState().column === 'fatigueLevel'){
@@ -64,10 +64,10 @@
             </span>
             }
           </th>
-          <th class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider">
+          <th class="p-4 text-muted-foreground font-bold uppercase text-sm tracking-wider">
             {{ 'HISTORICAL_EVENTS_TABLE.HEADER_DRIVER' | translate }}
           </th>
-          <th class="p-4 text-muted-foreground font-semibold uppercase text-sm tracking-wider">
+          <th class="p-4 text-muted-foreground font-bold uppercase text-sm tracking-wider">
             {{ 'HISTORICAL_EVENTS_TABLE.HEADER_VEHICLE' | translate }}
           </th>
         </tr>
@@ -76,7 +76,7 @@
       @if (eventsPage(); as page) {
       <tbody class="divide-y divide-border">
         @for (event of page.content; track event.id) {
-        <tr class="hover:bg-muted/30 transition-colors duration-150 data-table-row">
+        <tr class="odd:bg-background even:bg-card hover:bg-muted/30 transition-colors duration-150 data-table-row">
           <td class="p-4 text-foreground whitespace-nowrap">
             {{ event.timestamp | date : 'dd/MM/yyyy h:mm:ss a' }}
           </td>

@@ -60,7 +60,11 @@
       "START_DATE": "Fecha de Inicio",
       "END_DATE": "Fecha de Fin",
       "APPLY": "Aplicar",
-      "RESET": "Restablecer"
+      "RESET": "Restablecer",
+      "START_DATE_LABEL": "Fecha de Inicio",
+      "END_DATE_LABEL": "Fecha de Fin",
+      "APPLY_BUTTON": "Aplicar Filtros",
+      "CLEAR_BUTTON": "Limpiar Filtros"
     }
   },
   "HEADER": {

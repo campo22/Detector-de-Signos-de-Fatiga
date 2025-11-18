@@ -59,7 +59,11 @@
       "START_DATE": "Start Date",
       "END_DATE": "End Date",
       "APPLY": "Apply",
-      "RESET": "Reset"
+      "RESET": "Reset",
+      "START_DATE_LABEL": "Start Date",
+      "END_DATE_LABEL": "End Date",
+      "APPLY_BUTTON": "Apply Filters",
+      "CLEAR_BUTTON": "Clear Filters"
     }
   },
   "HEADER": {

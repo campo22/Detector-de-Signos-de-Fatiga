@@ -38,6 +38,21 @@ export class Header {
   public pageTitle = 'Dashboard Principal';
   public pageSubtitle = 'Bienvenido de nuevo, Administrador.';
 
+  public getUserInitials(): string {
+    const name = this.userProfile()?.name;
+    if (!name) {
+      return '';
+    }
+    const parts = name.split(' ').filter(part => part.length > 0);
+    if (parts.length === 0) {
+      return '';
+    }
+    if (parts.length === 1) {
+      return parts[0].charAt(0).toUpperCase();
+    }
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  }
+
   constructor() {
     this.initializeMenuItems();
     this.updatePageTitle(this.router.url);
