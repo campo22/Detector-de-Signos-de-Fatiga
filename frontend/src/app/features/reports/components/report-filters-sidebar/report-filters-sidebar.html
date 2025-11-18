@@ -1,37 +1,36 @@
 <aside
   class="w-full lg:w-[400px] bg-card border-r border-border flex flex-col p-6 rounded-lg shadow-lg h-full"
 >
-  <h2 class="text-white mb-6 text-xl font-semibold font-display">
-    {{ 'REPORTS_FILTERS.TITLE' | translate }}
-  </h2>
+  <div class="flex items-center gap-3 mb-6">
+    <span class="material-symbols-outlined text-primary text-2xl">tune</span>
+    <h2 class="text-white text-xl font-semibold font-display">
+      {{ 'REPORTS_FILTERS.TITLE' | translate }}
+    </h2>
+  </div>
 
   <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="flex flex-col gap-5 flex-grow">
-    <div class="space-y-4">
-      <p class="text-foreground/80 text-sm font-medium">
-        {{ 'REPORTS_FILTERS.DATE_RANGE' | translate }}
-      </p>
+    <!-- Date Range Section -->
+    <div class="space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-lg">calendar_month</span>
+        <p class="text-foreground/80 text-sm font-medium">
+          {{ 'REPORTS_FILTERS.DATE_RANGE' | translate }}
+        </p>
+      </div>
       <div class="grid grid-cols-1 @[280px]:grid-cols-2 gap-3">
         <div class="relative date-input group">
-          <span
-            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
-            >calendar_today</span
-          >
           <input
             type="date"
             formControlName="startDate"
-            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
+            class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
             [placeholder]="'REPORTS_FILTERS.START_DATE' | translate"
           />
         </div>
         <div class="relative date-input group">
-          <span
-            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
-            >calendar_today</span
-          >
           <input
             type="date"
             formControlName="endDate"
-            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
+            class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
             [placeholder]="'REPORTS_FILTERS.END_DATE' | translate"
           />
         </div>
@@ -39,56 +38,65 @@
     </div>
     <hr class="border-border/50" />
 
-    <div class="space-y-4">
-      <label class="flex flex-col gap-2">
+    <!-- Driver and Vehicle Section -->
+    <div class="space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-lg">info</span>
         <p class="text-foreground/80 text-sm font-medium">
-          {{ 'REPORTS_FILTERS.DRIVER_NAME' | translate }}
+          {{ 'REPORTS_FILTERS.DETAILS' | translate }}
         </p>
-        <div class="relative group">
-          <span
-            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
-            >person</span
-          >
-          <input
-            type="text"
-            formControlName="driverName"
-            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
-            [placeholder]="'REPORTS_FILTERS.DRIVER_NAME_PLACEHOLDER' | translate"
-          />
-        </div>
-      </label>
-      <label class="flex flex-col gap-2">
-        <p class="text-foreground/80 text-sm font-medium">
-          {{ 'REPORTS_FILTERS.VEHICLE_PLATE' | translate }}
-        </p>
-        <div class="relative group">
-          <span
-            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
-            >local_shipping</span
-          >
-          <input
-            type="text"
-            formControlName="vehiclePlate"
-            class="form-input w-full rounded-lg border bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50"
-            [placeholder]="'REPORTS_FILTERS.VEHICLE_PLATE_PLACEHOLDER' | translate"
-          />
-        </div>
-      </label>
+      </div>
+      <div class="space-y-3">
+        <label class="flex flex-col gap-2">
+          <p class="text-foreground/70 text-xs font-medium uppercase tracking-wide">
+            {{ 'REPORTS_FILTERS.DRIVER_NAME' | translate }}
+          </p>
+          <div class="relative group">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
+              >person</span
+            >
+            <input
+              type="text"
+              formControlName="driverName"
+              class="form-input w-full rounded-lg border border-border bg-background/50 pl-10 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
+              [placeholder]="'REPORTS_FILTERS.DRIVER_NAME_PLACEHOLDER' | translate"
+            />
+          </div>
+        </label>
+        <label class="flex flex-col gap-2">
+          <p class="text-foreground/70 text-xs font-medium uppercase tracking-wide">
+            {{ 'REPORTS_FILTERS.VEHICLE_PLATE' | translate }}
+          </p>
+          <div class="relative group">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
+              >local_shipping</span
+            >
+            <input
+              type="text"
+              formControlName="vehiclePlate"
+              class="form-input w-full rounded-lg border border-border bg-background/50 pl-10 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
+              [placeholder]="'REPORTS_FILTERS.VEHICLE_PLATE_PLACEHOLDER' | translate"
+            />
+          </div>
+        </label>
+      </div>
     </div>
     <hr class="border-border/50" />
 
-    <div class="flex flex-col gap-2">
-      <p class="text-foreground/80 text-sm font-medium">
-        {{ 'REPORTS_FILTERS.EVENT_TYPE' | translate }}
-      </p>
+    <!-- Event Type Section -->
+    <div class="flex flex-col gap-3">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-lg">category</span>
+        <p class="text-foreground/80 text-sm font-medium">
+          {{ 'REPORTS_FILTERS.EVENT_TYPE' | translate }}
+        </p>
+      </div>
       <div class="relative group">
-        <span
-          class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300"
-          >category</span
-        >
         <select
           formControlName="fatigueType"
-          class="form-input w-full rounded-lg border bg-background pl-9 pr-10 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 appearance-none cursor-pointer"
+          class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-10 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background appearance-none cursor-pointer transition-all duration-200"
         >
           <option [ngValue]="null">{{ 'REPORTS_FILTERS.ALL_TYPES' | translate }}</option>
           @for(type of fatigueTypes; track type[0]) {
@@ -103,10 +111,14 @@
     </div>
     <hr class="border-border/50" />
 
+    <!-- Fatigue Level Section -->
     <div class="flex flex-col gap-3">
-      <p class="text-foreground/80 text-sm font-medium">
-        {{ 'REPORTS_FILTERS.FATIGUE_LEVEL' | translate }}
-      </p>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-lg">speed</span>
+        <p class="text-foreground/80 text-sm font-medium">
+          {{ 'REPORTS_FILTERS.FATIGUE_LEVEL' | translate }}
+        </p>
+      </div>
       <div class="grid grid-cols-3 gap-2">
         <button
           type="button"
