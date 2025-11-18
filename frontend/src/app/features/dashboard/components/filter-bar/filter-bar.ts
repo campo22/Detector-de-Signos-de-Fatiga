@@ -52,6 +52,21 @@ export class FilterBar implements AfterViewInit {
             endDate: this.formatDate(date2.toJSDate())
           });
         });
+        
+        // Añadir estilos y comportamiento al abrir el picker
+        picker.on('show', () => {
+          const startInput = document.getElementById('start-date');
+          const endInput = document.getElementById('end-date');
+          if (startInput) startInput.classList.add('ring-2', 'ring-ring', 'border-ring', 'shadow-glow-primary');
+          if (endInput) endInput.classList.add('ring-2', 'ring-ring', 'border-ring', 'shadow-glow-primary');
+        });
+        
+        picker.on('hide', () => {
+          const startInput = document.getElementById('start-date');
+          const endInput = document.getElementById('end-date');
+          if (startInput) startInput.classList.remove('ring-2', 'ring-ring', 'border-ring', 'shadow-glow-primary');
+          if (endInput) endInput.classList.remove('ring-2', 'ring-ring', 'border-ring', 'shadow-glow-primary');
+        });
       }
     });
   }
