@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { SidebarService } from './sidebar.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,15 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule
   ],
   templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss'
+  styleUrl: './sidebar.scss',
+  animations: [
+    trigger('slideIn', [
+      state('void', style({ transform: 'translateX(-100%)' })),
+      transition('void => *', [
+        animate('300ms ease-in-out', style({ transform: 'translateX(0%)' }))
+      ])
+    ])
+  ]
 })
 export class Sidebar {
 

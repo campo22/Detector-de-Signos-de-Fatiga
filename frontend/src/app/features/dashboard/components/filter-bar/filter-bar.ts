@@ -21,13 +21,15 @@ export class FilterBar implements AfterViewInit {
   private fb = inject(FormBuilder);
   private filterService = inject(DashboardFilter);
 
+  private picker: Litepicker | null = null;
+
   filterForm = this.fb.group({
     startDate: [this.getDefaultStartDate()],
     endDate: [this.getCurrentDate()]
   });
 
   ngAfterViewInit(): void {
-    const picker = new Litepicker({
+    this.picker = new Litepicker({
       element: document.getElementById('start-date')!,
       elementEnd: document.getElementById('end-date')!,
       singleMode: false,
@@ -62,6 +64,19 @@ export class FilterBar implements AfterViewInit {
     };
 
     this.filterService.updateFilters(filter);
+  }
+
+  clearFilters(): void {
+    const startDate = this.getDefaultStartDate();
+    const endDate = this.getCurrentDate();
+    this.filterForm.reset({
+      startDate: startDate,
+      endDate: endDate
+    });
+    if (this.picker) {
+      this.picker.setDateRange(startDate, endDate);
+    }
+    this.applyFilters();
   }
 
   private formatDate(date: Date | string): string {

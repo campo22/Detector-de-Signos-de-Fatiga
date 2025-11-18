@@ -5,57 +5,36 @@
 
 /* Definición de las variables de color y estilo del nuevo diseño */
 @layer base {
-  /* TEMA CLARO (Light Theme) - Mejorado */
   :root {
-    --background: 210 40% 98%;      /* Blanco Hueso */
-    --foreground: 220 12% 10%;      /* Negro casi puro para mejor contraste en títulos */
-    --subtle-foreground: 220 10% 25%; /* Gris medio oscuro para cuerpo de texto principal */
-    --card: 210 40% 100%;           /* Blanco Puro */
-    --card-foreground: 220 12% 10%; /* Negro casi puro (Texto en Tarjetas) */
-    --popover: 210 40% 100%;
-    --popover-foreground: 220 12% 10%;
-    --primary: 217 91% 60%;         /* Azul Primario (Sin cambios) */
-    --primary-foreground: 210 40% 98%;
-    --primary-glow: 217 91% 60%;
-    --secondary: 210 40% 96%;       /* Gris Claro (Fondo Secundario) */
-    --secondary-foreground: 220 10% 25%; /* Gris medio oscuro */
-    --muted: 210 40% 96%;
-    --muted-foreground: 220 8% 50%; /* Gris más claro para texto silenciado */
-    --accent: 210 40% 94%;
-    --accent-foreground: 220 10% 25%; /* Gris medio oscuro */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --destructive-glow: 0 84% 60%;
-    --warning: 45 93% 47%;
-    --warning-foreground: 210 40% 98%;
-    --warning-glow: 45 93% 47%;
-    --success: 142 71% 45%;
-    --success-foreground: 210 40% 98%;
-    --success-glow: 142 71% 45%;
-    --info: 217 91% 60%;            /* Azul para información */
-    --info-foreground: 210 40% 98%;
-    --border: 214 20% 85%;          /* Borde Gris más claro y sutil */
-    --input: 0 0% 100%;             /* Blanco puro para inputs */
-    --input-foreground: 220 12% 10%; /* Negro casi puro para texto en inputs */
-    --input-placeholder: 220 8% 55%; /* Gris claro para placeholders */
-    --input-border: 214 20% 80%;    /* Borde más claro para inputs */
-    --input-focus: 217 91% 85%;     /* Color de focus más claro */
-    --input-focus-ring: 217 91% 60% / 0.5; /* Anillo de focus azul semi-transparente */
-
-    /* Variables específicas para alertas de fatiga */
-    --alert-fatiga-baja: 142 71% 45%;       /* Verde para fatiga baja */
-    --alert-fatiga-baja-foreground: 210 40% 98%;
-    --alert-fatiga-media: 45 93% 50%;       /* Amarillo más intenso para fatiga media */
-    --alert-fatiga-media-foreground: 210 40% 98%;
-    --alert-fatiga-alta: 0 84% 60%;         /* Rojo para fatiga alta */
-    --alert-fatiga-alta-foreground: 210 40% 98%;
-    --alert-fatiga-critica: 330 90% 50%;    /* Magenta para fatiga crítica */
-    --alert-fatiga-critica-foreground: 210 40% 98%;
-
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 221 83.2% 53.3%;
+    --primary-foreground: 210 20% 98%;
+    --primary-glow: 221 83.2% 53.3%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --destructive-glow: 0 84.2% 60.2%;
+    --warning: 38 91.6% 56.5%;
+    --warning-foreground: 210 20% 98%;
+    --warning-glow: 38 91.6% 56.5%;
+    --success: 142.1 76.2% 36.3%;
+    --success-foreground: 210 20% 98%;
+    --success-glow: 142.1 76.2% 36.3%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83.2% 53.3%;
     --radius: 0.75rem;
   }
-
-  /* TEMA OSCURO (Dark Theme) - El que el usuario considera "por defecto" */
   .dark {
     --background: 222 84% 4%;
     --foreground: 210 40% 98%;
@@ -81,26 +60,9 @@
     --success: 130 90% 50%;
     --success-foreground: 210 40% 98%;
     --success-glow: 130 90% 50%;
-    --info: 217 91% 60%;
-    --info-foreground: 210 40% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --input-foreground: 210 40% 98%;
-    --input-placeholder: 215 20% 65%;
-    --input-border: 217 33% 22%;
-    --input-focus: 217 33% 25%;
-    --input-focus-ring: 217 91% 60% / 0.5;
     --ring: 217 91% 60%;
-
-    /* Variables específicas para alertas de fatiga en tema oscuro */
-    --alert-fatiga-baja: var(--success);     /* Usa el color success original en modo oscuro */
-    --alert-fatiga-baja-foreground: var(--success-foreground);
-    --alert-fatiga-media: var(--warning);    /* Usa el color warning original en modo oscuro */
-    --alert-fatiga-media-foreground: var(--warning-foreground);
-    --alert-fatiga-alta: var(--destructive); /* Usa el color destructive original en modo oscuro */
-    --alert-fatiga-alta-foreground: var(--destructive-foreground);
-    --alert-fatiga-critica: 330 100% 60%;   /* Magenta intenso para fatiga crítica */
-    --alert-fatiga-critica-foreground: var(--destructive-foreground);
   }
 }
 

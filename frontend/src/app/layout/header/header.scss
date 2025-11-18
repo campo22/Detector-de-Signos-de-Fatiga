@@ -3,3 +3,9 @@
   // Añadimos una transición suave para que el cambio de color al pasar el ratón no sea brusco.
   transition: background-color 200ms ease-in-out;
 }
+
+.gradient-text {
+  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary-glow)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
