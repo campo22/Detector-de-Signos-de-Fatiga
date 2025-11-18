@@ -48,6 +48,7 @@
     "jspdf-autotable": "^5.0.2",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
+    "litepicker": "^2.0.12",
     "ng-apexcharts": "^2.0.1",
     "primeicons": "^7.0.0",
     "primeng": "^20.2.0",

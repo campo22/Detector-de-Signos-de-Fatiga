@@ -1,65 +1,19 @@
-<form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filter-bar">
-  <div class="filter-header">
-    <div class="filter-title-section">
-      <span class="material-symbols-outlined filter-icon">tune</span>
-      <h3 class="filter-title">{{ 'DASHBOARD.FILTERS.FILTERS' | translate }}</h3>
-    </div>
-  </div>
-
-  <div class="filter-content">
-    <!-- Start Date Filter -->
-    <div class="filter-group">
-      <label class="filter-label" for="startDate">
-        <span class="material-symbols-outlined label-icon">calendar_month</span>
-        {{ 'DASHBOARD.FILTERS.START_DATE' | translate }}
-      </label>
-      <div class="date-input-wrapper">
-        <input
-          id="startDate"
-          formControlName="startDate"
-          type="date"
-          class="date-input"
-          (click)="openDatepicker('startDate')"
-        />
-        <span class="material-symbols-outlined calendar-icon">event</span>
+<div class="bg-card p-4 rounded-lg shadow-lg shadow-black/20 mb-6">
+  <div class="flex items-end space-x-4">
+    <div class="flex-grow">
+      <label class="block text-sm font-medium text-muted-foreground mb-1.5" for="start-date">Fecha de Inicio</label>
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">calendar_today</span>
+        <input class="w-full bg-input border border-border rounded-md pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-ring focus:border-ring focus:shadow-glow-primary outline-none transition-all duration-300 text-foreground" id="start-date" placeholder="Seleccionar fecha" type="text"/>
       </div>
     </div>
-
-    <!-- End Date Filter -->
-    <div class="filter-group">
-      <label class="filter-label" for="endDate">
-        <span class="material-symbols-outlined label-icon">calendar_month</span>
-        {{ 'DASHBOARD.FILTERS.END_DATE' | translate }}
-      </label>
-      <div class="date-input-wrapper">
-        <input
-          id="endDate"
-          formControlName="endDate"
-          type="date"
-          class="date-input"
-          (click)="openDatepicker('endDate')"
-        />
-        <span class="material-symbols-outlined calendar-icon">event</span>
+    <div class="flex-grow">
+      <label class="block text-sm font-medium text-muted-foreground mb-1.5" for="end-date">Fecha de Fin</label>
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">event</span>
+        <input class="w-full bg-input border border-border rounded-md pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-ring focus:border-ring focus:shadow-glow-primary outline-none transition-all duration-300 text-foreground" id="end-date" placeholder="Seleccionar fecha" type="text"/>
       </div>
     </div>
-
-    <!-- Apply Button -->
-    <div class="filter-actions">
-      <button
-        type="submit"
-        class="btn-apply"
-      >
-        <span class="material-symbols-outlined">check_circle</span>
-        <span>{{ 'DASHBOARD.FILTERS.APPLY' | translate }}</span>
-      </button>
-      <button
-        type="button"
-        class="btn-reset"
-        (click)="resetFilters()"
-      >
-        <span class="material-symbols-outlined">restart_alt</span>
-        <span>{{ 'DASHBOARD.FILTERS.RESET' | translate }}</span>
-      </button>
-    </div>
+    <button class="px-8 py-2.5 bg-primary text-primary-foreground rounded-md font-semibold text-lg hover:bg-primary/90 hover:shadow-glow-primary transition-all duration-300">Aplicar Filtros</button>
   </div>
-</form>
+</div>

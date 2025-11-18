@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, AfterViewInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { DashboardFilter, DateRangeOption } from '../../services/dashboard-filter.service';
+import { DashboardFilter } from '../../services/dashboard-filter.service';
 import { CommonModule } from '@angular/common';
 import { AnalyticsFilterRequest } from '../../../../core/models/analytics.models';
 import { TranslateModule } from '@ngx-translate/core';
+import Litepicker from 'litepicker';
 
 @Component({
   selector: 'app-filter-bar',
@@ -15,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './filter-bar.html',
   styleUrl: './filter-bar.scss'
 })
-export class FilterBar {
+export class FilterBar implements AfterViewInit {
 
   private fb = inject(FormBuilder);
   private filterService = inject(DashboardFilter);
@@ -25,6 +26,34 @@ export class FilterBar {
     endDate: [this.getCurrentDate()]
   });
 
+  ngAfterViewInit(): void {
+    const picker = new Litepicker({
+      element: document.getElementById('start-date')!,
+      elementEnd: document.getElementById('end-date')!,
+      singleMode: false,
+      allowRepick: true,
+      startDate: this.filterForm.value.startDate || new Date(),
+      endDate: this.filterForm.value.endDate || new Date(),
+      format: 'DD MMM, YYYY',
+      lang: 'es-ES',
+      buttonText: {
+        previousMonth: `<span class="material-symbols-outlined">chevron_left</span>`,
+        nextMonth: `<span class="material-symbols-outlined">chevron_right</span>`,
+        reset: 'Resetear',
+        apply: 'Aplicar',
+        cancel: 'Cancelar'
+      },
+      setup: (picker) => {
+        picker.on('selected', (date1, date2) => {
+          this.filterForm.patchValue({
+            startDate: this.formatDate(date1.toJSDate()),
+            endDate: this.formatDate(date2.toJSDate())
+          });
+        });
+      }
+    });
+  }
+
   applyFilters(): void {
     const filtersValue = this.filterForm.value;
     const filter: AnalyticsFilterRequest = {
@@ -33,24 +62,6 @@ export class FilterBar {
     };
 
     this.filterService.updateFilters(filter);
-  }
-
-  resetFilters(): void {
-    this.filterForm.reset({
-      startDate: this.getDefaultStartDate(),
-      endDate: this.getCurrentDate()
-    });
-    this.applyFilters();
-  }
-
-  // Función para abrir el picker de fecha al hacer clic en el icono
-  openDatepicker(id: string): void {
-    const dateInput = document.getElementById(id) as HTMLInputElement;
-    if (dateInput) {
-      // En algunos navegadores, hacer click en el input abre el datepicker
-      dateInput.focus();
-      dateInput.click();
-    }
   }
 
   private formatDate(date: Date | string): string {
@@ -69,5 +80,4 @@ export class FilterBar {
     date.setDate(date.getDate() - 6); // Last 7 days
     return date.toISOString().split('T')[0];
   }
-
 }
