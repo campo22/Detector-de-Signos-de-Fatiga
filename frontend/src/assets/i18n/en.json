@@ -446,6 +446,7 @@
     "EVENT_TYPE": "Event Type",
     "ALL_TYPES": "All Types",
     "FATIGUE_LEVEL": "Fatigue Level",
+    "DETAILS": "Details",
     "LEVEL_HIGH": "HIGH",
     "LEVEL_MEDIUM": "MEDIUM",
     "LEVEL_LOW": "LOW",
