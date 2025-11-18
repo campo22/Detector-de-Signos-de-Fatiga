@@ -63,6 +63,34 @@
     }
   },
   "HEADER": {
+    "PAGE_TITLE": {
+      "DASHBOARD": "Main Dashboard",
+      "MONITORING_INDIVIDUAL": "Individual Monitoring",
+      "LIVE_EVENTS": "Live Events",
+      "MONITORING_DETAIL": "Driver Monitoring",
+      "MONITORING": "Monitoring",
+      "REPORTS": "Reports",
+      "DRIVERS": "Driver Management",
+      "VEHICLES": "Vehicle Management",
+      "RULES": "Rule Management",
+      "USERS": "User Management",
+      "PROFILE": "User Profile",
+      "SETTINGS": "System Settings"
+    },
+    "PAGE_SUBTITLE": {
+      "DASHBOARD": "Welcome back, Administrator.",
+      "MONITORING_INDIVIDUAL": "Detailed driver tracking",
+      "LIVE_EVENTS": "Real-time monitoring",
+      "MONITORING_DETAIL": "Detailed driver view",
+      "MONITORING": "Fleet monitoring panel",
+      "REPORTS": "Report generation and analysis",
+      "DRIVERS": "Driver profile administration",
+      "VEHICLES": "Fleet vehicle administration",
+      "RULES": "Security rule configuration",
+      "USERS": "System user administration",
+      "PROFILE": "Settings and personal data",
+      "SETTINGS": "Settings and preferences"
+    },
     "MAIN_DASHBOARD": "Main Dashboard",
     "WELCOME_ADMIN": "Welcome back, Administrator.",
     "FLEET_ADMIN": "Fleet Admin",

@@ -64,6 +64,34 @@
     }
   },
   "HEADER": {
+    "PAGE_TITLE": {
+      "DASHBOARD": "Dashboard Principal",
+      "MONITORING_INDIVIDUAL": "Monitoreo Individual",
+      "LIVE_EVENTS": "Eventos en Vivo",
+      "MONITORING_DETAIL": "Monitoreo de Conductor",
+      "MONITORING": "Monitoreo",
+      "REPORTS": "Reportes",
+      "DRIVERS": "Gestión de Conductores",
+      "VEHICLES": "Gestión de Vehículos",
+      "RULES": "Gestión de Reglas",
+      "USERS": "Gestión de Usuarios",
+      "PROFILE": "Perfil de Usuario",
+      "SETTINGS": "Configuración del Sistema"
+    },
+    "PAGE_SUBTITLE": {
+      "DASHBOARD": "Bienvenido de nuevo, Administrador.",
+      "MONITORING_INDIVIDUAL": "Seguimiento detallado de conductores",
+      "LIVE_EVENTS": "Monitoreo en tiempo real",
+      "MONITORING_DETAIL": "Vista detallada de conductor",
+      "MONITORING": "Panel de monitoreo de flota",
+      "REPORTS": "Generación y análisis de reportes",
+      "DRIVERS": "Administración de perfiles de conductores",
+      "VEHICLES": "Administración de vehículos de la flota",
+      "RULES": "Configuración de reglas de seguridad",
+      "USERS": "Administración de usuarios del sistema",
+      "PROFILE": "Configuración y datos personales",
+      "SETTINGS": "Ajustes y preferencias"
+    },
     "MAIN_DASHBOARD": "Dashboard Principal",
     "WELCOME_ADMIN": "Bienvenido de nuevo, Administrador.",
     "FLEET_ADMIN": "Admin Flota",
