@@ -56,6 +56,7 @@
     "WAITING_FOR_EVENTS": "Esperando nuevos eventos...",
     "VIEW_ALL_ALERTS": "Ver todas las alertas",
     "FILTERS": {
+      "FILTERS": "Filtros de Búsqueda",
       "START_DATE": "Fecha de Inicio",
       "END_DATE": "Fecha de Fin",
       "APPLY": "Aplicar"

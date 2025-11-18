@@ -1,46 +1,147 @@
-/* Estilos mejorados para el componente de filtro de fechas */
-.filter-bar {
-  @apply flex items-center gap-6 p-4 bg-card border border-border rounded-xl shadow-sm;
-
-  label {
-    @apply text-sm font-semibold text-foreground;
+/* Estilos para el formulario de filtros que coinciden con el diseño del ejemplo */
+.bg-card {
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 2px);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  
+  /* Título de la sección de filtros */
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: hsl(var(--card-foreground));
   }
-
-  .input-container {
-    @apply relative flex items-center;
-  }
-
-  input[type="date"] {
-    @apply w-full bg-background border border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 appearance-none;
+  
+  /* Contenedor de los controles */
+  > div:last-child {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: end;
     
-    /* Estilo para el texto dentro del input */
-    color: hsl(var(--foreground));
-  }
-
-  .calendar-icon {
-    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none;
-  }
-
-  .calendar-icon-inner {
-    @apply text-foreground/70;
-  }
-
-  button {
-    @apply px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg shadow-sm hover:shadow-primary/30 transition-all duration-300;
-  }
-
-  /* Estilo para el botón cuando está deshabilitado */
-  button:disabled {
-    @apply bg-muted text-muted-foreground cursor-not-allowed hover:shadow-none;
-  }
-
-  /* Ajustes para dispositivos móviles */
-  @media (max-width: 768px) {
-    @apply flex-col gap-4;
-    align-items: stretch;
-
-    .input-group {
-      @apply flex flex-col gap-2 w-full;
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  
+  /* Estilo de los grupos de campos */
+  .relative {
+    &.group {
+      label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 0.5rem;
+      }
+      
+      /* Contenedor del input con icono */
+      > .relative {
+        position: relative;
+        
+        /* Icono del calendario */
+        > span:first-child {
+          color: hsl(var(--muted-foreground));
+          position: absolute;
+          left: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+        }
+        
+        /* Input del formulario */
+        input[type="date"] {
+          background-color: hsl(var(--background));
+          border: 1px solid hsl(var(--border));
+          border-radius: calc(var(--radius) - 4px);
+          padding-left: 2.5rem;
+          padding-right: 1rem;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+          width: 100%;
+          color: hsl(var(--foreground));
+          outline: none;
+          transition: box-shadow 0.2s ease;
+          appearance: none;
+          
+          /* Ocultar el indicador de calendario nativo del navegador */
+          &::-webkit-calendar-picker-indicator {
+            display: none;
+            -webkit-appearance: none;
+          }
+          
+          &::-moz-calendar-picker-indicator {
+            display: none;
+          }
+          
+          /* Efecto de foco */
+          &:focus {
+            box-shadow: 0 0 0 2px hsl(var(--primary));
+            border-color: hsl(var(--primary));
+          }
+        }
+      }
+    }
+  }
+  
+  /* Botón de aplicar filtros */
+  button[type="submit"] {
+    width: 100%;
+    @media (min-width: 768px) {
+      width: auto;
+    }
+    padding: 0.5rem 1.5rem;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-radius: calc(var(--radius) - 2px);
+    font-weight: 600;
+    border: none;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    
+    &:hover {
+      background-color: hsl(var(--primary) / 0.9);
+      transform: scale(1.02);
+    }
+    
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary));
+    }
+  }
+  
+  /* Contenedor de botones adicionales (más filtros, restablecer) */
+  .justify-between {
+    > div:last-child {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      
+      .relative.group {
+        button {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
+          color: hsl(var(--muted-foreground));
+          
+          &:hover {
+            color: hsl(var(--foreground));
+          }
+        }
+      }
+    }
+  }
+  
+  /* Estilos para iconos de Material Symbols */
+  .material-symbols-outlined {
+    font-size: 1.25rem;
+    line-height: 1;
   }
 }

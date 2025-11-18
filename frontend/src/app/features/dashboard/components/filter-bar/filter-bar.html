@@ -1,35 +1,43 @@
-<form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filter-bar">
-  <div class="input-group flex items-center gap-2">
-    <label for="startDate" class="text-sm font-semibold text-foreground">{{ 'DASHBOARD.FILTERS.START_DATE' | translate }}</label>
-    <div class="input-container">
-      <input
-        id="startDate"
-        type="date"
-        formControlName="startDate"
-        class="form-input bg-background border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary transition"
-      />
-      <div class="calendar-icon">
-        <span class="calendar-icon-inner material-symbols-outlined text-sm">calendar_month</span>
-      </div>
-    </div>
+<form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filter-bar bg-card border border-border rounded-xl p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h3 class="text-xl font-bold text-card-foreground">{{ 'DASHBOARD.FILTERS.FILTERS' | translate }}</h3>
   </div>
 
-  <div class="input-group flex items-center gap-2">
-    <label for="endDate" class="text-sm font-semibold text-foreground">{{ 'DASHBOARD.FILTERS.END_DATE' | translate }}</label>
-    <div class="input-container">
-      <input
-        id="endDate"
-        type="date"
-        formControlName="endDate"
-        class="form-input bg-background border-border rounded-lg pl-3 pr-10 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary transition"
-      />
-      <div class="calendar-icon">
-        <span class="calendar-icon-inner material-symbols-outlined text-sm">calendar_month</span>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
+    <div class="relative group">
+      <label class="block text-sm font-medium text-muted-foreground mb-2" for="startDate">{{ 'DASHBOARD.FILTERS.START_DATE' | translate }}</label>
+      <div class="relative">
+        <span class="material-symbols-outlined text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">calendar_today</span>
+        <input
+          id="startDate"
+          formControlName="startDate"
+          type="date"
+          class="bg-background border border-border rounded-lg pl-10 pr-4 py-3 w-full text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 shadow-sm"
+        />
       </div>
     </div>
-  </div>
 
-  <button type="submit" class="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg shadow-sm hover:shadow-primary/30 transition-all duration-300">
-    {{ 'DASHBOARD.FILTERS.APPLY' | translate }}
-  </button>
+    <div class="relative group">
+      <label class="block text-sm font-medium text-muted-foreground mb-2" for="endDate">{{ 'DASHBOARD.FILTERS.END_DATE' | translate }}</label>
+      <div class="relative">
+        <span class="material-symbols-outlined text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">calendar_today</span>
+        <input
+          id="endDate"
+          formControlName="endDate"
+          type="date"
+          class="bg-background border border-border rounded-lg pl-10 pr-4 py-3 w-full text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 shadow-sm"
+        />
+      </div>
+    </div>
+
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2"
+      >
+        <span class="material-symbols-outlined">check_circle</span>
+        {{ 'DASHBOARD.FILTERS.APPLY' | translate }}
+      </button>
+    </div>
+  </div>
 </form>

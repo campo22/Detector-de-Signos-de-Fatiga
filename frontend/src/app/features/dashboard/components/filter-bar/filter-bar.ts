@@ -28,11 +28,28 @@ export class FilterBar {
   applyFilters(): void {
     const filtersValue = this.filterForm.value;
     const filter: AnalyticsFilterRequest = {
-      startDate: filtersValue.startDate || undefined,
-      endDate: filtersValue.endDate || undefined,
+      startDate: filtersValue.startDate ? this.formatDate(filtersValue.startDate) : undefined,
+      endDate: filtersValue.endDate ? this.formatDate(filtersValue.endDate) : undefined,
     };
 
     this.filterService.updateFilters(filter);
+  }
+
+  // Función para abrir el picker de fecha al hacer clic en el icono
+  openDatepicker(id: string): void {
+    const dateInput = document.getElementById(id) as HTMLInputElement;
+    if (dateInput) {
+      // En algunos navegadores, hacer click en el input abre el datepicker
+      dateInput.focus();
+      dateInput.click();
+    }
+  }
+
+  private formatDate(date: Date | string): string {
+    if (typeof date === 'string') {
+      return date;
+    }
+    return date.toISOString().split('T')[0];
   }
 
   private getCurrentDate(): string {
