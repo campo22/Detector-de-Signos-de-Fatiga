@@ -22,17 +22,19 @@
           <input
             type="date"
             formControlName="startDate"
-            class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
+            class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-10 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
             [placeholder]="'REPORTS_FILTERS.START_DATE' | translate"
           />
+          <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-lg pointer-events-none">calendar_month</span>
         </div>
         <div class="relative date-input group">
           <input
             type="date"
             formControlName="endDate"
-            class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
+            class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-10 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
             [placeholder]="'REPORTS_FILTERS.END_DATE' | translate"
           />
+          <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-lg pointer-events-none">calendar_month</span>
         </div>
       </div>
     </div>
@@ -52,14 +54,10 @@
             {{ 'REPORTS_FILTERS.DRIVER_NAME' | translate }}
           </p>
           <div class="relative group">
-            <span
-              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300 pointer-events-none"
-              >person</span
-            >
             <input
               type="text"
               formControlName="driverName"
-              class="form-input w-full rounded-lg border border-border bg-background/50 pl-10 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
+              class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
               [placeholder]="'REPORTS_FILTERS.DRIVER_NAME_PLACEHOLDER' | translate"
             />
           </div>
@@ -69,14 +67,10 @@
             {{ 'REPORTS_FILTERS.VEHICLE_PLATE' | translate }}
           </p>
           <div class="relative group">
-            <span
-              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base group-focus-within:text-primary transition-colors duration-300 pointer-events-none"
-              >local_shipping</span
-            >
             <input
               type="text"
               formControlName="vehiclePlate"
-              class="form-input w-full rounded-lg border border-border bg-background/50 pl-10 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
+              class="form-input w-full rounded-lg border border-border bg-background/50 pl-3 pr-3 py-2.5 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 focus:bg-background transition-all duration-200"
               [placeholder]="'REPORTS_FILTERS.VEHICLE_PLATE_PLACEHOLDER' | translate"
             />
           </div>

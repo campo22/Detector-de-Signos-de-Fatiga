@@ -1,0 +1,183 @@
+// Report Filters Sidebar Styles
+
+aside {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(var(--primary-rgb), 0.3);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(var(--primary-rgb), 0.5);
+    }
+  }
+}
+
+// Form Input Styles
+.form-input {
+  transition: all 0.2s ease;
+
+  &:hover:not(:focus) {
+    border-color: rgba(var(--primary-rgb), 0.3);
+    background-color: rgba(var(--background-rgb), 0.7);
+  }
+
+  &:focus {
+    border-color: rgb(var(--primary-rgb));
+    background-color: rgb(var(--background-rgb));
+  }
+
+  // Date input specific styles
+  &[type='date'] {
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+      -webkit-appearance: none;
+    }
+  }
+
+
+  // Select specific styles
+  &[type='select'],
+  select {
+    background-image: none;
+    padding-right: 2.5rem;
+
+    &:hover {
+      background-color: rgba(var(--background-rgb), 0.7);
+    }
+  }
+}
+
+// Fatigue Level Buttons
+.fatigue-option {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.1;
+    transition: left 0.3s ease;
+    z-index: 0;
+  }
+
+  &:hover::before {
+    left: 0;
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Filter Button
+.filter-button {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: left 0.3s ease;
+    z-index: 0;
+  }
+
+  &:hover:not(:disabled)::before {
+    left: 0;
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// Section Headers with Icons
+.flex.items-center.gap-2 {
+  .material-symbols-outlined {
+    flex-shrink: 0;
+    animation: slideInLeft 0.3s ease;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Label Styles
+label {
+  transition: all 0.2s ease;
+
+  &:hover {
+    .material-symbols-outlined {
+      color: rgb(var(--primary-rgb));
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  aside {
+    width: 100% !important;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .grid-cols-3 {
+    @apply grid-cols-2;
+  }
+}
+
+// Dark mode optimizations
+@media (prefers-color-scheme: dark) {
+  .form-input {
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    }
+  }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
