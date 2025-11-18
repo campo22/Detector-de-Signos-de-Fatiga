@@ -35,6 +35,14 @@ export class FilterBar {
     this.filterService.updateFilters(filter);
   }
 
+  resetFilters(): void {
+    this.filterForm.reset({
+      startDate: this.getDefaultStartDate(),
+      endDate: this.getCurrentDate()
+    });
+    this.applyFilters();
+  }
+
   // Función para abrir el picker de fecha al hacer clic en el icono
   openDatepicker(id: string): void {
     const dateInput = document.getElementById(id) as HTMLInputElement;

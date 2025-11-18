@@ -58,7 +58,8 @@
     "FILTERS": {
       "START_DATE": "Start Date",
       "END_DATE": "End Date",
-      "APPLY": "Apply"
+      "APPLY": "Apply",
+      "RESET": "Reset"
     }
   },
   "HEADER": {
@@ -456,7 +457,9 @@
       "CABECEO": "Head Nod",
       "DISTRAIDO": "Distracted",
       "MICROSUEÑO": "Microsleep",
-      "CIERRE_OJOS": "Eye Closure"
+      "CIERRE_OJOS": "Eye Closure",
+      "NINGUNO": "None",
+      "CANSANCIO_VISUAL": "Visual Fatigue"
     }
   },
   "HISTORICAL_EVENTS_TABLE": {

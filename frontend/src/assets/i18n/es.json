@@ -59,7 +59,8 @@
       "FILTERS": "Filtros de Búsqueda",
       "START_DATE": "Fecha de Inicio",
       "END_DATE": "Fecha de Fin",
-      "APPLY": "Aplicar"
+      "APPLY": "Aplicar",
+      "RESET": "Restablecer"
     }
   },
   "HEADER": {
@@ -457,7 +458,9 @@
       "CABECEO": "Cabeceo",
       "DISTRAIDO": "Distraído",
       "MICROSUEÑO": "Microsueño",
-      "CIERRE_OJOS": "Cierre de Ojos"
+      "CIERRE_OJOS": "Cierre de Ojos",
+      "NINGUNO": "Ninguno",
+      "CANSANCIO_VISUAL": "Cansancio Visual"
     }
   },
   "HISTORICAL_EVENTS_TABLE": {
