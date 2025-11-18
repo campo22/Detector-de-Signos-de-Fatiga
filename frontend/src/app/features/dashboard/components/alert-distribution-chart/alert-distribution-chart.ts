@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild, ChangeDetectorRef, computed, signal, Signal } from '@angular/core';
+import { Component, inject, ViewChild, computed, signal, Signal } from '@angular/core';
 import { ApexChart, ApexDataLabels, ApexNonAxisChartSeries, ApexPlotOptions, ApexStroke, ApexTooltip, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { AnalyticsService } from '../../../shared/services/analytics.service';
 import { FatigueType } from '../../../../core/models/enums';
@@ -19,6 +19,7 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   stroke: ApexStroke;
   tooltip: ApexTooltip;
+  states?: any; // Añadido para incluir estados del gráfico
 };
 
 @Component({
@@ -33,38 +34,50 @@ export type ChartOptions = {
 export class AlertDistributionChart {
 
   @ViewChild("chart") chart!: ChartComponent;
-  
+
   private analyticsService = inject(AnalyticsService);
   private filterService = inject(DashboardFilter);
-  private cdr = inject(ChangeDetectorRef);
 
-  // Configuración base del gráfico
+  private colorsSignal = signal<Record<FatigueType, string> | null>(null);
+
+  // Configuración base del gráfico - diseño minimalista y limo
   private baseChartConfig: Partial<ChartOptions> = {
     chart: {
       type: 'donut',
       height: 280,
-      sparkline: { enabled: true }
+      sparkline: { enabled: true }, // Habilitar sparkline para un diseño más limpio
+      background: 'transparent',
+      dropShadow: {
+        enabled: false
+      }
     },
     plotOptions: {
       pie: {
         donut: {
-          size: '80%',
+          size: '80%', // Aumentar el tamaño del agujero para un aspecto más elegante
           background: 'transparent',
           labels: {
             show: true,
-            name: { show: false },
+            name: {
+              show: false, // No mostrar nombres en el gráfico para más limpieza
+            },
             value: {
-              color: 'hsl(var(--foreground))',
+              show: true, // Mostrar solo valores numéricos
+              fontSize: '28px',
               fontFamily: 'Roboto Mono, monospace',
               fontWeight: 'bold',
-              fontSize: '32px',
-              offsetY: 8,
+              color: 'hsl(var(--foreground))',
+              offsetY: -5,
+              formatter: function(val: any) {
+                return val; // Muestra el valor numérico
+              }
             },
             total: {
               show: true,
-              label: 'Total Alertas',
+              label: 'Total',
               color: 'hsl(var(--muted-foreground))',
-              fontSize: '18px',
+              fontSize: '16px',
+              fontWeight: 500,
               formatter: (w) => {
                 return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0).toString();
               }
@@ -73,48 +86,51 @@ export class AlertDistributionChart {
         }
       }
     },
-    dataLabels: { enabled: false },
-    stroke: { width: 4, colors: ['hsl(var(--card))'] },
+    dataLabels: { 
+      enabled: false // Deshabilitar etiquetas de datos para un aspecto más limpio
+    },
+    stroke: { 
+      width: 4, 
+      colors: ['hsl(var(--card))'] // Color del fondo del gráfico
+    },
     tooltip: {
       enabled: true,
-      y: { formatter: (val) => `${val} alertas` },
+      fixed: {
+        enabled: false // Deshabilitar posición fija
+      },
       style: {
         fontSize: '12px',
         fontFamily: 'Inter, sans-serif',
       },
-      custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
-        const label = w.globals.labels[dataPointIndex];
-        const value = series[seriesIndex];
-        const color = w.globals.colors[seriesIndex];
-        return `
-          <div class="apexcharts-custom-tooltip"
-               style="background: hsl(var(--card));
-                      color: hsl(var(--foreground));
-                      border: 1px solid hsl(var(--border));
-                      padding: 8px;
-                      border-radius: 4px;
-                      font-family: Inter, sans-serif;
-                      font-size: 12px;
-                      display: flex;
-                      align-items: center;">
-            <span style="display: inline-block;
-                         width: 10px;
-                         height: 10px;
-                         border-radius: 50%;
-                         background: ${color};
-                         margin-right: 8px;"></span>
-            <div>
-              <strong>${label}</strong><br>
-              Alertas: ${value}
-            </div>
-          </div>
-        `;
+      x: {
+        show: true,
+        formatter: function(val: any) {
+          return val; // Muestra el tipo de fatiga
+        }
+      },
+      y: {
+        formatter: function(val: any) {
+          return val + " alertas"; // Muestra el valor con texto
+        },
+        title: {
+          formatter: (seriesName: string) => seriesName // Formato para el título
+        }
+      },
+      theme: 'dark',
+    },
+    states: {
+      hover: {
+        filter: { type: 'none' } // No aplicar efecto especial al hacer hover
+      },
+      active: {
+        allowMultipleDataPointsSelection: false,
+        filter: { type: 'none' }
       }
     }
   };
 
   // Convertir el signal de filtros a un observable y obtener los datos
-  private alertData = toSignal(
+  private _alertData = toSignal(
     toObservable(this.filterService.filter$).pipe(
       switchMap(filters => {
         console.log('AlertDistributionChart - Filtros cambiados:', filters);
@@ -123,50 +139,99 @@ export class AlertDistributionChart {
     ),
     { initialValue: null }
   );
+  
+  // Getter público para acceder a los datos desde el template
+  public alertData = () => this._alertData();
+
+  constructor() {
+    // Wait for the view to be initialized before getting CSS variables
+    setTimeout(() => {
+      // Map fatigue types to appropriate color variables with consistency across the dashboard
+      this.colorsSignal.set({
+        [FatigueType.MICROSUEÑO]: this.getCssVariableValue('--destructive'), // Critical fatigue
+        [FatigueType.CABECEO]: this.getCssVariableValue('--destructive-secondary') || this.getCssVariableValue('--destructive'), // Critical fatigue
+        [FatigueType.BOSTEZO]: this.getCssVariableValue('--warning'), // Medium fatigue
+        [FatigueType.CANSANCIO_VISUAL]: this.getCssVariableValue('--primary'), // Low fatigue
+        [FatigueType.NINGUNO]: this.getCssVariableValue('--success') || this.getCssVariableValue('--muted-foreground'), // No fatigue
+      });
+    }, 0);
+  }
+
+  private getCssVariableValue(variable: string): string {
+    return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+  }
 
   // Computed signal para las opciones del gráfico
   public chartOptions: Signal<Partial<ChartOptions>> = computed(() => {
-    const data = this.alertData();
-    
-    if (!data) {
+    const data = this._alertData();
+    const colorMap = this.colorsSignal();
+
+    if (!data || !colorMap) {
       return {
         ...this.baseChartConfig,
         series: [1],
         labels: ['Cargando...'],
-        colors: ['hsl(var(--muted))']
+        colors: [`hsl(${this.getCssVariableValue('--muted')})`]
       };
     }
 
     console.log('AlertDistributionChart - Datos recibidos:', data);
+    console.log('AlertDistributionChart - colorMap:', colorMap);
 
     const labels: string[] = [];
     const series: number[] = [];
     const colors: string[] = [];
 
-    const colorMap: Record<FatigueType, string> = {
-      [FatigueType.MICROSUEÑO]: 'hsl(var(--alert-fatiga-critica))',
-      [FatigueType.CABECEO]: 'hsl(var(--alert-fatiga-critica))',
-      [FatigueType.BOSTEZO]: 'hsl(var(--alert-fatiga-alta))',
-      [FatigueType.CANSANCIO_VISUAL]: 'hsl(var(--alert-fatiga-media))',
-      [FatigueType.NINGUNO]: 'hsl(var(--alert-fatiga-baja))',
-    };
-
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const fatigueType = key as FatigueType;
+        console.log('AlertDistributionChart - fatigueType key:', fatigueType);
         labels.push(fatigueType.replace('_', ' '));
         series.push(data[fatigueType]);
-        colors.push(colorMap[fatigueType] || 'hsl(var(--secondary))');
+        const colorValue = colorMap[fatigueType];
+        // Add 'hsl(' prefix and ')' suffix to the raw HSL value from CSS variables
+        colors.push(colorValue ? `hsl(${colorValue})` : `hsl(${this.getCssVariableValue('--secondary')})`);
       }
     }
 
     console.log('AlertDistributionChart - Series procesadas:', series);
+    console.log('AlertDistributionChart - Colors procesados:', colors);
 
     return {
       ...this.baseChartConfig,
       series: series.length > 0 ? series : [1],
       labels: labels.length > 0 ? labels : ['Sin datos'],
-      colors: colors.length > 0 ? colors : ['hsl(var(--muted))']
+      colors: colors.length > 0 ? colors : [`hsl(${this.getCssVariableValue('--muted')})`]
     };
   });
+
+  /**
+   * Procesa los datos de distribución de alertas para mostrarlos como una lista
+   * similar al "Top 5 Conductores con Más Alertas"
+   */
+  processDistributionData(): Array<{type: string, count: number, color: string}> {
+    const data = this._alertData();
+    const colorMap = this.colorsSignal();
+
+    if (!data || !colorMap) {
+      return [];
+    }
+
+    // Convertir objeto a array de objetos {type, count, color}
+    const items = Object.keys(data).map(key => {
+      const fatigueType = key as FatigueType;
+      const count = data[fatigueType];
+      const colorValue = colorMap[fatigueType];
+      const color = colorValue ? `hsl(${colorValue})` : `hsl(${this.getCssVariableValue('--secondary')})`;
+
+      return {
+        type: fatigueType.replace('_', ' '), // Convertir guiones bajos a espacios
+        count: count,
+        color: color
+      };
+    });
+
+    // Ordenar por cantidad en orden descendente (más altas primero)
+    return items.sort((a, b) => b.count - a.count);
+  }
 }
