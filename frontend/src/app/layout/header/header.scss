@@ -9,3 +9,9 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.notification-menu {
+  width: 300px; // Adjust width as needed
+  max-height: 400px; // Adjust max height as needed
+  overflow-y: auto; // Add scroll if content exceeds max height
+}

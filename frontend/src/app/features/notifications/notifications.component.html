@@ -1,0 +1,70 @@
+<p-toast></p-toast>
+
+<div class="bg-card rounded-lg shadow-lg border border-border flex flex-col">
+  <div class="p-6 border-b border-border flex items-center justify-between">
+    <h3 class="text-lg font-semibold text-foreground">{{ 'NOTIFICATIONS.TITLE' | translate }}</h3>
+    <div class="flex items-center gap-2">
+      <button (click)="markAllAsRead()" class="flex items-center justify-center gap-2 px-3 py-1.5 text-sm font-medium text-primary border border-primary/50 rounded-md shadow-sm hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring">
+        <span class="material-symbols-outlined text-base">checklist</span>
+        <span>{{ 'NOTIFICATIONS.MARK_ALL_AS_READ' | translate }}</span>
+      </button>
+      <button (click)="loadNotifications(true)" class="flex items-center justify-center gap-2 px-3 py-1.5 text-sm font-medium text-primary border border-primary/50 rounded-md shadow-sm hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring">
+        <span class="material-symbols-outlined text-base">refresh</span>
+        <span>{{ 'NOTIFICATIONS.REFRESH' | translate }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto flex-1 custom-scrollbar">
+    <table class="w-full text-sm text-left text-muted-foreground">
+      <thead class="text-xs text-muted-foreground uppercase bg-secondary/30 backdrop-blur-sm sticky top-0 z-10">
+        <tr>
+          <th scope="col" class="px-6 py-3" style="width: 15%;">{{ 'NOTIFICATIONS.STATUS' | translate }}</th>
+          <th scope="col" class="px-6 py-3">{{ 'NOTIFICATIONS.MESSAGE' | translate }}</th>
+          <th scope="col" class="px-6 py-3" style="width: 20%;">{{ 'NOTIFICATIONS.DATE' | translate }}</th>
+          <th scope="col" class="px-6 py-3 text-center" style="width: 15%;">{{ 'NOTIFICATIONS.ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+
+      @if (!loading() && notifications().length > 0) {
+        <tbody>
+          @for (notification of notifications(); track notification.id; let i = $index) {
+            <tr class="bg-card border-b border-border even:bg-secondary/20 hover:bg-muted/40 transition-colors" [ngClass]="{'opacity-60': notification.isRead}">
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="!notification.isRead ? 'status-active bg-primary/10 text-primary' : 'status-inactive bg-surface-100 text-muted-foreground'">
+                  <span class="w-2 h-2 mr-1.5 rounded-full" [ngClass]="!notification.isRead ? 'bg-primary' : 'bg-muted-foreground'"></span>
+                  {{ notification.isRead ? ('NOTIFICATIONS.STATUS_READ' | translate) : ('NOTIFICATIONS.STATUS_UNREAD' | translate) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 font-medium whitespace-nowrap" [ngClass]="!notification.isRead ? 'text-foreground' : 'text-muted-foreground'">{{ notification.message }}</td>
+              <td class="px-6 py-4">{{ notification.createdAt | date:'medium' }}</td>
+              <td class="px-6 py-4 text-center">
+                @if (!notification.isRead) {
+                  <button (click)="markAsRead(notification)" [title]="'NOTIFICATIONS.MARK_AS_READ_TOOLTIP' | translate" class="p-3 rounded-full text-primary hover:bg-primary/10 transition-all duration-200">
+                    <span class="material-symbols-outlined text-xl">check_circle</span>
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      }
+    </table>
+
+    @if (loading()) {
+      <div class="flex flex-col items-center justify-center text-muted-foreground p-20 gap-4">
+        <span class="material-symbols-outlined text-6xl animate-spin text-primary">progress_activity</span>
+        <p class="text-lg">{{ 'USERS.TABLE.LOADING' | translate }}</p> <!-- Reusing translation key -->
+      </div>
+    }
+
+    @if (!loading() && notifications().length === 0) {
+      <div class="text-center text-muted-foreground p-20">
+        <div class="flex flex-col items-center justify-center gap-4">
+          <span class="material-symbols-outlined text-6xl text-primary">notifications_off</span>
+          <h3 class="text-xl font-semibold">{{ 'NOTIFICATIONS.NO_NOTIFICATIONS_FOUND' | translate }}</h3>
+        </div>
+      </div>
+    }
+  </div>
+</div>

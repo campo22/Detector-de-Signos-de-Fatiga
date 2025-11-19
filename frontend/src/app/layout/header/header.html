@@ -5,8 +5,8 @@
     </button>
     <!-- Title and Subtitle -->
     <div>
-      <h2 class="text-3xl font-bold text-foreground gradient-text">{{ pageTitle | translate }}</h2>
-      <p class="text-muted-foreground">{{ pageSubtitle | translate }}</p>
+      <h2 class="text-3xl font-bold text-foreground gradient-text">{{ pageTitle() }}</h2>
+      <p class="text-muted-foreground">{{ pageSubtitle() }}</p>
     </div>
   </div>
 
@@ -14,12 +14,14 @@
     <button (click)="toggleTheme()" class="p-2 rounded-full hover:bg-muted relative transition-colors">
       <span class="material-symbols-outlined text-foreground">{{ currentTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</span>
     </button>
-    <button class="p-2 rounded-full hover:bg-muted relative transition-colors">
+    <button (click)="handleNotificationClick($event)" pButton pRipple class="p-2 rounded-full hover:bg-muted relative transition-colors p-button-text p-button-plain">
       <span class="material-symbols-outlined text-foreground">notifications</span>
       <span
-        class="absolute top-1 right-1 block h-2 w-2 rounded-full bg-destructive shadow-glow-destructive"
-      ></span>
+        *ngIf="unreadNotificationCount() > 0"
+        class="absolute top-1 right-1 block h-5 w-5 rounded-full bg-destructive shadow-glow-destructive flex items-center justify-center text-xs text-white"
+      >{{ unreadNotificationCount() }}</span>
     </button>
+    <p-menu #notificationMenu [model]="notificationMenuItems()" [popup]="true" styleClass="notification-menu"></p-menu>
 
     <!-- User Profile Dropdown -->
     <div *ngIf="userProfile()">

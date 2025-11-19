@@ -80,7 +80,8 @@
       "RULES": "Gestión de Reglas",
       "USERS": "Gestión de Usuarios",
       "PROFILE": "Perfil de Usuario",
-      "SETTINGS": "Configuración del Sistema"
+      "SETTINGS": "Configuración del Sistema",
+      "NOTIFICATIONS": "Centro de Notificaciones"
     },
     "PAGE_SUBTITLE": {
       "DASHBOARD": "Bienvenido de nuevo, Administrador.",
@@ -94,12 +95,22 @@
       "RULES": "Configuración de reglas de seguridad",
       "USERS": "Administración de usuarios del sistema",
       "PROFILE": "Configuración y datos personales",
-      "SETTINGS": "Ajustes y preferencias"
+      "SETTINGS": "Ajustes y preferencias",
+      "NOTIFICATIONS": "Revisa tus notificaciones recientes"
     },
     "MAIN_DASHBOARD": "Dashboard Principal",
     "WELCOME_ADMIN": "Bienvenido de nuevo, Administrador.",
     "FLEET_ADMIN": "Admin Flota",
-    "ADMIN": "Admin"
+    "ADMIN": "Admin",
+    "MENU": {
+      "VIEW_PROFILE": "Ver Perfil",
+      "LOGOUT": "Cerrar Sesión"
+    },
+    "NOTIFICATIONS": {
+      "VIEW_ALL": "Ver todas las notificaciones",
+      "MARK_ALL_READ": "Marcar todas como leídas",
+      "NO_NEW_NOTIFICATIONS": "No hay notificaciones nuevas"
+    }
   },
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
@@ -554,5 +565,29 @@
     "FORM_INVALID": "El formulario no es válido. Por favor, revisa los campos.",
     "UPDATE_SUCCESS": "Perfil actualizado con éxito.",
     "UPDATE_ERROR": "Error al actualizar el perfil."
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Centro de Notificaciones",
+    "MARK_ALL_AS_READ": "Marcar todo como leído",
+    "REFRESH": "Actualizar",
+    "SEARCH_PLACEHOLDER": "Buscar notificaciones...",
+    "STATUS": "Estado",
+    "MESSAGE": "Mensaje",
+    "DATE": "Fecha",
+    "ACTIONS": "Acciones",
+    "STATUS_READ": "Leída",
+    "STATUS_UNREAD": "No Leída",
+    "MARK_AS_READ_TOOLTIP": "Marcar como leída",
+    "NO_NOTIFICATIONS_FOUND": "No se encontraron notificaciones.",
+    "SUCCESS_SUMMARY": "Éxito",
+    "ERROR_SUMMARY": "Error",
+    "LOAD_SUCCESS_DETAIL": "Notificaciones cargadas correctamente.",
+    "LOAD_ERROR_DETAIL": "Error al cargar las notificaciones.",
+    "MARK_AS_READ_SUCCESS_DETAIL": "Notificación marcada como leída.",
+    "MARK_AS_READ_ERROR_DETAIL": "Error al marcar la notificación como leída.",
+    "MARK_ALL_READ_SUCCESS_DETAIL": "Todas las notificaciones han sido marcadas como leídas.",
+    "MARK_ALL_READ_ERROR_DETAIL": "Error al marcar todas las notificaciones como leídas.",
+    "NEW_ALERT_SUMMARY": "Nueva Alerta de Fatiga",
+    "NEW_ALERT_DETAIL": "Evento de {type} detectado."
   }
 }

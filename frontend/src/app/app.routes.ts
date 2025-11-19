@@ -76,6 +76,10 @@ export const routes: Routes = [
         path: 'profile/settings',
         loadComponent: () => import('./features/user/profile/profile').then(m => m.Profile)
       },
+      {
+        path: 'notifications',
+        loadComponent: () => import('./features/notifications/notifications.component').then(m => m.NotificationsComponent)
+      },
     ]
   },
 

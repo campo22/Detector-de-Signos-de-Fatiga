@@ -4,6 +4,7 @@ import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DialogService } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api'; // Added
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -41,6 +42,7 @@ export const appConfig: ApplicationConfig = {
         }
       })
     ),
-    DialogService
+    DialogService,
+    MessageService
   ]
 };

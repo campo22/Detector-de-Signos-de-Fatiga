@@ -79,7 +79,8 @@
       "RULES": "Rule Management",
       "USERS": "User Management",
       "PROFILE": "User Profile",
-      "SETTINGS": "System Settings"
+      "SETTINGS": "System Settings",
+      "NOTIFICATIONS": "Notification Center"
     },
     "PAGE_SUBTITLE": {
       "DASHBOARD": "Welcome back, Administrator.",
@@ -93,12 +94,22 @@
       "RULES": "Security rule configuration",
       "USERS": "System user administration",
       "PROFILE": "Settings and personal data",
-      "SETTINGS": "Settings and preferences"
+      "SETTINGS": "Settings and preferences",
+      "NOTIFICATIONS": "Check your recent notifications"
     },
     "MAIN_DASHBOARD": "Main Dashboard",
     "WELCOME_ADMIN": "Welcome back, Administrator.",
     "FLEET_ADMIN": "Fleet Admin",
-    "ADMIN": "Admin"
+    "ADMIN": "Admin",
+    "MENU": {
+      "VIEW_PROFILE": "View Profile",
+      "LOGOUT": "Logout"
+    },
+    "NOTIFICATIONS": {
+      "VIEW_ALL": "View all notifications",
+      "MARK_ALL_READ": "Mark all as read",
+      "NO_NEW_NOTIFICATIONS": "No new notifications"
+    }
   },
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
@@ -541,5 +552,29 @@
     "STATUS": "Status:",
     "ACTIVE": "Active",
     "INACTIVE": "Inactive"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notification Center",
+    "MARK_ALL_AS_READ": "Mark all as read",
+    "REFRESH": "Refresh",
+    "SEARCH_PLACEHOLDER": "Search notifications...",
+    "STATUS": "Status",
+    "MESSAGE": "Message",
+    "DATE": "Date",
+    "ACTIONS": "Actions",
+    "STATUS_READ": "Read",
+    "STATUS_UNREAD": "Unread",
+    "MARK_AS_READ_TOOLTIP": "Mark as read",
+    "NO_NOTIFICATIONS_FOUND": "No notifications found.",
+    "SUCCESS_SUMMARY": "Success",
+    "ERROR_SUMMARY": "Error",
+    "LOAD_SUCCESS_DETAIL": "Notifications loaded successfully.",
+    "LOAD_ERROR_DETAIL": "Error loading notifications.",
+    "MARK_AS_READ_SUCCESS_DETAIL": "Notification marked as read.",
+    "MARK_AS_READ_ERROR_DETAIL": "Error marking notification as read.",
+    "MARK_ALL_READ_SUCCESS_DETAIL": "All notifications have been marked as read.",
+    "MARK_ALL_READ_ERROR_DETAIL": "Error marking all notifications as read.",
+    "NEW_ALERT_SUMMARY": "New Fatigue Alert",
+    "NEW_ALERT_DETAIL": "{type} event detected."
   }
 }
