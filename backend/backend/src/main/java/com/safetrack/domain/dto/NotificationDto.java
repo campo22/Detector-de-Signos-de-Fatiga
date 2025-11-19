@@ -1,5 +1,6 @@
 package com.safetrack.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.time.Instant;
 public class NotificationDto {
     private Long id;
     private String message;
+    @JsonProperty("isRead")
     private boolean isRead;
     private Instant createdAt;
 }

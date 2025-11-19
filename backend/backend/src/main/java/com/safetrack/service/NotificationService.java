@@ -2,57 +2,33 @@ package com.safetrack.service;
 
 import com.safetrack.domain.entity.Notification;
 import com.safetrack.domain.entity.User;
-import com.safetrack.repository.NotificationRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+public interface NotificationService {
 
-@Service
-@RequiredArgsConstructor
-public class NotificationService {
+    /**
+     * Crea una nueva notificación para un usuario.
+     */
+    Notification createNotification(User user, String message);
 
-    private final NotificationRepository notificationRepository;
+    /**
+     * Obtiene las notificaciones de un usuario de forma paginada.
+     */
+    Page<Notification> getNotificationsForUser(User user, Pageable pageable);
 
-    @Transactional
-    public Notification createNotification(User user, String message) {
-        Notification notification = Notification.builder()
-                .user(user)
-                .message(message)
-                .build();
-        return notificationRepository.save(notification);
-    }
+    /**
+     * Obtiene el conteo de notificaciones no leídas de un usuario.
+     */
+    long getUnreadNotificationsCount(User user);
 
-    @Transactional(readOnly = true)
-    public Page<Notification> getNotificationsForUser(User user, Pageable pageable) {
-        return notificationRepository.findByUserOrderByCreatedAtDesc(user, pageable);
-    }
+    /**
+     * Marca una notificación específica como leída.
+     */
+    void markAsRead(Long notificationId, User user);
 
-    @Transactional(readOnly = true)
-    public long getUnreadNotificationsCount(User user) {
-        return notificationRepository.countByUserAndIsReadFalse(user);
-    }
-
-    @Transactional
-    public void markAsRead(Long notificationId, User user) {
-        Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new EntityNotFoundException("Notification not found with id: " + notificationId));
-
-        if (!notification.getUser().getId().equals(user.getId())) {
-            // Lanza una excepción de seguridad si el usuario no es el propietario de la notificación
-            throw new SecurityException("User does not have permission to mark this notification as read.");
-        }
-
-        notification.setRead(true);
-        notificationRepository.save(notification);
-    }
-
-    @Transactional
-    public void markAllAsRead(User user) {
-        notificationRepository.markAllAsReadForUser(user);
-    }
+    /**
+     * Marca todas las notificaciones de un usuario como leídas.
+     */
+    void markAllAsRead(User user);
 }
