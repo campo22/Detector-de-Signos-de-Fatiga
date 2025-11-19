@@ -5,6 +5,8 @@ import com.safetrack.domain.entity.User;
 import com.safetrack.repository.NotificationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +28,8 @@ public class NotificationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Notification> getNotificationsForUser(User user) {
-        return notificationRepository.findByUserOrderByCreatedAtDesc(user);
+    public Page<Notification> getNotificationsForUser(User user, Pageable pageable) {
+        return notificationRepository.findByUserOrderByCreatedAtDesc(user, pageable);
     }
 
     @Transactional(readOnly = true)

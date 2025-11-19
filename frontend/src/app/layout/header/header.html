@@ -21,7 +21,45 @@
         class="absolute top-1 right-1 block h-5 w-5 rounded-full bg-destructive shadow-glow-destructive flex items-center justify-center text-xs text-white"
       >{{ unreadNotificationCount() }}</span>
     </button>
-    <p-menu #notificationMenu [model]="notificationMenuItems()" [popup]="true" styleClass="notification-menu"></p-menu>
+    <p-menu #notificationMenu [model]="notificationMenuItems()" [popup]="true" styleClass="notification-menu-custom">
+      <ng-template pTemplate="start">
+        <div class="flex items-center justify-between px-6 py-4 bg-muted/30">
+          <h2 class="text-foreground text-base font-semibold">{{ 'NOTIFICATIONS.TITLE' | translate }}</h2>
+          <button (click)="markAllNotificationsAsRead()" class="text-primary text-sm font-medium hover:shadow-glow-primary transition-shadow duration-300 rounded-md">
+            {{ 'NOTIFICATIONS.MARK_ALL_AS_READ' | translate }}
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="item" let-item>
+        @if (item.data) {
+          <a class="p-menuitem-link" (click)="item.command()">
+            <div class="flex items-start gap-4 px-6 py-4 hover:bg-muted transition-colors cursor-pointer w-full">
+              <div class="mt-1.5 size-2 shrink-0 rounded-full" [ngClass]="{'bg-primary glow-dot': !item.data.isRead, 'bg-transparent': item.data.isRead}"></div>
+              <div class="flex items-start gap-4">
+                <div class="flex items-center justify-center rounded-full bg-muted shrink-0 size-10" [ngClass]="{'text-primary': !item.data.isRead, 'text-muted-foreground': item.data.isRead}">
+                  <span class="material-symbols-outlined text-xl">notifications_active</span>
+                </div>
+                <div class="flex flex-col gap-0.5 text-left">
+                  <p class="text-sm" [ngClass]="{'text-foreground font-bold': !item.data.isRead, 'text-foreground/80': item.data.isRead}">{{ item.data.message }}</p>
+                  <p class="text-muted-foreground text-xs font-normal">{{ item.data.createdAt | date:'shortTime' }}</p>
+                </div>
+              </div>
+            </div>
+          </a>
+        } @else {
+          <div class="text-center text-muted-foreground p-10">
+            <p>{{ item.label }}</p>
+          </div>
+        }
+      </ng-template>
+      <ng-template pTemplate="end">
+        <div class="flex items-center justify-center px-4 py-3 bg-muted/30 border-t border-border">
+          <a (click)="onViewAllNotifications()" class="text-primary text-sm font-medium hover:shadow-glow-primary transition-shadow duration-300 rounded-md px-2 py-1 cursor-pointer">
+            {{ 'HEADER.NOTIFICATIONS.VIEW_ALL' | translate }}
+          </a>
+        </div>
+      </ng-template>
+    </p-menu>
 
     <!-- User Profile Dropdown -->
     <div *ngIf="userProfile()">

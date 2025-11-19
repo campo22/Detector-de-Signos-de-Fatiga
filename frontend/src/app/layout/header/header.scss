@@ -10,8 +10,41 @@
   -webkit-text-fill-color: transparent;
 }
 
-.notification-menu {
-  width: 300px; // Adjust width as needed
-  max-height: 400px; // Adjust max height as needed
-  overflow-y: auto; // Add scroll if content exceeds max height
+.glow-dot {
+  box-shadow: 0 0 6px 1px hsl(var(--primary));
+}
+
+:host ::ng-deep .notification-menu-custom {
+  // Remove default padding from the panel itself
+  .p-menu {
+    padding: 0;
+  }
+  
+  .p-menu-list {
+    padding: 0;
+    width: 384px; // Ancho del diseño
+    background-color: hsl(var(--card));
+  }
+
+  // Style for the container of the start/end templates
+  .p-menu-start, .p-menu-end {
+    padding: 0;
+  }
+
+  .p-menuitem > .p-menuitem-content {
+    background-color: transparent;
+  }
+
+  .p-menuitem-link {
+    padding: 0;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  .no-notifications-item {
+    .p-menuitem-link {
+      pointer-events: none;
+    }
+  }
 }

@@ -7,6 +7,7 @@ import { WebSocketService } from '../../features/auth/services/web-socket.servic
 import { AudioService } from './audio.service';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { Page } from '../models/event.models';
 
 @Injectable({
   providedIn: 'root'
@@ -48,8 +49,14 @@ export class NotificationService {
     });
   }
 
-  getNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>(this.apiUrl);
+  getNotifications(page: number = 0, size: number = 10): Observable<Page<Notification>> {
+    return this.http.get<Page<Notification>>(this.apiUrl, {
+      params: {
+        page: page.toString(),
+        size: size.toString(),
+        sort: 'createdAt,desc'
+      }
+    });
   }
 
   getUnreadNotificationsCount(): Observable<number> {

@@ -70,40 +70,25 @@ export class Header implements OnInit, OnDestroy { // Implemented OnInit, OnDest
     this.initializeMenuItems();
     this.updatePageTitle(this.router.url);
 
-    // Effect to update notificationMenuItems when recentNotifications changes
+    // Effect to build notification menu items
     effect(() => {
-      this.notificationMenuItems.set(this.recentNotifications().map(notif => ({
-        label: notif.message,
-        icon: notif.isRead ? 'pi pi-check' : 'pi pi-bell', // Example icon based on read status
-        tooltip: this.datePipe.transform(notif.createdAt, 'medium') || undefined, // Fixed: ensure string | undefined
-        command: () => this.markNotificationAsRead(notif.id)
-      })));
+      const notifications = this.recentNotifications();
+      let items: MenuItem[];
 
-      // Add "Ver todas" and "Marcar todas como leídas" options if there are notifications
-      if (this.recentNotifications().length > 0) {
-        this.notificationMenuItems.update(items => [
-          ...items,
-          { separator: true },
-          {
-            label: this.translateService.instant('HEADER.NOTIFICATIONS.VIEW_ALL'), // Using translate service
-            icon: 'pi pi-list',
-            routerLink: ['/notifications'] // Placeholder route
-          },
-          {
-            label: this.translateService.instant('HEADER.NOTIFICATIONS.MARK_ALL_READ'), // Using translate service
-            icon: 'pi pi-envelope-open',
-            command: () => this.markAllNotificationsAsRead()
-          }
-        ]);
+      if (notifications.length > 0) {
+        items = notifications.map(notif => ({
+          data: notif,
+          styleClass: !notif.isRead ? 'notification-item unread' : 'notification-item read',
+          command: () => this.markNotificationAsRead(notif.id)
+        }));
       } else {
-        this.notificationMenuItems.set([
-          {
-            label: this.translateService.instant('HEADER.NOTIFICATIONS.NO_NEW_NOTIFICATIONS'), // Using translate service
-            icon: 'pi pi-info-circle',
-            disabled: true
-          }
-        ]);
+        items = [{
+          label: this.translateService.instant('HEADER.NOTIFICATIONS.NO_NEW_NOTIFICATIONS'),
+          disabled: true,
+          styleClass: 'no-notifications-item'
+        }];
       }
+      this.notificationMenuItems.set(items);
     });
 
     // Escuchar cambios de navegación para actualizar títulos
@@ -271,11 +256,11 @@ export class Header implements OnInit, OnDestroy { // Implemented OnInit, OnDest
   // Notification Methods
 
   loadRecentNotifications(): void {
-    this.notificationService.getNotifications()
+    // We only need the first 5 for the dropdown, so we request a small page size.
+    this.notificationService.getNotifications(0, 5)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(notifications => {
-        // Limit to 5 or so for the dropdown
-        this.recentNotifications.set(notifications.slice(0, 5));
+      .subscribe(notificationPage => {
+        this.recentNotifications.set(notificationPage.content);
       });
   }
 
@@ -284,13 +269,35 @@ export class Header implements OnInit, OnDestroy { // Implemented OnInit, OnDest
     this.notificationMenu.toggle(event);
   }
 
+  onViewAllNotifications(): void {
+    this.notificationMenu.hide();
+    this.router.navigate(['/notifications']);
+  }
+
   markNotificationAsRead(notificationId: number): void {
+    // Find the notification in the current list
+    const notification = this.recentNotifications().find(n => n.id === notificationId);
+    if (!notification || notification.isRead) {
+      return; // Already read or not found, do nothing
+    }
+
+    // Optimistically update the UI
+    this.recentNotifications.update(current =>
+      current.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
+    );
+
+    // Call the service to update the backend
     this.notificationService.markAsRead(notificationId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        // La cuenta se actualiza a través del tap en el servicio,
-        // solo necesitamos recargar las notificaciones del menú.
-        this.loadRecentNotifications();
+      .subscribe({
+        error: () => {
+          // If the API call fails, revert the change
+          this.recentNotifications.update(current =>
+            current.map(n => n.id === notificationId ? { ...n, isRead: false } : n)
+          );
+          // Here you could show an error toast to the user
+        }
+        // No need for a next() block as the UI is already updated
       });
   }
 
