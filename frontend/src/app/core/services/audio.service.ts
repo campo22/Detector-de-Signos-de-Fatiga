@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AudioService {
   private audioContext: AudioContext | null = null;
+  private settingsService = inject(SettingsService);
 
   constructor() {
     // Inicializar AudioContext después de una interacción del usuario es una buena práctica,
@@ -17,7 +19,10 @@ export class AudioService {
   }
 
   playNotificationSound(): void {
-    if (!this.audioContext) {
+    const settings = this.settingsService.settings();
+    console.log('[AudioService] Checking settings. Sound enabled:', settings.notificationSound);
+
+    if (!this.audioContext || !settings.notificationSound) {
       return;
     }
 

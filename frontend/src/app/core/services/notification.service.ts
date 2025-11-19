@@ -33,16 +33,11 @@ export class NotificationService {
 
   private listenForRealTimeNotifications(): void {
     this.webSocketService.fatigueEvent$.subscribe(event => {
-      console.log('New fatigue event received in NotificationService:', event);
       const settings = this.settingsService.settings();
-      console.log('Checking notification settings. Sound enabled:', settings.notificationSound, 'Toasts enabled:', settings.showToasts);
 
-      // 1. Play sound
-      if (settings.notificationSound) {
-        this.audioService.playNotificationSound();
-      }
-
-      // 2. Show toast
+      // The check is now inside the audio service
+      this.audioService.playNotificationSound();
+      
       if (settings.showToasts) {
         this.messageService.add({
           severity: 'warn',
@@ -52,7 +47,7 @@ export class NotificationService {
         });
       }
 
-      // 3. Update unread count
+      // Update unread count
       this.unreadCount.next(this.unreadCount.value + 1);
     });
   }
