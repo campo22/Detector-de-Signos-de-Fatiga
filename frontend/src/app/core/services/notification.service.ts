@@ -8,6 +8,7 @@ import { AudioService } from './audio.service';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { Page } from '../models/event.models';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class NotificationService {
   private audioService = inject(AudioService);
   private messageService = inject(MessageService);
   private translate = inject(TranslateService);
+  private settingsService = inject(SettingsService);
 
   private apiUrl = '/api/notifications';
 
@@ -32,17 +34,23 @@ export class NotificationService {
   private listenForRealTimeNotifications(): void {
     this.webSocketService.fatigueEvent$.subscribe(event => {
       console.log('New fatigue event received in NotificationService:', event);
+      const settings = this.settingsService.settings();
+      console.log('Checking notification settings. Sound enabled:', settings.notificationSound, 'Toasts enabled:', settings.showToasts);
 
       // 1. Play sound
-      this.audioService.playNotificationSound();
+      if (settings.notificationSound) {
+        this.audioService.playNotificationSound();
+      }
 
       // 2. Show toast
-      this.messageService.add({
-        severity: 'warn',
-        summary: this.translate.instant('NOTIFICATIONS.NEW_ALERT_SUMMARY'),
-        detail: this.translate.instant('NOTIFICATIONS.NEW_ALERT_DETAIL', { type: event.fatigueType }),
-        life: 5000
-      });
+      if (settings.showToasts) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: this.translate.instant('NOTIFICATIONS.NEW_ALERT_SUMMARY'),
+          detail: this.translate.instant('NOTIFICATIONS.NEW_ALERT_DETAIL', { type: event.fatigueType }),
+          life: 5000
+        });
+      }
 
       // 3. Update unread count
       this.unreadCount.next(this.unreadCount.value + 1);

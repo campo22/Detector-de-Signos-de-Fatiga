@@ -46,7 +46,11 @@
     "TITLE": "Rules Management",
     "DESCRIPTION": "Manage fatigue and distraction detection rules and policies.",
     "CURRENT_RULES": "Current Rules",
-    "NO_RULES_YET": "No rules configured yet. You can add new rules here."
+    "NO_RULES_YET": "No rules configured yet. You can add new rules here.",
+    "NOTIFICATION_SOUND_LABEL": "Notification Sound",
+    "NOTIFICATION_SOUND_SUBTITLE": "Play a sound when a new notification arrives.",
+    "TOAST_NOTIFICATIONS_LABEL": "Toast Notifications",
+    "TOAST_NOTIFICATIONS_SUBTITLE": "Show a toast notification in the corner of the screen."
   },
   "DASHBOARD": {
     "ALERT_DISTRIBUTION": "Alert Distribution",

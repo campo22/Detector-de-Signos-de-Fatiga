@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -10,16 +10,20 @@ import { ThemeService } from '../../core/services/theme.service';
 import { LanguageService } from '../../core/services/language.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { SettingsService } from '../../core/services/settings.service'; // Added
+import { ToggleButtonModule } from 'primeng/togglebutton'; // Added
 
 @Component({
   selector: 'app-settings',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     ButtonModule,
     TranslateModule,
-    ToastModule
+    ToastModule,
+    ToggleButtonModule
   ],
   providers: [MessageService],
   templateUrl: './settings.html',
@@ -34,6 +38,7 @@ export class Settings implements OnInit {
   private translate = inject(TranslateService);
   private router = inject(Router);
   private messageService = inject(MessageService);
+  public settingsService = inject(SettingsService);
 
   passwordForm: FormGroup;
   generalForm: FormGroup;

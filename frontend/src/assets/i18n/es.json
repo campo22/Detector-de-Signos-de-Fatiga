@@ -46,7 +46,11 @@
     "TITLE": "Gestión de Reglas",
     "DESCRIPTION": "Administra las reglas y políticas de detección de fatiga y distracción.",
     "CURRENT_RULES": "Reglas Actuales",
-    "NO_RULES_YET": "Aún no hay reglas configuradas. Puedes añadir nuevas reglas aquí."
+    "NO_RULES_YET": "Aún no hay reglas configuradas. Puedes añadir nuevas reglas aquí.",
+    "NOTIFICATION_SOUND_LABEL": "Sonido de Notificación",
+    "NOTIFICATION_SOUND_SUBTITLE": "Reproducir un sonido cuando llegue una nueva notificación.",
+    "TOAST_NOTIFICATIONS_LABEL": "Notificaciones Emergentes",
+    "TOAST_NOTIFICATIONS_SUBTITLE": "Mostrar una notificación emergente (toast) en la esquina de la pantalla."
   },
   "DASHBOARD": {
     "ALERT_DISTRIBUTION": "Distribución de Alertas",
