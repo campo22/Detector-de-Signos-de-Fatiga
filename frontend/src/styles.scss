@@ -64,8 +64,8 @@
     --input: 217 33% 17%;
     --ring: 217 91% 60%;
   }
-}
-
+  /* Custom styles for the notification menu */
+  }
 /* Estilo base para el body, aplicando la fuente y el color de fondo a TODA la app */
 body {
   @apply bg-background font-display text-foreground;
@@ -309,4 +309,69 @@ th {
 
 
 
+
+
+
+
+/* ==========================================================================
+   Custom Notification Menu Styles
+   ========================================================================== */
+.notification-menu-custom.p-menu {
+  background-color: hsl(var(--card)) !important;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  padding: 0 !important;
+}
+
+.notification-menu-custom .p-menu-start,
+.notification-menu-custom .p-menu-end {
+    background-color: transparent !important;
+}
+
+.notification-menu-custom .p-menu-list {
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+.notification-menu-custom .p-menu-item {
+  background-color: transparent !important;
+  border-bottom: 1px solid hsl(var(--border));
+  margin: 0 !important;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.notification-menu-custom .p-menu-item:last-child {
+  border-bottom: none;
+}
+
+.notification-menu-custom .p-menu-item > .p-menuitem-content:hover {
+  background-color: hsl(var(--muted)) !important;
+}
+
+
+
+/* ==========================================================================
+   Header Glow Hover Effect
+   ========================================================================== */
+.header-glow-hover {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 9999px; /* Ensure circular shape for icons */
+  padding: 0.5rem; /* p-2 */
+}
+
+.header-glow-hover:hover {
+  background-color: hsl(var(--primary) / 0.1) !important; /* Luminous blue background */
+  box-shadow: 0 0 10px hsl(var(--primary)) !important;
+}
+
+
+
+/* Style for the profile button hover */
+.profile-button-hover {
+  transition: background-color 0.3s ease;
+}
+.p-button.profile-button-hover:hover {
+  background-color: hsl(var(--primary) / 0.1) !important;
+}
 

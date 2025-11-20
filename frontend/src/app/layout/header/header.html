@@ -1,6 +1,6 @@
 <header class="h-20 bg-card border-b border-border flex items-center justify-between px-4 sm:px-6">
   <div class="flex items-center gap-2 sm:gap-4">
-    <button (click)="toggleSidebar()" class="p-2 rounded-full hover:bg-muted lg:hidden">
+    <button (click)="toggleSidebar()" class="header-glow-hover text-foreground lg:hidden">
       <span class="material-symbols-outlined text-foreground">menu</span>
     </button>
     <!-- Title and Subtitle -->
@@ -11,10 +11,10 @@
   </div>
 
   <div class="flex items-center space-x-2">
-    <button (click)="toggleTheme()" class="p-2 rounded-full hover:bg-muted relative transition-colors">
+    <button (click)="toggleTheme()" class="header-glow-hover text-foreground relative">
       <span class="material-symbols-outlined text-foreground">{{ currentTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</span>
     </button>
-    <button (click)="handleNotificationClick($event)" pButton pRipple class="p-2 rounded-full hover:bg-muted relative transition-colors p-button-text p-button-plain">
+    <button (click)="handleNotificationClick($event)" pButton pRipple class="header-glow-hover text-foreground relative p-button-text p-button-plain">
       <span class="material-symbols-outlined text-foreground">notifications</span>
       <span
         *ngIf="unreadNotificationCount() > 0"
@@ -23,9 +23,9 @@
     </button>
     <p-menu #notificationMenu [model]="notificationMenuItems()" [popup]="true" styleClass="notification-menu-custom">
       <ng-template pTemplate="start">
-        <div class="flex items-center justify-between px-6 py-4 bg-muted/30">
-          <h2 class="text-foreground text-base font-semibold">{{ 'NOTIFICATIONS.TITLE' | translate }}</h2>
-          <button (click)="markAllNotificationsAsRead()" class="text-primary text-sm font-medium hover:shadow-glow-primary transition-shadow duration-300 rounded-md">
+        <div class="flex items-center justify-between px-6 py-4 bg-blue-500 text-white border-b border-blue-400">
+          <h2 class="text-white text-xl font-bold">{{ 'NOTIFICATIONS.TITLE' | translate }}</h2>
+          <button (click)="markAllNotificationsAsRead()" class="bg-white/20 text-white text-sm font-semibold rounded-md px-3 py-1.5 hover:bg-white/30 transition-colors duration-300">
             {{ 'NOTIFICATIONS.MARK_ALL_AS_READ' | translate }}
           </button>
         </div>
@@ -53,8 +53,8 @@
         }
       </ng-template>
       <ng-template pTemplate="end">
-        <div class="flex items-center justify-center px-4 py-3 bg-muted/30 border-t border-border">
-          <a (click)="onViewAllNotifications()" class="text-primary text-sm font-medium hover:shadow-glow-primary transition-shadow duration-300 rounded-md px-2 py-1 cursor-pointer">
+        <div class="flex items-center justify-center px-4 py-3 bg-blue-500 text-white border-t border-blue-400">
+          <a (click)="onViewAllNotifications()" class="bg-white/20 text-white text-sm font-semibold rounded-md px-3 py-1.5 hover:bg-white/30 transition-colors duration-300 cursor-pointer">
             {{ 'HEADER.NOTIFICATIONS.VIEW_ALL' | translate }}
           </a>
         </div>
@@ -63,7 +63,7 @@
 
     <!-- User Profile Dropdown -->
     <div *ngIf="userProfile()">
-      <button type="button" pButton pRipple class="p-button-text p-button-plain" (click)="menu.toggle($event)">
+      <button type="button" pButton pRipple class="profile-button-hover p-button-text p-button-plain text-foreground" (click)="menu.toggle($event)">
         <div class="flex items-center space-x-2">
           <!-- Avatar with Initials -->
           <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-blue-400 flex items-center justify-center text-white font-semibold text-sm">
