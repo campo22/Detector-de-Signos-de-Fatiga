@@ -1,3 +1,26 @@
 .glow-dot {
-  box-shadow: 0 0 6px 1px hsl(var(--primary));
+  box-shadow: 0 0 8px 2px hsl(var(--primary) / 0.7);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted) / 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
+
+.font-bold {
+  font-weight: 700;
 }

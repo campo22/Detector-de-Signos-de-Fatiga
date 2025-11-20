@@ -593,5 +593,20 @@
     "MARK_ALL_READ_ERROR_DETAIL": "Error al marcar todas las notificaciones como leídas.",
     "NEW_ALERT_SUMMARY": "Nueva Alerta de Fatiga",
     "NEW_ALERT_DETAIL": "Evento de {type} detectado."
+  },
+  "TIME": {
+    "JUST_NOW": "Ahora mismo",
+    "MINUTE_AGO": "Hace un minuto",
+    "MINUTES_AGO_PLURAL": "Hace {{count}} minutos",
+    "HOUR_AGO": "Hace una hora",
+    "HOURS_AGO_PLURAL": "Hace {{count}} horas",
+    "DAY_AGO": "Hace un día",
+    "DAYS_AGO_PLURAL": "Hace {{count}} días",
+    "WEEK_AGO": "Hace una semana",
+    "WEEKS_AGO_PLURAL": "Hace {{count}} semanas",
+    "MONTH_AGO": "Hace un mes",
+    "MONTHS_AGO_PLURAL": "Hace {{count}} meses",
+    "YEAR_AGO": "Hace un año",
+    "YEARS_AGO_PLURAL": "Hace {{count}} años"
   }
 }

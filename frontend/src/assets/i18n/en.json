@@ -580,5 +580,20 @@
     "MARK_ALL_READ_ERROR_DETAIL": "Error marking all notifications as read.",
     "NEW_ALERT_SUMMARY": "New Fatigue Alert",
     "NEW_ALERT_DETAIL": "{type} event detected."
+  },
+  "TIME": {
+    "JUST_NOW": "Just now",
+    "MINUTE_AGO": "A minute ago",
+    "MINUTES_AGO_PLURAL": "{{count}} minutes ago",
+    "HOUR_AGO": "An hour ago",
+    "HOURS_AGO_PLURAL": "{{count}} hours ago",
+    "DAY_AGO": "A day ago",
+    "DAYS_AGO_PLURAL": "{{count}} days ago",
+    "WEEK_AGO": "A week ago",
+    "WEEKS_AGO_PLURAL": "{{count}} weeks ago",
+    "MONTH_AGO": "A month ago",
+    "MONTHS_AGO_PLURAL": "{{count}} months ago",
+    "YEAR_AGO": "A year ago",
+    "YEARS_AGO_PLURAL": "{{count}} years ago"
   }
 }

@@ -1,14 +1,27 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Notification } from '../../../../core/models/notification.model';
 import { TranslateModule } from '@ngx-translate/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { TimeAgoPipe } from '../../../../shared/pipes/time-ago-pipe';
 
 @Component({
   selector: 'app-notification-panel',
   standalone: true,
-  imports: [CommonModule, TranslateModule, DatePipe],
+  imports: [CommonModule, TranslateModule, TimeAgoPipe],
   templateUrl: './notification-panel.component.html',
   styleUrls: ['./notification-panel.component.scss'],
+  animations: [
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0,
+        transform: 'translateY(-10px)'
+      })),
+      transition('void <=> *', [
+        animate('300ms ease-in-out')
+      ]),
+    ])
+  ]
 })
 export class NotificationPanelComponent {
   @Input() notifications: Notification[] = [];
@@ -34,6 +47,6 @@ export class NotificationPanelComponent {
   // Helper para obtener un icono genérico por ahora
   getNotificationIcon(notification: Notification): string {
     // Lógica futura para devolver un icono basado en el tipo de notificación
-    return 'notifications_active'; 
+    return 'notifications'; 
   }
 }
