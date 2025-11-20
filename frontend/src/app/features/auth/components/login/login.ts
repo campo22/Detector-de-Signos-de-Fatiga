@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 // Importaciones de PrimeNG para la UI y notificaciones
@@ -26,7 +26,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     CommonModule,
     IconFieldModule,
     InputIconModule,
-    TranslateModule
+    TranslateModule,
+    RouterLink
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],

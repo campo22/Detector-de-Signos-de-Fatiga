@@ -29,3 +29,10 @@ export interface UserProfile {
   role: Role;
   activo?: boolean; // Made activo optional
 }
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+

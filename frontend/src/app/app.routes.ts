@@ -11,6 +11,14 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./features/auth/components/login/login').then(m => m.LoginComponent)
   },
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./features/auth/components/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./features/auth/components/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
 
 
   // --- Rutas Protegidas (dentro del Layout Principal) ---

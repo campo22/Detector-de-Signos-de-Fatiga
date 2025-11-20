@@ -15,5 +15,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByResetToken(String resetToken); // New method
+
     List<User> findByRolIn(List<Role> roles);
 }

@@ -142,6 +142,31 @@
     "ERROR_SUMMARY": "Login Error",
     "ERROR_DETAIL": "Incorrect email or password. Please try again."
   },
+  "AUTH": {
+    "FORGOT_PASSWORD": {
+      "TITLE": "Recover Password",
+      "INSTRUCTIONS": "Enter your email and we will send you a link to reset your password.",
+      "SUBMIT_BUTTON": "Send Recovery Link"
+    },
+    "RESET_PASSWORD": {
+      "TITLE": "Reset Password",
+      "INSTRUCTIONS": "Enter your new password below.",
+      "NEW_PASSWORD": "New Password",
+      "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
+      "NEW_PASSWORD_REQUIRED": "New password is required.",
+      "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters.",
+      "CONFIRM_PASSWORD": "Confirm New Password",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Re-type your new password",
+      "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required.",
+      "PASSWORDS_MISMATCH": "Passwords do not match.",
+      "SUBMIT_BUTTON": "Reset Password"
+    },
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "your.email@example.com",
+    "EMAIL_REQUIRED": "Email is required.",
+    "EMAIL_INVALID": "The email format is not valid.",
+    "BACK_TO_LOGIN": "Back to Login"
+  },
   "DRIVERS": {
     "TITLE": "Driver Management",
     "EXPORT_BUTTON": "Export",

@@ -1,6 +1,10 @@
 package com.safetrack.controller;
 
 import com.safetrack.domain.dto.request.ChangeOwnPasswordRequest;
+import com.safetrack.domain.dto.request.ForgotPasswordRequest;
+import com.safetrack.domain.dto.request.LoginRequest;
+import com.safetrack.domain.dto.request.RegisterRequest;
+import com.safetrack.domain.dto.request.ResetPasswordRequest;
 import com.safetrack.domain.dto.request.LoginRequest;
 import com.safetrack.domain.dto.request.RegisterRequest;
 import com.safetrack.domain.dto.response.AuthResponse; // <-- CAMBIO IMPORTANTE
@@ -118,5 +122,25 @@ public class AuthController {
     public ResponseEntity<Void> changeOwnPassword(@Valid @RequestBody ChangeOwnPasswordRequest request, Authentication authentication) {
         authenticationService.changeOwnPassword(request, authentication.getName());
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Iniciar el proceso de recuperación de contraseña")
+    @ApiResponse(responseCode = "200", description = "Si el email existe, se enviará un enlace de recuperación.")
+    @ApiResponse(responseCode = "400", description = "Email no válido.")
+    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        log.info("Solicitud de recuperación de contraseña para el email: {}", request.getEmail());
+        authenticationService.forgotPassword(request.getEmail());
+        return ResponseEntity.ok("Si el email existe, se ha enviado un enlace de recuperación de contraseña.");
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Restablecer la contraseña usando un token de recuperación")
+    @ApiResponse(responseCode = "200", description = "Contraseña restablecida exitosamente.")
+    @ApiResponse(responseCode = "400", description = "Datos inválidos o token no válido/expirado.")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        log.info("Solicitud de restablecimiento de contraseña recibida para el token.");
+        authenticationService.resetPassword(request);
+        return ResponseEntity.ok("Contraseña restablecida exitosamente.");
     }
 }

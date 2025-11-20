@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, finalize, map, Observable, of, tap, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { AuthResponse, LoginRequest, Role, UserProfile } from '../../../core/models/auth.models';
+import { AuthResponse, LoginRequest, Role, UserProfile, ResetPasswordRequest } from '../../../core/models/auth.models';
 import { jwtDecode } from 'jwt-decode';
 import { UserService } from '../../shared/services/user.service'; // Added import
 
@@ -40,6 +40,24 @@ export class AuthService {
           map(() => response) // Return the original response
         )
       )
+    );
+  }
+
+  forgotPassword(email: string): Observable<string> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email }, { responseType: 'text' }).pipe(
+      catchError(error => {
+        console.error('Error in forgotPassword:', error);
+        throw error;
+      })
+    );
+  }
+
+  resetPassword(request: ResetPasswordRequest): Observable<string> {
+    return this.http.post(`${this.apiUrl}/reset-password`, request, { responseType: 'text' }).pipe(
+      catchError(error => {
+        console.error('Error in resetPassword:', error);
+        throw error;
+      })
     );
   }
 

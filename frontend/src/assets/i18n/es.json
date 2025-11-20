@@ -143,6 +143,31 @@
     "ERROR_SUMMARY": "Error en el Login",
     "ERROR_DETAIL": "Email o contraseña incorrectos. Por favor, inténtalo de nuevo."
   },
+  "AUTH": {
+    "FORGOT_PASSWORD": {
+      "TITLE": "Recuperar Contraseña",
+      "INSTRUCTIONS": "Introduce tu email y te enviaremos un enlace para restablecer tu contraseña.",
+      "SUBMIT_BUTTON": "Enviar Enlace de Recuperación"
+    },
+    "RESET_PASSWORD": {
+      "TITLE": "Restablecer Contraseña",
+      "INSTRUCTIONS": "Introduce tu nueva contraseña a continuación.",
+      "NEW_PASSWORD": "Nueva Contraseña",
+      "NEW_PASSWORD_PLACEHOLDER": "Introduce tu nueva contraseña",
+      "NEW_PASSWORD_REQUIRED": "La nueva contraseña es requerida.",
+      "PASSWORD_MIN_LENGTH": "La contraseña debe tener al menos 6 caracteres.",
+      "CONFIRM_PASSWORD": "Confirmar Nueva Contraseña",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Vuelve a escribir tu nueva contraseña",
+      "CONFIRM_PASSWORD_REQUIRED": "La confirmación de la contraseña es requerida.",
+      "PASSWORDS_MISMATCH": "Las contraseñas no coinciden.",
+      "SUBMIT_BUTTON": "Restablecer Contraseña"
+    },
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "tu.correo@example.com",
+    "EMAIL_REQUIRED": "El email es requerido.",
+    "EMAIL_INVALID": "El formato del email no es válido.",
+    "BACK_TO_LOGIN": "Volver a Iniciar Sesión"
+  },
   "DRIVERS": {
     "TITLE": "Gestión de Conductores",
     "EXPORT_BUTTON": "Exportar",
