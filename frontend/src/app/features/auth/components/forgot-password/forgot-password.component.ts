@@ -20,7 +20,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     TranslateModule,
     ToastModule,
     InputTextModule,
-    ButtonModule,
     ProgressSpinnerModule
   ],
   templateUrl: './forgot-password.component.html',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
@@ -18,13 +18,11 @@ import { ResetPasswordRequest } from '../../../../core/models/auth.models'; // N
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     TranslateModule,
     ToastModule,
     InputTextModule,
     ButtonModule,
-    ProgressSpinnerModule,
-    PasswordModule
+    ProgressSpinnerModule
   ],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss'],
@@ -34,11 +32,13 @@ export class ResetPasswordComponent implements OnInit {
   resetPasswordForm!: FormGroup;
   token: string | null = null;
   loading: boolean = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
+    public router: Router,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService
   ) {}
@@ -62,9 +62,21 @@ export class ResetPasswordComponent implements OnInit {
     }, { validators: this.passwordMatchValidator });
   }
 
+  get passwordControl() {
+    return this.resetPasswordForm.get('newPassword');
+  }
+
   passwordMatchValidator(form: FormGroup) {
     return form.get('newPassword')?.value === form.get('confirmPassword')?.value
       ? null : { 'mismatch': true };
+  }
+
+  toggleNewPassword(): void {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   onSubmit(): void {
