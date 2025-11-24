@@ -1,0 +1,49 @@
+<section class="py-24 sm:py-32">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 max-w-3xl mx-auto" data-aos>
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-text-dark-primary">{{ 'testimonials.title' | translate }}</h2>
+      <p class="mt-6 text-lg text-landing-text-dark-secondary">{{ 'testimonials.subtitle' | translate }}</p>
+    </div>
+    
+    <!-- Testimonial Cards & Stat -->
+    <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div appSpotlight class="spotlight-card bg-[#111620] rounded-2xl p-8 border border-border-dark transition-all duration-300 ease-in-out hover:border-landing-primary/50 hover:-translate-y-1" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-center mb-4">
+          <img alt="Avatar de Cliente" class="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=48&h=48&auto=format&fit=crop"/>
+          <div class="ml-4">
+            <p class="font-bold text-text-dark-primary">{{ 'testimonials.cards.perez.name' | translate }}</p>
+            <p class="text-sm text-landing-text-dark-secondary">{{ 'testimonials.cards.perez.role' | translate }}</p>
+          </div>
+        </div>
+        <p class="text-landing-text-dark-secondary">"{{ 'testimonials.cards.perez.quote' | translate }}"</p>
+      </div>
+
+      <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div appSpotlight class="spotlight-card bg-[#111620] rounded-2xl p-8 border border-border-dark transition-all duration-300 ease-in-out hover:border-landing-primary/50 hover:-translate-y-1" data-aos="fade-up" data-aos-delay="200">
+          <div class="flex items-center mb-4">
+            <img alt="Avatar de Cliente" class="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=48&h=48&auto=format&fit=crop"/>
+            <div class="ml-4">
+              <p class="font-bold text-text-dark-primary">{{ 'testimonials.cards.rodriguez.name' | translate }}</p>
+              <p class="text-sm text-landing-text-dark-secondary">{{ 'testimonials.cards.rodriguez.role' | translate }}</p>
+            </div>
+          </div>
+          <p class="text-landing-text-dark-secondary">"{{ 'testimonials.cards.rodriguez.quote' | translate }}"</p>
+        </div>
+        <div appSpotlight class="spotlight-card bg-[#111620] rounded-2xl p-8 border border-border-dark transition-all duration-300 ease-in-out hover:border-landing-primary/50 hover:-translate-y-1" data-aos="fade-up" data-aos-delay="300">
+          <div class="flex items-center mb-4">
+            <img alt="Avatar de Cliente" class="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=48&h=48&auto=format&fit=crop"/>
+            <div class="ml-4">
+              <p class="font-bold text-text-dark-primary">{{ 'testimonials.cards.gomez.name' | translate }}</p>
+              <p class="text-sm text-landing-text-dark-secondary">{{ 'testimonials.cards.gomez.role' | translate }}</p>
+            </div>
+          </div>
+          <p class="text-landing-text-dark-secondary">"{{ 'testimonials.cards.gomez.quote' | translate }}"</p>
+        </div>
+        <div appSpotlight class="spotlight-card md:col-span-2 bg-[#111620] rounded-2xl p-8 border border-border-dark flex flex-col justify-center items-center text-center transition-all duration-300 ease-in-out hover:border-landing-primary/50 hover:-translate-y-1" data-aos="fade-up" data-aos-delay="400">
+           <p class="text-7xl font-bold text-landing-primary animate-pulse-glow">92%</p>
+           <p class="mt-2 text-landing-text-dark-secondary">{{ 'testimonials.stat' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

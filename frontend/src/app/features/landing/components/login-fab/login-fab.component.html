@@ -1,0 +1,13 @@
+<!-- Login FAB -->
+<div class="fixed bottom-6 left-6 z-40 group animate-fade-in">
+  <button (click)="openLoginModal()"
+     class="w-16 h-16 sm:w-auto sm:h-auto flex items-center justify-center sm:justify-start gap-2 rounded-full sm:px-6 sm:py-3 bg-landing-primary text-white text-base font-medium shadow-lg shadow-primary-glow hover:bg-landing-primary-focus transition-all duration-300 ease-in-out transform hover:scale-110">
+    <span class="material-symbols-outlined text-xl">login</span>
+    <span class="hidden sm:inline">{{ 'header.login' | translate }}</span>
+  </button>
+  <!-- Tooltip for small screens -->
+  <div class="sm:hidden absolute left-full ml-4 top-1/2 -translate-y-1/2 px-4 py-2 bg-[#111620] text-text-dark-primary rounded-lg shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+    {{ 'header.login' | translate }}
+    <div class="absolute right-full top-1/2 -translate-y-1/2 w-2 h-2 bg-[#111620] rotate-45"></div>
+  </div>
+</div>

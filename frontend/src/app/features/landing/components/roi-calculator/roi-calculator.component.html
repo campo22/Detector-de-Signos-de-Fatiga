@@ -1,0 +1,51 @@
+<section class="py-24 sm:py-32 bg-[#0D1117] scroll-mt-28" id="roi-calculator">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div data-aos="fade-up">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-landing-primary/10 border border-landing-primary/20 rounded-full text-sm text-landing-primary mb-4">
+          {{ 'roi.tag' | translate }}
+        </div>
+        <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-text-dark-primary">{{ 'roi.title' | translate }}</h2>
+        <p class="mt-6 text-lg text-landing-text-dark-secondary">
+          {{ 'roi.subtitle' | translate }}
+        </p>
+      </div>
+      <div class="bg-[#111620] rounded-2xl p-8 lg:p-10 border border-border-dark" data-aos="fade-up" data-aos-delay="100">
+        <form [formGroup]="roiForm" class="space-y-6">
+          <div>
+            <label for="vehicleCount" class="block text-sm font-medium text-landing-text-dark-secondary">{{ 'roi.form.vehicles' | translate }}</label>
+            <div class="mt-2">
+              <input formControlName="vehicleCount" id="vehicleCount" type="number" min="1"
+                     class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors" />
+            </div>
+          </div>
+          <div>
+            <label for="incidentCount" class="block text-sm font-medium text-landing-text-dark-secondary">{{ 'roi.form.incidents' | translate }}</label>
+            <div class="mt-2">
+              <input formControlName="incidentCount" id="incidentCount" type="number" min="0"
+                     class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors" />
+            </div>
+          </div>
+          <div>
+            <label for="incidentCost" class="block text-sm font-medium text-landing-text-dark-secondary">{{ 'roi.form.cost' | translate }}</label>
+            <div class="mt-2">
+              <input formControlName="incidentCost" id="incidentCost" type="number" min="0"
+                     class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors" />
+            </div>
+          </div>
+        </form>
+        <div class="mt-8 pt-8 border-t border-border-dark text-center">
+          <p class="text-landing-text-dark-secondary">{{ 'roi.results.title' | translate }}</p>
+          <p class="text-5xl font-bold text-landing-primary mt-2 animate-pulse-glow">
+            ${{ potentialSavings() | number:'1.0-0' }}
+          </p>
+          <div class="mt-8">
+            <button (click)="openDemoModal()" class="w-full sm:w-auto inline-block text-center rounded-full px-8 py-3 text-base font-medium bg-landing-primary text-white hover:bg-landing-primary-focus transition-colors duration-200 ease-in-out shadow-primary-glow">
+              {{ 'roi.results.cta' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

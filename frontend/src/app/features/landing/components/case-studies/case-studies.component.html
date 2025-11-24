@@ -1,0 +1,69 @@
+<section class="py-24 sm:py-32 bg-[#0D1117] scroll-mt-28" id="case-studies">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-landing-primary/10 border border-landing-primary/20 rounded-full text-sm text-landing-primary mb-4">
+        {{ 'caseStudies.tag' | translate }}
+      </div>
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-text-dark-primary">{{ 'caseStudies.title' | translate }}</h2>
+      <p class="mt-6 text-lg text-landing-text-dark-secondary">
+        {{ 'caseStudies.subtitle' | translate }}
+      </p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Case Study 1: Large Logistics -->
+      <div appSpotlight class="spotlight-card bg-[#111620] rounded-2xl p-8 border border-border-dark transition-all duration-300 ease-in-out hover:border-landing-primary/50 hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <p class="text-sm font-semibold text-landing-primary">{{ 'caseStudies.cards.transglobal.sector' | translate }}</p>
+            <h3 class="text-2xl font-bold text-text-dark-primary mt-1">{{ 'caseStudies.cards.transglobal.name' | translate }}</h3>
+          </div>
+          <img src="https://logo.clearbit.com/fedex.com" alt="TransGlobal Logistics Logo" class="h-10 w-auto opacity-70 group-hover:opacity-100 transition-opacity">
+        </div>
+        <p class="text-landing-text-dark-secondary italic">"{{ 'caseStudies.cards.transglobal.quote' | translate }}"</p>
+        <div class="mt-8 grid grid-cols-2 gap-6 text-center">
+          <div>
+            <p class="text-4xl font-bold text-landing-primary">-82%</p>
+            <p class="mt-1 text-sm text-landing-text-dark-secondary">{{ 'caseStudies.cards.transglobal.metric1' | translate }}</p>
+          </div>
+          <div>
+            <p class="text-4xl font-bold text-landing-primary">+15%</p>
+            <p class="mt-1 text-sm text-landing-text-dark-secondary">{{ 'caseStudies.cards.transglobal.metric2' | translate }}</p>
+          </div>
+        </div>
+        <div class="mt-8">
+          <a href="#" class="font-semibold text-landing-primary inline-flex items-center gap-2 group-hover:underline">
+            {{ 'caseStudies.readMore' | translate }}
+            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+      <!-- Case Study 2: Regional Transport -->
+      <div appSpotlight class="spotlight-card bg-[#111620] rounded-2xl p-8 border border-border-dark transition-all duration-300 ease-in-out hover:border-landing-primary/50 hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <p class="text-sm font-semibold text-landing-primary">{{ 'caseStudies.cards.cargaRapida.sector' | translate }}</p>
+            <h3 class="text-2xl font-bold text-text-dark-primary mt-1">{{ 'caseStudies.cards.cargaRapida.name' | translate }}</h3>
+          </div>
+           <img src="https://logo.clearbit.com/dhl.com" alt="Carga Rápida del Norte Logo" class="h-10 w-auto opacity-70 group-hover:opacity-100 transition-opacity">
+        </div>
+        <p class="text-landing-text-dark-secondary italic">"{{ 'caseStudies.cards.cargaRapida.quote' | translate }}"</p>
+        <div class="mt-8 grid grid-cols-2 gap-6 text-center">
+          <div>
+            <p class="text-4xl font-bold text-landing-primary">-95%</p>
+            <p class="mt-1 text-sm text-landing-text-dark-secondary">{{ 'caseStudies.cards.cargaRapida.metric1' | translate }}</p>
+          </div>
+          <div>
+            <p class="text-4xl font-bold text-landing-primary">24/7</p>
+            <p class="mt-1 text-sm text-landing-text-dark-secondary">{{ 'caseStudies.cards.cargaRapida.metric2' | translate }}</p>
+          </div>
+        </div>
+         <div class="mt-8">
+          <a href="#" class="font-semibold text-landing-primary inline-flex items-center gap-2 group-hover:underline">
+            {{ 'caseStudies.readMore' | translate }}
+            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

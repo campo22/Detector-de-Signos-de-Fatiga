@@ -1,0 +1,67 @@
+<section class="relative py-24 sm:py-32">
+  <div class="relative container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-text-dark-primary">{{ 'systemTour.title' | translate }}</h2>
+      <p class="mt-6 text-lg text-landing-text-dark-secondary">{{ 'systemTour.subtitle' | translate }}</p>
+    </div>
+    
+    <div class="relative max-w-5xl mx-auto" data-aos="zoom-in" data-aos-delay="200">
+      <!-- Glow effect -->
+      <div class="absolute inset-0 -mx-8 bg-landing-primary/10 blur-3xl opacity-40 rounded-full"></div>
+      
+      <!-- Carousel Container -->
+      <div class="relative bg-[#111620] rounded-2xl border border-border-dark p-4 sm:p-6 lg:p-8">
+        <div class="relative overflow-hidden aspect-[16/9] rounded-lg">
+          @for (slide of slides(); track slide.title; let i = $index) {
+            <img [ngSrc]="slide.imgSrc" 
+                 [alt]="slide.alt"
+                 width="1200"
+                 height="675"
+                 [priority]="i === 0"
+                 class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out"
+                 [class.opacity-100]="i === currentSlide()"
+                 [class.opacity-0]="i !== currentSlide()">
+          }
+           <!-- Indicators -->
+            <div class="absolute bottom-4 left-4 flex space-x-2">
+                @for (slide of slides(); track slide.title; let i = $index) {
+                    <button (click)="goToSlide(i)" 
+                            class="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                            [class.bg-landing-primary]="i === currentSlide()"
+                            [class.w-6]="i === currentSlide()"
+                            [class.bg-white/30]="i !== currentSlide()"
+                            [class.hover:bg-white/60]="i !== currentSlide()">
+                        <span class="sr-only">Go to slide {{ i + 1 }}</span>
+                    </button>
+                }
+            </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-8 relative h-28"> <!-- Set fixed height for text area -->
+            @for (slide of slides(); track slide.title; let i = $index) {
+              <div class="absolute inset-0 transition-opacity duration-500" 
+                  [class.opacity-100]="i === currentSlide()"
+                  [class.opacity-0]="i !== currentSlide()"
+                  [class.pointer-events-none]="i !== currentSlide()">
+                <h3 class="text-2xl font-bold text-text-dark-primary">{{ slide.title }}</h3>
+                <p class="mt-2 text-landing-text-dark-secondary">{{ slide.description }}</p>
+              </div>
+            }
+          </div>
+
+          <div class="md:col-span-4 flex items-center justify-start md:justify-end gap-3">
+            <button (click)="prevSlide()" class="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-border-dark hover:border-landing-primary/50 text-landing-text-dark-secondary hover:text-text-dark-primary transition-colors">
+              <span class="material-symbols-outlined">arrow_back</span>
+              <span class="sr-only">Previous slide</span>
+            </button>
+            <button (click)="nextSlide()" class="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-border-dark hover:border-landing-primary/50 text-landing-text-dark-secondary hover:text-text-dark-primary transition-colors">
+              <span class="material-symbols-outlined">arrow_forward</span>
+              <span class="sr-only">Next slide</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

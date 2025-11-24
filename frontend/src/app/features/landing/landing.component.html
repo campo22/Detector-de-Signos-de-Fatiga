@@ -1,0 +1,46 @@
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+  <!-- New Background -->
+  <div class="absolute inset-0 z-0 pointer-events-none">
+    <div class="absolute inset-0 bg-background-dark"></div>
+    <!-- Soft Glows -->
+    <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/20 -translate-y-1/2 translate-x-1/2 rounded-full blur-[200px] opacity-50"></div>
+    <div class="absolute bottom-0 left-0 w-2/3 h-2/3 bg-primary/10 -translate-y-1/4 -translate-x-1/2 rounded-full blur-[150px] opacity-50"></div>
+    
+    <!-- Abstract Lines -->
+    <svg class="absolute inset-0 w-full h-full opacity-10" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="rgba(60, 77, 255, 0)" />
+                <stop offset="50%" stop-color="rgba(60, 77, 255, 0.5)" />
+                <stop offset="100%" stop-color="rgba(60, 77, 255, 0)" />
+            </linearGradient>
+        </defs>
+        <path d="M-200 200 Q 400 0, 800 300 T 1600 200" stroke="url(#line-gradient)" fill="none" stroke-width="2"/>
+        <path d="M-100 800 Q 500 1000, 900 700 T 1800 900" stroke="url(#line-gradient)" fill="none" stroke-width="2"/>
+        <path d="M2000 100 Q 1600 300, 1200 200 T 400 300" stroke="url(#line-gradient)" fill="none" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <!-- Content layered on top -->
+  <div class="relative z-10 flex flex-col min-h-screen">
+    <app-header></app-header>
+    <main class="flex-grow">
+      <app-hero></app-hero>
+      <app-logo-cloud></app-logo-cloud>
+      <app-features></app-features>
+      <app-system-tour></app-system-tour>
+      <app-testimonials></app-testimonials>
+      <app-case-studies></app-case-studies>
+      <app-how-it-works></app-how-it-works>
+      <app-roi-calculator></app-roi-calculator>
+      <app-pricing></app-pricing>
+      <app-faq></app-faq>
+      <app-contact></app-contact>
+    </main>
+    <app-login-fab></app-login-fab>
+    <app-chatbot></app-chatbot>
+    <app-demo-modal></app-demo-modal>
+    <app-login-modal></app-login-modal>
+    <app-footer></app-footer>
+  </div>
+</div>

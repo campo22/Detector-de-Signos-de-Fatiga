@@ -1,0 +1,75 @@
+<section id="contacto" class="border-y border-border-dark scroll-mt-28">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+    <div class="grid lg:grid-cols-2 gap-16 items-center" data-aos>
+      <div class="pr-0 lg:pr-12">
+        <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-text-dark-primary">{{ 'contact.title' | translate }}</h2>
+        <p class="mt-6 text-lg text-landing-text-dark-secondary">{{ 'contact.subtitle' | translate }}</p>
+        <div class="mt-10 flex flex-col sm:flex-row gap-x-8 gap-y-4">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-landing-primary">check_circle</span>
+            <span class="text-landing-text-dark-secondary">{{ 'contact.perks.perk1' | translate }}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-landing-primary">check_circle</span>
+            <span class="text-landing-text-dark-secondary">{{ 'contact.perks.perk2' | translate }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="bg-[#111620] p-8 md:p-10 rounded-xl border border-border-dark">
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6" novalidate>
+          <div>
+            <label class="sr-only" for="name">{{ 'contact.form.name' | translate }}</label>
+            <input formControlName="name" id="name" type="text" [placeholder]="'contact.form.name' | translate" autocomplete="name"
+                   class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors"
+                   [class.border-red-500]="name?.invalid && name?.touched" />
+          </div>
+          <div>
+            <label class="sr-only" for="company">{{ 'contact.form.company' | translate }}</label>
+            <input formControlName="company" id="company" type="text" [placeholder]="'contact.form.company' | translate" autocomplete="organization"
+                   class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors"
+                   [class.border-red-500]="company?.invalid && company?.touched" />
+          </div>
+          <div>
+            <label class="sr-only" for="email">{{ 'contact.form.email' | translate }}</label>
+            <input formControlName="email" id="email" type="email" [placeholder]="'contact.form.email' | translate" autocomplete="email"
+                   class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors"
+                   [class.border-red-500]="email?.invalid && email?.touched" />
+          </div>
+          <div>
+            <label class="sr-only" for="phone">{{ 'contact.form.phone' | translate }}</label>
+            <input formControlName="phone" id="phone" type="tel" [placeholder]="'contact.form.phone' | translate" autocomplete="tel"
+                   class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors"
+                   [class.border-red-500]="phone?.invalid && phone?.touched" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="sr-only" for="message">{{ 'contact.form.message' | translate }}</label>
+            <textarea formControlName="message" id="message" [placeholder]="'contact.form.message' | translate" rows="4"
+                      class="w-full rounded-lg border-border-dark bg-[#0D1117] focus:ring-2 focus:ring-landing-primary/50 focus:border-landing-primary text-text-dark-primary placeholder-gray-500 transition-colors"
+                      [class.border-red-500]="message?.invalid && message?.touched"></textarea>
+          </div>
+          <div class="sm:col-span-2 flex flex-col items-end">
+            <button type="submit"
+                    [disabled]="submitting()"
+                    class="w-full sm:w-auto rounded-lg px-8 py-3 text-base font-semibold bg-landing-primary text-white hover:bg-landing-primary-focus transition-all duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center shadow-primary-glow">
+              @if (submitting()) {
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>{{ 'contact.form.submitting' | translate }}</span>
+              } @else {
+                <span>{{ 'contact.form.submit' | translate }}</span>
+              }
+            </button>
+            @if (submittedSuccessfully() === true) {
+              <p class="mt-4 text-sm text-green-400">{{ 'contact.form.success' | translate }}</p>
+            }
+            @if (submittedSuccessfully() === false) {
+              <p class="mt-4 text-sm text-red-400">{{ 'contact.form.error' | translate }}</p>
+            }
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

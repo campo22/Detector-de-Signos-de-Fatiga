@@ -4,9 +4,16 @@ import { Role } from './core/models/auth.models';
 import { MainLayout } from './layout/main-layout/main-layout';
 import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
+import { LandingComponent } from './features/landing/landing.component';
 
 export const routes: Routes = [
-  // --- Rutas Públicas ---
+  // --- Nueva Ruta de Landing Page ---
+  {
+    path: '',
+    loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent)
+  },
+
+  // --- Rutas Públicas existentes ---
   {
     path: 'login',
     loadComponent: () => import('./features/auth/components/login/login').then(m => m.LoginComponent)
@@ -100,6 +107,6 @@ export const routes: Routes = [
 
 
   // --- Ruta Wildcard (Comodín) ---
-  // Si el usuario escribe una URL que no existe, lo redirigimos al dashboard.
-  { path: '**', redirectTo: 'dashboard' }
+  // Si el usuario escribe una URL que no existe, lo redirigimos a la landing page.
+  { path: '**', redirectTo: '' }
 ];

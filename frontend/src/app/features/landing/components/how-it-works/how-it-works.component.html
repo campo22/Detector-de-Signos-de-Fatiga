@@ -1,0 +1,42 @@
+<section class="py-24 sm:py-32 scroll-mt-28" id="how-it-works">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 max-w-3xl mx-auto" data-aos>
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-text-dark-primary">{{ 'howItWorks.title' | translate }}</h2>
+      <p class="mt-6 text-lg text-landing-text-dark-secondary">
+        {{ 'howItWorks.subtitle' | translate }}
+      </p>
+    </div>
+    <div class="relative mt-8" data-aos="fade-in">
+      <!-- Animated Connector Line for desktop -->
+      <div class="absolute inset-0 hidden md:flex justify-center items-center -top-4 pointer-events-none">
+        <svg class="w-full max-w-4xl h-24" viewBox="0 0 1000 100" preserveAspectRatio="none">
+          <path d="M 160 50 C 350 100, 400 0, 500 50 C 600 100, 650 0, 840 50" fill="none" stroke="rgba(60, 77, 255, 0.3)" stroke-width="2" class="connector-line"/>
+        </svg>
+      </div>
+
+      <div class="relative grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay="100">
+          <div class="flex items-center justify-center w-20 h-20 rounded-2xl bg-[#111620] border border-border-dark mb-6">
+            <span class="material-symbols-outlined text-3xl text-landing-primary">install_desktop</span>
+          </div>
+          <h3 class="text-2xl font-bold text-text-dark-primary mb-3">{{ 'howItWorks.steps.step1.title' | translate }}</h3>
+          <p class="text-landing-text-dark-secondary">{{ 'howItWorks.steps.step1.description' | translate }}</p>
+        </div>
+        <div class="flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="flex items-center justify-center w-20 h-20 rounded-2xl bg-[#111620] border border-border-dark mb-6">
+            <span class="material-symbols-outlined text-3xl text-landing-primary">monitoring</span>
+          </div>
+          <h3 class="text-2xl font-bold text-text-dark-primary mb-3">{{ 'howItWorks.steps.step2.title' | translate }}</h3>
+          <p class="text-landing-text-dark-secondary">{{ 'howItWorks.steps.step2.description' | translate }}</p>
+        </div>
+        <div class="flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay="300">
+          <div class="flex items-center justify-center w-20 h-20 rounded-2xl bg-[#111620] border border-border-dark mb-6">
+            <span class="material-symbols-outlined text-3xl text-landing-primary">task_alt</span>
+          </div>
+          <h3 class="text-2xl font-bold text-text-dark-primary mb-3">{{ 'howItWorks.steps.step3.title' | translate }}</h3>
+          <p class="text-landing-text-dark-secondary">{{ 'howItWorks.steps.step3.description' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

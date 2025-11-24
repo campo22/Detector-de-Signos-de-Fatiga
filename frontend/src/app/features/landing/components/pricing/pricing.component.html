@@ -1,0 +1,154 @@
+<section class="py-24 sm:py-32 scroll-mt-28" id="pricing">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+      <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-text-dark-primary bg-gradient-to-r from-primary to-blue-300 bg-clip-text text-transparent">
+        {{ 'pricing.title' | translate }}
+      </h2>
+      <p class="mt-6 text-lg text-landing-text-dark-secondary">
+        {{ 'pricing.subtitle' | translate }}
+      </p>
+    </div>
+
+    <!-- Billing Cycle Toggle -->
+    <div class="flex justify-center items-center gap-4 mb-12" data-aos="fade-up">
+      <span class="font-medium text-landing-text-dark-secondary">{{ 'pricing.billing.monthly' | translate }}</span>
+      <button (click)="toggleBillingCycle()" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-landing-primary focus:ring-offset-2 focus:ring-offset-background-dark" [class.bg-landing-primary]="billingCycle() === 'yearly'" [class.bg-gray-600]="billingCycle() === 'monthly'">
+        <span class="sr-only">Use setting</span>
+        <span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out" [class.translate-x-5]="billingCycle() === 'yearly'" [class.translate-x-0]="billingCycle() === 'monthly'"></span>
+      </button>
+      <span class="font-medium text-landing-text-dark-secondary">{{ 'pricing.billing.yearly' | translate }}</span>
+      <span class="ml-2 inline-flex items-center rounded-full bg-landing-primary/10 px-3 py-1 text-sm font-medium text-landing-primary">{{ 'pricing.billing.save' | translate }}</span>
+    </div>
+    
+    <!-- Pricing Table -->
+    <div class="mt-16 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+      
+      <!-- Plan Esencial -->
+      <div appSpotlight class="spotlight-card bg-[#111620] rounded-2xl p-8 border border-border-dark h-full flex flex-col transition-all duration-300 ease-in-out hover:border-landing-primary/50" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-2xl font-bold text-text-dark-primary">{{ 'pricing.plans.essential.title' | translate }}</h3>
+        <p class="mt-2 text-landing-text-dark-secondary min-h-[3rem]">{{ 'pricing.plans.essential.description' | translate }}</p>
+        <div class="my-8">
+          <span class="text-5xl font-bold text-text-dark-primary">{{ 'pricing.plans.customPrice' | translate }}</span>
+        </div>
+        <button (click)="openDemoModal()" class="w-full inline-block text-center rounded-full px-8 py-3 text-base font-medium text-text-dark-primary border border-border-dark hover:border-landing-primary hover:text-landing-primary transition-colors">
+          {{ 'pricing.plans.cta' | translate }}
+        </button>
+        <hr class="my-8 border-border-dark">
+        <ul class="space-y-4 text-landing-text-dark-secondary flex-grow">
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.detection' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.inCabAlerts' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.basicDashboard' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3 opacity-50">
+            <span class="material-symbols-outlined text-landing-text-dark-secondary text-lg">remove</span>
+            <span>{{ 'pricing.features.predictiveAnalysis' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3 opacity-50">
+            <span class="material-symbols-outlined text-landing-text-dark-secondary text-lg">remove</span>
+            <span>{{ 'pricing.features.advancedReports' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3 opacity-50">
+            <span class="material-symbols-outlined text-landing-text-dark-secondary text-lg">remove</span>
+            <span>{{ 'pricing.features.coaching' | translate }}</span>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Plan Profesional (Highlighted) - Refactored for correct badge positioning -->
+      <div class="relative" data-aos="fade-up" data-aos-delay="200">
+        <!-- The Card - this is the element that scales -->
+        <div appSpotlight class="spotlight-card bg-[#161C2A] rounded-2xl p-8 border border-transparent h-full flex flex-col relative transform lg:scale-105 ring-2 ring-primary select-none">
+            <h3 class="text-2xl font-bold text-landing-primary">{{ 'pricing.plans.professional.title' | translate }}</h3>
+            <p class="mt-2 text-landing-text-dark-secondary min-h-[3rem]">{{ 'pricing.plans.professional.description' | translate }}</p>
+            <div class="my-8">
+              <span class="text-5xl font-bold text-text-dark-primary">{{ 'pricing.plans.customPrice' | translate }}</span>
+            </div>
+            <button (click)="openDemoModal()" class="w-full inline-block text-center rounded-full px-8 py-3 text-base font-medium bg-landing-primary text-white hover:bg-landing-primary-focus transition-colors shadow-primary-glow">
+              {{ 'pricing.plans.cta' | translate }}
+            </button>
+            <hr class="my-8 border-border-dark">
+            <ul class="space-y-4 text-landing-text-dark-secondary flex-grow">
+              <li class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+                <span>{{ 'pricing.features.detection' | translate }}</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+                <span>{{ 'pricing.features.inCabAlerts' | translate }}</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+                <span>{{ 'pricing.features.basicDashboard' | translate }}</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+                <span>{{ 'pricing.features.predictiveAnalysis' | translate }}</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+                <span>{{ 'pricing.features.advancedReports' | translate }}</span>
+              </li>
+              <li class="flex items-center gap-3 opacity-50">
+                <span class="material-symbols-outlined text-landing-text-dark-secondary text-lg">remove</span>
+                <span>{{ 'pricing.features.coaching' | translate }}</span>
+              </li>
+            </ul>
+        </div>
+
+        <!-- The badge, absolutely positioned relative to the outer wrapper -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+          <span class="select-none inline-flex items-center rounded-full bg-gradient-to-r from-primary to-blue-400 px-4 py-1 text-sm font-bold text-white shadow-lg shadow-primary/30 ring-2 ring-[#161C2A]">
+            {{ 'pricing.plans.popular' | translate }}
+          </span>
+        </div>
+      </div>
+      
+      <!-- Plan Empresarial -->
+      <div appSpotlight class="spotlight-card bg-[#111620] rounded-2xl p-8 border border-border-dark h-full flex flex-col transition-all duration-300 ease-in-out hover:border-landing-primary/50" data-aos="fade-up" data-aos-delay="300">
+        <h3 class="text-2xl font-bold text-text-dark-primary">{{ 'pricing.plans.enterprise.title' | translate }}</h3>
+        <p class="mt-2 text-landing-text-dark-secondary min-h-[3rem]">{{ 'pricing.plans.enterprise.description' | translate }}</p>
+        <div class="my-8">
+          <span class="text-5xl font-bold text-text-dark-primary">{{ 'pricing.plans.customPrice' | translate }}</span>
+        </div>
+         <button (click)="openDemoModal()" class="w-full inline-block text-center rounded-full px-8 py-3 text-base font-medium text-text-dark-primary border border-border-dark hover:border-landing-primary hover:text-landing-primary transition-colors">
+            {{ 'pricing.plans.cta' | translate }}
+          </button>
+        <hr class="my-8 border-border-dark">
+        <ul class="space-y-4 text-landing-text-dark-secondary flex-grow">
+           <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.detection' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.inCabAlerts' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.basicDashboard' | translate }}</span>
+          </li>
+           <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.predictiveAnalysis' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.advancedReports' | translate }}</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-landing-primary text-lg">check</span>
+            <span>{{ 'pricing.features.coaching' | translate }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
