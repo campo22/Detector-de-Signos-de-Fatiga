@@ -34,7 +34,8 @@ fps: 20
 # Índice de la cámara a utilizar (por ejemplo, 0 para la cámara predeterminada)
 camera_index: 0
 # Ancho del frame para la captura de video
-frame_width: 450
+frame_width: 960
+display_full_screen: false
 
 # --- Rutas de Archivos ---
 # Ruta al modelo de predictor de puntos faciales
@@ -44,18 +45,21 @@ alarm_sound_path: "assets/music.wav"
 
 # --- Umbrales de Análisis de Fatiga ---
 # Umbral de Eye Aspect Ratio (EAR) para considerar los ojos como "cerrados"
-FATIGUE_EAR_THRESHOLD: 0.23
+FATIGUE_EAR_THRESHOLD: 0.20
 # Umbral de Mouth Aspect Ratio (MAR) para considerar un "bostezo"
-FATIGUE_MAR_THRESHOLD: 0.75
+FATIGUE_MAR_THRESHOLD: 0.80
 
 # Contadores de Frames Consecutivos para la Detección de Fatiga (para evitar falsos positivos)
 # Estos valores se basan en el FPS y la duración deseada (por ejemplo, 1 segundo = 20 frames a 20 FPS)
-FATIGUE_EYE_CLOSED_CONSEC_FRAMES: 30 # Ojos cerrados durante 1.5 segundos para microsueño
-FATIGUE_HEAD_NOD_CONSEC_FRAMES: 50 # Cabeza hacia abajo, más frames para robustez contra vibración
+FATIGUE_EYE_CLOSED_CONSEC_FRAMES: 40 # Ojos cerrados durante 1.5 segundos para microsueño
+FATIGUE_HEAD_NOD_CONSEC_FRAMES: 60 # Cabeza hacia abajo, más frames para robustez contra vibración
 FATIGUE_YAWN_CONSEC_FRAMES: 18 # Boca abierta ~0.9s a 20 FPS para bostezo sostenido
 
 # Umbrales de Pose de la Cabeza (en grados)
 # Ángulo en grados para considerar que la cabeza está mirando hacia abajo de forma significativa
-FATIGUE_HEAD_PITCH_DOWN_THRESHOLD: 30 # Umbral más alto para evitar falsos positivos por vibración
+FATIGUE_HEAD_PITCH_DOWN_THRESHOLD: 32 # Umbral más alto para evitar falsos positivos por vibración
+IGNORE_YAWN_IF_HEAD_DOWN: true # Nuevo: Ignorar bostezos si la cabeza está agachada (para evitar falsos positivos)
+FATIGUE_HEAD_YAW_THRESHOLD: 25 # Ángulo en grados para considerar giro significativo de cabeza (distracción)
+FATIGUE_HEAD_YAW_CONSEC_FRAMES: 10 # Frames consecutivos con cabeza girada para detectar distracción
 head_nod_require_eyes_closed: true
 head_nod_ignore_if_yawn: true

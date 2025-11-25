@@ -183,6 +183,15 @@ def main():
     vs = VideoStream(src=config.get('camera_index', 0)).start()
     time.sleep(1.0)
 
+    # --- Configuración de la Ventana de Display ---
+    window_name = "Simulador de Vehículo Inteligente"
+    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+    if config.get('display_full_screen', False):
+        cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    
+    # --- Variables para alternar pantalla completa ---
+    is_fullscreen = config.get('display_full_screen', False)
+    
     overlay_enabled = True
     fps_calc_start = time.time()
     fps_frame_count = 0
@@ -201,8 +210,8 @@ def main():
     # --- Bucle Principal de la Aplicación ---
     print("[INFO] Iniciando simulación...")
     while True:
-        frame = vs.read()
-        if frame is None:
+        raw_camera_frame = vs.read()
+        if raw_camera_frame is None:
             none_frame_count += 1
             if none_frame_count >= none_frame_threshold:
                 print("[WARN] Stream de cámara sin frames, intentando reconectar...")
@@ -220,7 +229,7 @@ def main():
                         none_frame_count = 0
                         reconnect_backoff = 1.0
                         reconnect_attempts = 0
-                        frame = test
+                        raw_camera_frame = test
                     else:
                         raise RuntimeError("No frame tras reconectar")
                 except Exception as e:
@@ -238,11 +247,15 @@ def main():
         else:
             none_frame_count = 0
         
-        frame = imutils.resize(frame, width=config.get('frame_width', 450))
+        # Frame para procesamiento (siempre se redimensiona a frame_width para consistencia)
+        processed_frame = imutils.resize(raw_camera_frame.copy(), width=config.get('frame_width', 450))
+        
         fps_frame_count += 1
 
         # Procesar el frame y obtener métricas crudas
-        display_frame, raw_metrics = detector.process_frame(frame.copy()) # Usar una copia para dibujar
+        # display_frame ahora es el frame procesado con los overlays del detector
+        display_frame, raw_metrics = detector.process_frame(processed_frame.copy())
+        
 
         # --- Lógica de Visualización y Detección ---
         if raw_metrics:
@@ -279,7 +292,7 @@ def main():
             # --- Dibujar Puntos Faciales y Pose de la Cabeza ---
             if overlay_enabled and raw_metrics['face_landmarks'] is not None:
                 for (x, y) in raw_metrics['face_landmarks']:
-                    cv2.circle(display_frame, (x, y), 1, (0, 255, 0), -1) # Puntos en verde
+                    cv2.circle(display_frame, (x, y), 2, (0, 255, 0), -1) # Puntos en verde (radio aumentado)
             
             if overlay_enabled and raw_metrics['rotation_vector'] is not None:
                 focal_length = display_frame.shape[1]
@@ -402,6 +415,12 @@ def main():
                 send_vehicle_data(keepalive_payload)
                 last_send_time = current_time
 
+        # --- Mostrar atajos de teclado ---
+        cv2.putText(display_frame, "Q: Salir", (display_frame.shape[1] - 120, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(display_frame, "O: Overlay", (display_frame.shape[1] - 120, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(display_frame, "A: Audio", (display_frame.shape[1] - 120, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(display_frame, "S: Captura", (display_frame.shape[1] - 120, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        
         cv2.imshow("Simulador de Vehículo Inteligente", display_frame)
         key = cv2.waitKey(1) & 0xFF
 
@@ -427,6 +446,13 @@ def main():
                 print(f"[INFO] Captura guardada en {fname}")
             except Exception as e:
                 print(f"[WARN] No se pudo guardar captura: {e}")
+        elif key == ord("f"): # Alternar pantalla completa
+            is_fullscreen = not is_fullscreen
+            if is_fullscreen:
+                cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+            else:
+                cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_NORMAL)
+            print(f"[INFO] Pantalla completa {'activada' if is_fullscreen else 'desactivada'}.")
 
     # --- Limpieza Final ---
     print("[INFO] Finalizando simulación y realizando limpieza...")

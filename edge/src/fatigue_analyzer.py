@@ -20,15 +20,19 @@ class FatigueAnalyzer:
         self.HEAD_NOD_CONSEC_FRAMES = config['FATIGUE_HEAD_NOD_CONSEC_FRAMES']
         self.YAWN_CONSEC_FRAMES = config['FATIGUE_YAWN_CONSEC_FRAMES']
         self.HEAD_PITCH_DOWN_THRESHOLD = config['FATIGUE_HEAD_PITCH_DOWN_THRESHOLD']
+        self.HEAD_YAW_THRESHOLD = config['FATIGUE_HEAD_YAW_THRESHOLD']
+        self.HEAD_YAW_CONSEC_FRAMES = config['FATIGUE_HEAD_YAW_CONSEC_FRAMES']
         self.FPS = config['fps'] # Frames per second from config
         self.HEAD_NOD_REQUIRE_EYES_CLOSED = config.get('head_nod_require_eyes_closed', True)
         self.HEAD_NOD_IGNORE_IF_YAWN = config.get('head_nod_ignore_if_yawn', True)
+        self.IGNORE_YAWN_IF_HEAD_DOWN = config.get('IGNORE_YAWN_IF_HEAD_DOWN', True) # Nuevo
 
         # --- Contadores de Estado Interno ---
         self._eye_closed_frames = 0
         self._yawn_frames = 0
         self._head_nod_frames = 0
         self._head_down_with_eyes_closed_frames = 0
+        self._head_yaw_frames = 0
 
         # --- Métricas de Parpadeo ---
         self._is_blinking = False
@@ -45,6 +49,7 @@ class FatigueAnalyzer:
         self._ear_history = collections.deque(maxlen=5)
         self._mar_history = collections.deque(maxlen=5)
         self._pitch_history = collections.deque(maxlen=5)
+        self._yaw_history = collections.deque(maxlen=5)
 
         # --- Métricas de Fatiga Derivadas ---
         self.eye_closure_duration = 0.0 # Duración del cierre de ojos actual
@@ -79,8 +84,13 @@ class FatigueAnalyzer:
         else:
             self.avg_blink_duration = 0.0
 
-    def _update_yawn_metrics(self, mar):
+    def _update_yawn_metrics(self, mar, head_pitch_eff):
         current_time = time.time()
+
+        # Nuevo: Ignorar bostezo si la cabeza está agachada y la configuración lo permite
+        if self.IGNORE_YAWN_IF_HEAD_DOWN and head_pitch_eff < -self.HEAD_PITCH_DOWN_THRESHOLD:
+            self._yawn_frames = 0 # Resetear el contador de bostezo
+            return # Salir sin procesar el bostezo
 
         if mar > self.MAR_THRESHOLD:
             self._yawn_frames += 1
@@ -109,21 +119,23 @@ class FatigueAnalyzer:
         ear = metrics.get("ear", 0.0)
         mar = metrics.get("mar", 0.0)
         head_pitch = metrics.get("head_pitch", 0.0)
+        head_yaw = metrics.get("head_yaw", 0.0) # Nuevo: Recuperar head_yaw
 
         # Actualizar históricos para suavizado
         if ear > 0:
             self._ear_history.append(ear)
         if mar > 0:
             self._mar_history.append(mar)
-        # head_pitch puede ser negativo; siempre apilar
         self._pitch_history.append(head_pitch)
+        self._yaw_history.append(head_yaw) # Nuevo: Actualizar historial de yaw
 
         ear_eff = self._avg(self._ear_history) if self._ear_history else ear
         mar_eff = self._avg(self._mar_history) if self._mar_history else mar
         head_pitch_eff = self._avg(self._pitch_history) if self._pitch_history else head_pitch
+        head_yaw_eff = self._avg(self._yaw_history) if self._yaw_history else head_yaw # Nuevo: yaw efectivo
 
         self._update_blink_metrics(ear_eff)
-        self._update_yawn_metrics(mar_eff)
+        self._update_yawn_metrics(mar_eff, head_pitch_eff)
 
         # --- Lógica de Detección de Microsueño (Ojos Cerrados) ---
         if ear_eff < self.EAR_THRESHOLD:
@@ -149,6 +161,12 @@ class FatigueAnalyzer:
             self._head_nod_frames = 0
             self._head_down_with_eyes_closed_frames = 0
 
+        # --- Lógica de Detección de Distracción (Giro de Cabeza Lateral) ---
+        if abs(head_yaw_eff) > self.HEAD_YAW_THRESHOLD:
+            self._head_yaw_frames += 1
+        else:
+            self._head_yaw_frames = 0
+
         # --- Determinación del Nivel y Tipo de Fatiga ---
         self.fatigue_level = "NONE"
         self.fatigue_type = "NONE"
@@ -159,6 +177,9 @@ class FatigueAnalyzer:
         elif (self._head_down_with_eyes_closed_frames >= self.HEAD_NOD_CONSEC_FRAMES) if self.HEAD_NOD_REQUIRE_EYES_CLOSED else (self._head_nod_frames >= self.HEAD_NOD_CONSEC_FRAMES):
             self.fatigue_level = "HIGH"
             self.fatigue_type = "HEAD_NOD"
+        elif self._head_yaw_frames >= self.HEAD_YAW_CONSEC_FRAMES: # Nuevo: Detección de distracción por giro de cabeza
+            self.fatigue_level = "MEDIUM"
+            self.fatigue_type = "DISTRACTION"
         elif self.yawn_count >= 3: # Más de 3 bostezos en el último minuto
             self.fatigue_level = "MEDIUM"
             self.fatigue_type = "YAWNING"
@@ -178,7 +199,8 @@ class FatigueAnalyzer:
             "MICRO_SLEEP": "MICROSUEÑO",
             "HEAD_NOD": "CABECEO",
             "YAWNING": "BOSTEZO",
-            "EYE_STRAIN": "CANSANCIO_VISUAL"
+            "EYE_STRAIN": "CANSANCIO_VISUAL",
+            "DISTRACTION": "DISTRAÍDO"
         }
         level_es = level_map.get(self.fatigue_level, self.fatigue_level)
         type_es = type_map.get(self.fatigue_type, self.fatigue_type)
