@@ -633,5 +633,64 @@
     "MONTHS_AGO_PLURAL": "Hace {{count}} meses",
     "YEAR_AGO": "Hace un año",
     "YEARS_AGO_PLURAL": "Hace {{count}} años"
+  },
+  "roi": {
+    "tag": "Calculadora de ROI",
+    "title": "Calcule su Ahorro Anual",
+    "subtitle": "Utilice nuestra calculadora interactiva para estimar cuánto podría ahorrar su flota al implementar nuestra solución de monitoreo de fatiga. Reduzca costos asociados a incidentes y mejore la seguridad.",
+    "feature1": "Reducción de hasta un 82% en incidentes por fatiga.",
+    "feature2": "Optimización de costos de seguro y mantenimiento.",
+    "feature3": "Mejora del bienestar y la productividad del conductor.",
+    "form": {
+      "vehicles": "Número de Vehículos en su Flota",
+      "incidents": "Incidentes Anuales por Fatiga (Promedio)",
+      "cost": "Costo Promedio por Incidente ($)"
+    },
+    "results": {
+      "title": "Ahorro Anual Potencial Estimado",
+      "cta": "Agendar una Demostración"
+    }
+  },
+  "loginModal": {
+    "visual": {
+      "title": "Transforme la Seguridad de su Flota",
+      "subtitle": "Nuestra tecnología de IA detecta la fatiga en tiempo real, previniendo incidentes antes de que ocurran."
+    },
+    "title": "Acceso a la Plataforma",
+    "welcome": "Bienvenido de Nuevo",
+    "subtitle": "Inicie sesión para gestionar su flota y monitorizar la seguridad.",
+    "form": {
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "forgot": "¿Olvidó su contraseña?",
+      "submit": "Iniciar Sesión",
+      "submitting": "Iniciando Sesión..."
+    },
+    "signup": {
+      "prompt": "¿Aún no tiene una cuenta?",
+      "link": "Regístrese",
+      "title": "Crear Nueva Cuenta",
+      "subtitle": "Comience a proteger a sus conductores hoy mismo.",
+      "form": {
+        "name": "Nombre Completo",
+        "company": "Nombre de la Empresa",
+        "submit": "Crear Cuenta",
+        "submitting": "Creando Cuenta...",
+        "success": "¡Registro exitoso! Ahora puede iniciar sesión.",
+        "error": "Error en el registro. Por favor, inténtelo de nuevo."
+      }
+    },
+    "login": {
+      "prompt": "¿Ya tiene una cuenta?",
+      "link": "Iniciar Sesión"
+    },
+    "forgotPassword": {
+      "title": "Recuperar Contraseña",
+      "subtitle": "Introduzca su correo electrónico y le enviaremos un enlace para restablecer su contraseña.",
+      "submit": "Enviar Enlace",
+      "submitting": "Enviando...",
+      "success": "Se ha enviado un enlace de recuperación a su correo.",
+      "backToLogin": "Volver a Iniciar Sesión"
+    }
   }
 }

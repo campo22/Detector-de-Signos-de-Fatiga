@@ -620,5 +620,64 @@
     "MONTHS_AGO_PLURAL": "{{count}} months ago",
     "YEAR_AGO": "A year ago",
     "YEARS_AGO_PLURAL": "{{count}} years ago"
+  },
+  "roi": {
+    "tag": "ROI Calculator",
+    "title": "Calculate Your Annual Savings",
+    "subtitle": "Use our interactive calculator to estimate how much your fleet could save by implementing our fatigue monitoring solution. Reduce incident-related costs and improve safety.",
+    "feature1": "Up to 82% reduction in fatigue-related incidents.",
+    "feature2": "Optimization of insurance and maintenance costs.",
+    "feature3": "Improved driver well-being and productivity.",
+    "form": {
+      "vehicles": "Number of Vehicles in Your Fleet",
+      "incidents": "Annual Fatigue-Related Incidents (Average)",
+      "cost": "Average Cost per Incident ($)"
+    },
+    "results": {
+      "title": "Estimated Potential Annual Savings",
+      "cta": "Schedule a Demonstration"
+    }
+  },
+  "loginModal": {
+    "visual": {
+      "title": "Transform Your Fleet's Safety",
+      "subtitle": "Our AI technology detects fatigue in real-time, preventing incidents before they happen."
+    },
+    "title": "Platform Access",
+    "welcome": "Welcome Back",
+    "subtitle": "Log in to manage your fleet and monitor safety.",
+    "form": {
+      "email": "Email Address",
+      "password": "Password",
+      "forgot": "Forgot your password?",
+      "submit": "Sign In",
+      "submitting": "Signing In..."
+    },
+    "signup": {
+      "prompt": "Don't have an account yet?",
+      "link": "Sign Up",
+      "title": "Create New Account",
+      "subtitle": "Start protecting your drivers today.",
+      "form": {
+        "name": "Full Name",
+        "company": "Company Name",
+        "submit": "Create Account",
+        "submitting": "Creating Account...",
+        "success": "Registration successful! You can now log in.",
+        "error": "Registration failed. Please try again."
+      }
+    },
+    "login": {
+      "prompt": "Already have an account?",
+      "link": "Sign In"
+    },
+    "forgotPassword": {
+      "title": "Recover Password",
+      "subtitle": "Enter your email and we'll send you a link to reset your password.",
+      "submit": "Send Link",
+      "submitting": "Sending...",
+      "success": "A recovery link has been sent to your email.",
+      "backToLogin": "Back to Sign In"
+    }
   }
 }

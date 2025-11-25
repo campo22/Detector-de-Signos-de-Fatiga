@@ -1,6 +1,6 @@
 
 import { Component, ChangeDetectionStrategy, AfterViewInit, ElementRef, inject, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -22,6 +22,8 @@ import { LoginFabComponent } from './components/login-fab/login-fab.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { DemoModalComponent } from './components/demo-modal/demo-modal.component';
 import { LoginModalComponent } from './components/login-modal/login-modal.component';
+import { ModalService } from './services/modal.service';
+import { AuthService } from '../auth/services/auth.service';
 
 @Component({
   selector: 'app-landing',
@@ -53,7 +55,11 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
   private readonly route = inject(ActivatedRoute);
   private readonly languageService = inject(LanguageService);
+  private readonly modalService = inject(ModalService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private fragmentSubscription: Subscription | undefined;
+  private queryParamsSubscription: Subscription | undefined;
 
   constructor() {
     this.languageService.init();
@@ -76,6 +82,30 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 0);
       }
     });
+
+    this.queryParamsSubscription = this.route.queryParams.subscribe((params: Params) => {
+      if (params['showLogin'] === 'true') {
+        // Verificar que authService esté disponible antes de usarlo
+        // Usar Promise.resolve() para asegurar que se ejecute en el siguiente ciclo de eventos
+        Promise.resolve().then(() => {
+          if (this.authService) {
+            // Usar un pequeño retraso para asegurar la sincronización del estado de autenticación
+            setTimeout(() => {
+              // Solo abrir el modal si el usuario no está autenticado
+              if (!this.authService.isAuthenticated()) {
+                this.modalService.openLoginModal();
+              } else {
+                // Si el usuario ya está autenticado, redirigir al dashboard
+                this.router.navigate(['/dashboard']);
+              }
+            }, 10);
+          } else {
+            // Si no está disponible, abrir modal como fallback
+            this.modalService.openLoginModal();
+          }
+        });
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -84,6 +114,7 @@ export class LandingComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.fragmentSubscription?.unsubscribe();
+    this.queryParamsSubscription?.unsubscribe?.();
   }
 
   private initializeAOS(): void {

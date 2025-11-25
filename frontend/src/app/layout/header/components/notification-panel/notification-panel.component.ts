@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Notification } from '../../../../core/models/notification.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { TimeAgoPipe } from '../../../../shared/pipes/time-ago-pipe';
 
 @Component({
   selector: 'app-notification-panel',
   standalone: true,
-  imports: [CommonModule, TranslateModule, TimeAgoPipe],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './notification-panel.component.html',
   styleUrls: ['./notification-panel.component.scss'],
   animations: [

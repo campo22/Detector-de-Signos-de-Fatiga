@@ -16,7 +16,8 @@ export const routes: Routes = [
   // --- Rutas Públicas existentes ---
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/components/login/login').then(m => m.LoginComponent)
+    redirectTo: '/?showLogin=true',
+    pathMatch: 'full'
   },
   {
     path: 'forgot-password',

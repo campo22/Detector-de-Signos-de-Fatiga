@@ -31,6 +31,7 @@
     "@angular/platform-browser": "^20.3.6",
     "@angular/platform-server": "^20.3.6",
     "@angular/router": "^20.3.6",
+    "@google/genai": "^1.30.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "@primeuix/themes": "^1.2.4",
@@ -50,6 +51,7 @@
     "leaflet": "^1.9.4",
     "litepicker": "^2.0.12",
     "ng-apexcharts": "^2.0.1",
+    "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^20.2.0",
     "raf": "^3.4.1",
@@ -58,8 +60,7 @@
     "stackblur-canvas": "^2.7.0",
     "svg-pathdata": "^8.0.0",
     "tslib": "^2.3.0",
-    "xlsx": "^0.18.5",
-    "@google/genai": "latest"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@angular/build": "^20.3.6",

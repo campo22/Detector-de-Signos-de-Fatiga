@@ -3,9 +3,10 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, finalize, map, Observable, of, tap, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { AuthResponse, LoginRequest, Role, UserProfile, ResetPasswordRequest } from '../../../core/models/auth.models';
+import { AuthResponse, LoginRequest, Role, UserProfile, ResetPasswordRequest, SignupRequest } from '../../../core/models/auth.models';
 import { jwtDecode } from 'jwt-decode';
 import { UserService } from '../../shared/services/user.service'; // Added import
+import { RedirectService } from '../../../core/services/redirect.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private userService = inject(UserService); // Injected UserService
+  private redirectService = inject(RedirectService); // Injected RedirectService
 
 
   private accessToken = signal<string | null>(null);
@@ -35,12 +37,20 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => this.setAuthData(response)),
-      switchMap(response => 
+      switchMap(response =>
         this.fetchAndSetUserProfile().pipe(
+          tap(() => {
+            // Redirigir después del login exitoso
+            this.redirectService.redirectToAfterLogin(this.isAuthenticated());
+          }),
           map(() => response) // Return the original response
         )
       )
     );
+  }
+
+  register(userInfo: SignupRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/register`, userInfo);
   }
 
   forgotPassword(email: string): Observable<string> {
@@ -101,7 +111,7 @@ export class AuthService {
         // el fialize se ejecuta cuando se completa el observable
         finalize(() => {
           this.clearAuthData();
-          this.router.navigate(['/login']);
+          this.redirectService.redirectToAfterLogout();
         })
       )
       .subscribe();

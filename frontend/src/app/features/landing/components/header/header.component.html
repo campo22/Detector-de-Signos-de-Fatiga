@@ -4,61 +4,63 @@
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <header class="w-full bg-landing-background-dark/50 backdrop-blur-lg rounded-full border border-border-dark" id="navbar">
       <!-- The content of the header, with its own padding -->
-      <div class="relative flex items-center justify-between px-4 py-3">
+      <div class="relative flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3">
         <a routerLink="/" class="flex items-center gap-2">
           <app-logo></app-logo>
         </a>
-        <nav class="hidden md:flex items-center gap-2">
-          <a class="text-sm font-medium hover:text-text-dark-primary transition-colors px-4 py-2" routerLink="/" fragment="features" [class.text-landing-primary]="activeSection() === 'features'" [class.text-landing-text-dark-secondary]="activeSection() !== 'features'">
+        <!-- Menú de navegación para pantallas medianas en adelante -->
+        <nav class="hidden md:flex items-center gap-1 sm:gap-2">
+          <a class="text-xs sm:text-sm font-medium hover:text-text-dark-primary transition-colors px-2 sm:px-3 py-1.5 sm:py-2" routerLink="/" fragment="features" [class.text-landing-primary]="activeSection() === 'features'" [class.text-landing-text-dark-secondary]="activeSection() !== 'features'">
             {{ 'header.features' | translate }}
           </a>
-          <a class="text-sm font-medium hover:text-text-dark-primary transition-colors px-4 py-2" routerLink="/" fragment="case-studies" [class.text-landing-primary]="activeSection() === 'case-studies'" [class.text-landing-text-dark-secondary]="activeSection() !== 'case-studies'">
+          <a class="text-xs sm:text-sm font-medium hover:text-text-dark-primary transition-colors px-2 sm:px-3 py-1.5 sm:py-2" routerLink="/" fragment="case-studies" [class.text-landing-primary]="activeSection() === 'case-studies'" [class.text-landing-text-dark-secondary]="activeSection() !== 'case-studies'">
             {{ 'header.caseStudies' | translate }}
           </a>
-          <a class="text-sm font-medium hover:text-text-dark-primary transition-colors px-4 py-2" routerLink="/" fragment="how-it-works" [class.text-landing-primary]="activeSection() === 'how-it-works'" [class.text-landing-text-dark-secondary]="activeSection() !== 'how-it-works'">
+          <a class="text-xs sm:text-sm font-medium hover:text-text-dark-primary transition-colors px-2 sm:px-3 py-1.5 sm:py-2" routerLink="/" fragment="how-it-works" [class.text-landing-primary]="activeSection() === 'how-it-works'" [class.text-landing-text-dark-secondary]="activeSection() !== 'how-it-works'">
             {{ 'header.howItWorks' | translate }}
           </a>
-          <a class="text-sm font-medium hover:text-text-dark-primary transition-colors px-4 py-2" routerLink="/" fragment="roi-calculator" [class.text-landing-primary]="activeSection() === 'roi-calculator'" [class.text-landing-text-dark-secondary]="activeSection() !== 'roi-calculator'">
+          <a class="text-xs sm:text-sm font-medium hover:text-text-dark-primary transition-colors px-2 sm:px-3 py-1.5 sm:py-2" routerLink="/" fragment="roi-calculator" [class.text-landing-primary]="activeSection() === 'roi-calculator'" [class.text-landing-text-dark-secondary]="activeSection() !== 'roi-calculator'">
             {{ 'header.roiCalculator' | translate }}
           </a>
-          <a class="text-sm font-medium hover:text-text-dark-primary transition-colors px-4 py-2" routerLink="/" fragment="pricing" [class.text-landing-primary]="activeSection() === 'pricing'" [class.text-landing-text-dark-secondary]="activeSection() !== 'pricing'">
+          <a class="text-xs sm:text-sm font-medium hover:text-text-dark-primary transition-colors px-2 sm:px-3 py-1.5 sm:py-2" routerLink="/" fragment="pricing" [class.text-landing-primary]="activeSection() === 'pricing'" [class.text-landing-text-dark-secondary]="activeSection() !== 'pricing'">
             {{ 'header.pricing' | translate }}
           </a>
-          <a class="text-sm font-medium hover:text-text-dark-primary transition-colors px-4 py-2" routerLink="/" fragment="faq" [class.text-landing-primary]="activeSection() === 'faq'" [class.text-landing-text-dark-secondary]="activeSection() !== 'faq'">
+          <a class="text-xs sm:text-sm font-medium hover:text-text-dark-primary transition-colors px-2 sm:px-3 py-1.5 sm:py-2" routerLink="/" fragment="faq" [class.text-landing-primary]="activeSection() === 'faq'" [class.text-landing-text-dark-secondary]="activeSection() !== 'faq'">
             {{ 'header.faq' | translate }}
           </a>
         </nav>
-        <div class="flex items-center gap-4">
-          <!-- Language Switcher -->
+        <div class="flex items-center gap-1 sm:gap-2">
+          <!-- Language Switcher - Mostrar en pantallas sm y más grandes -->
           <div class="relative hidden sm:inline-block">
-            <button (click)="toggleLangMenu()" class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-landing-text-dark-secondary border border-border-dark hover:border-white/50 hover:text-text-dark-primary bg-transparent transition-colors duration-200 ease-in-out">
+            <button (click)="toggleLangMenu()" class="flex items-center gap-1 rounded-full px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-landing-text-dark-secondary border border-border-dark hover:border-white/50 hover:text-text-dark-primary bg-transparent transition-colors duration-200 ease-in-out">
               @if (currentLang() === 'es') {
-                <span>🇪🇸 ES</span>
+                <span class="text-xs sm:text-sm">🇪🇸 ES</span>
               } @else {
-                <span>🇺🇸 EN</span>
+                <span class="text-xs sm:text-sm">🇺🇸 EN</span>
               }
-              <span class="material-symbols-outlined text-base transition-transform" [class.rotate-180]="langMenuOpen()">expand_more</span>
+              <span class="material-symbols-outlined text-xs transition-transform" [class.rotate-180]="langMenuOpen()">expand_more</span>
             </button>
             @if (langMenuOpen()) {
-              <div class="absolute top-full right-0 mt-2 w-40 bg-[#111620] border border-border-dark rounded-lg shadow-lg animate-fade-in-scale">
-                <button (click)="switchLanguage('es')" class="w-full text-left px-4 py-2 text-sm text-landing-text-dark-secondary hover:bg-white/5 hover:text-text-dark-primary flex items-center gap-2">
+              <div class="absolute top-full right-0 mt-2 w-32 sm:w-36 bg-[#111620] border border-border-dark rounded-lg shadow-lg animate-fade-in-scale z-[100]">
+                <button (click)="switchLanguage('es')" class="w-full text-left px-3 py-2 text-sm text-landing-text-dark-secondary hover:bg-white/5 hover:text-text-dark-primary flex items-center gap-2">
                   🇪🇸 Español
                 </button>
-                <button (click)="switchLanguage('en')" class="w-full text-left px-4 py-2 text-sm text-landing-text-dark-secondary hover:bg-white/5 hover:text-text-dark-primary flex items-center gap-2">
+                <button (click)="switchLanguage('en')" class="w-full text-left px-3 py-2 text-sm text-landing-text-dark-secondary hover:bg-white/5 hover:text-text-dark-primary flex items-center gap-2">
                   🇺🇸 English
                 </button>
               </div>
             }
           </div>
-          
-          <button (click)="openDemoModal()" class="rounded-full px-5 py-2 text-sm font-medium bg-landing-primary text-white hover:bg-landing-primary-focus transition-colors duration-200 ease-in-out shadow-primary-glow">
+
+          <button (click)="openDemoModal()" class="rounded-full px-2.5 sm:px-4 py-1.5 text-xs sm:text-sm font-medium bg-landing-primary text-white hover:bg-landing-primary-focus transition-colors duration-200 ease-in-out shadow-primary-glow whitespace-nowrap">
             {{ 'header.bookDemo' | translate }}
           </button>
+          <!-- Menú hamburguesa para pantallas pequeñas -->
           <button (click)="toggleMenu()" class="md:hidden p-2 rounded-full hover:bg-white/10 text-text-dark-primary transition-colors z-[60]">
             @if (!menuOpen()) {
-              <span class="material-symbols-outlined">menu</span>
+              <span class="material-symbols-outlined text-base sm:text-lg">menu</span>
             } @else {
-              <span class="material-symbols-outlined">close</span>
+              <span class="material-symbols-outlined text-base sm:text-lg">close</span>
             }
           </button>
         </div>
@@ -69,20 +71,46 @@
 
 @if (menuOpen()) {
   <div class="fixed inset-0 z-40 bg-landing-background-dark/95 backdrop-blur-lg md:hidden animate-fade-in">
-    <nav class="flex flex-col items-center justify-center h-full text-center gap-8">
-      <a (click)="toggleMenu()" class="text-2xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="features" [class.text-landing-primary]="activeSection() === 'features'" [class.text-landing-text-dark-secondary]="activeSection() !== 'features'">{{ 'header.features' | translate }}</a>
-      <a (click)="toggleMenu()" class="text-2xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="case-studies" [class.text-landing-primary]="activeSection() === 'case-studies'" [class.text-landing-text-dark-secondary]="activeSection() !== 'case-studies'">{{ 'header.caseStudies' | translate }}</a>
-      <a (click)="toggleMenu()" class="text-2xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="how-it-works" [class.text-landing-primary]="activeSection() === 'how-it-works'" [class.text-landing-text-dark-secondary]="activeSection() !== 'how-it-works'">{{ 'header.howItWorks' | translate }}</a>
-       <a (click)="toggleMenu()" class="text-2xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="roi-calculator" [class.text-landing-primary]="activeSection() === 'roi-calculator'" [class.text-landing-text-dark-secondary]="activeSection() !== 'roi-calculator'">
-            {{ 'header.roiCalculator' | translate }}
-       </a>
-       <a (click)="toggleMenu()" class="text-2xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="pricing" [class.text-landing-primary]="activeSection() === 'pricing'" [class.text-landing-text-dark-secondary]="activeSection() !== 'pricing'">
-            {{ 'header.pricing' | translate }}
-       </a>
-      <a (click)="toggleMenu()" class="text-2xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="faq" [class.text-landing-primary]="activeSection() === 'faq'" [class.text-landing-text-dark-secondary]="activeSection() !== 'faq'">{{ 'header.faq' | translate }}</a>
-      
-      <div class="mt-8 flex flex-col items-center gap-6 w-full max-w-xs mx-auto">
-        <button (click)="openDemoModal()" class="w-full inline-block rounded-full py-3 text-lg font-medium text-white bg-landing-primary hover:bg-landing-primary-focus transition-colors duration-200 ease-in-out">
+    <nav class="flex flex-col items-center justify-center h-full text-center gap-4 sm:gap-6">
+      <div class="flex flex-col items-center gap-4">
+        <a (click)="toggleMenu()" class="text-lg sm:text-xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="features" [class.text-landing-primary]="activeSection() === 'features'" [class.text-landing-text-dark-secondary]="activeSection() !== 'features'">{{ 'header.features' | translate }}</a>
+        <a (click)="toggleMenu()" class="text-lg sm:text-xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="case-studies" [class.text-landing-primary]="activeSection() === 'case-studies'" [class.text-landing-text-dark-secondary]="activeSection() !== 'case-studies'">{{ 'header.caseStudies' | translate }}</a>
+        <a (click)="toggleMenu()" class="text-lg sm:text-xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="how-it-works" [class.text-landing-primary]="activeSection() === 'how-it-works'" [class.text-landing-text-dark-secondary]="activeSection() !== 'how-it-works'">{{ 'header.howItWorks' | translate }}</a>
+        <a (click)="toggleMenu()" class="text-lg sm:text-xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="roi-calculator" [class.text-landing-primary]="activeSection() === 'roi-calculator'" [class.text-landing-text-dark-secondary]="activeSection() !== 'roi-calculator'">
+          {{ 'header.roiCalculator' | translate }}
+        </a>
+        <a (click)="toggleMenu()" class="text-lg sm:text-xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="pricing" [class.text-landing-primary]="activeSection() === 'pricing'" [class.text-landing-text-dark-secondary]="activeSection() !== 'pricing'">
+          {{ 'header.pricing' | translate }}
+        </a>
+        <a (click)="toggleMenu()" class="text-lg sm:text-xl font-medium hover:text-text-dark-primary transition-colors" routerLink="/" fragment="faq" [class.text-landing-primary]="activeSection() === 'faq'" [class.text-landing-text-dark-secondary]="activeSection() !== 'faq'">{{ 'header.faq' | translate }}</a>
+      </div>
+
+      <!-- Selector de idioma en el menú móvil -->
+      <div class="flex flex-col items-center gap-2">
+        <div class="relative">
+          <button (click)="toggleLangMenu()" class="flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-landing-text-dark-secondary border border-border-dark hover:border-white/50 hover:text-text-dark-primary bg-transparent transition-colors duration-200 ease-in-out">
+            @if (currentLang() === 'es') {
+              <span class="text-sm">🇪🇸 ES</span>
+            } @else {
+              <span class="text-sm">🇺🇸 EN</span>
+            }
+            <span class="material-symbols-outlined text-sm transition-transform" [class.rotate-180]="langMenuOpen()">expand_more</span>
+          </button>
+          @if (langMenuOpen()) {
+            <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-36 bg-[#111620] border border-border-dark rounded-lg shadow-lg animate-fade-in-scale z-[100]">
+              <button (click)="switchLanguage('es')" class="w-full text-left px-3 py-2 text-sm text-landing-text-dark-secondary hover:bg-white/5 hover:text-text-dark-primary flex items-center gap-2">
+                🇪🇸 Español
+              </button>
+              <button (click)="switchLanguage('en')" class="w-full text-left px-3 py-2 text-sm text-landing-text-dark-secondary hover:bg-white/5 hover:text-text-dark-primary flex items-center gap-2">
+                🇺🇸 English
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="mt-4 sm:mt-6 flex flex-col items-center gap-3 sm:gap-6 w-full max-w-xs mx-auto">
+        <button (click)="openDemoModal()" class="w-full inline-block rounded-full py-3 text-base sm:text-lg font-medium text-white bg-landing-primary hover:bg-landing-primary-focus transition-colors duration-200 ease-in-out">
           {{ 'header.bookDemo' | translate }}
         </button>
       </div>

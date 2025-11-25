@@ -2,13 +2,14 @@ import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/cor
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal.service';
+import { DashboardPreviewComponent } from '../dashboard-preview/dashboard-preview.component';
 
 @Component({
   selector: 'app-hero',
   templateUrl: './hero.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [TranslatePipe, RouterLink]
+  imports: [TranslatePipe, RouterLink, DashboardPreviewComponent]
 })
 export class HeroComponent {
   isVideoModalOpen = signal(false);

@@ -1,7 +1,7 @@
 @if (isLoginModalOpen()) {
   <div (click)="closeModal()" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
     <div (click)="$event.stopPropagation()" class="relative w-full max-w-4xl min-h-[600px] flex bg-[#0D1117] rounded-2xl border border-border-dark shadow-2xl animate-fade-in-scale overflow-hidden">
-       
+
        <!-- Left Panel (Visual) -->
        <div class="hidden md:flex w-1/2 bg-cover bg-center relative flex-col justify-end p-12 text-white" style="background-image: url('https://images.unsplash.com/photo-1549317336-206569e8475c?q=80&w=870&auto=format&fit=crop')">
          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -16,14 +16,15 @@
           <button (click)="closeModal()" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-white/5 rounded-full text-landing-text-dark-secondary hover:bg-white/10 hover:text-text-dark-primary transition-colors z-10">
             <span class="material-symbols-outlined">close</span>
           </button>
-          
+
+
           <!-- Login View -->
           @if (view() === 'login') {
             <div class="w-full max-w-sm mx-auto animate-fade-in">
               <p class="text-sm text-landing-text-dark-secondary">{{ 'loginModal.title' | translate }}</p>
               <h2 class="text-3xl font-bold tracking-tight text-text-dark-primary mt-1">{{ 'loginModal.welcome' | translate }}</h2>
               <p class="mt-2 text-landing-text-dark-secondary">{{ 'loginModal.subtitle' | translate }}</p>
-              
+
               <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="mt-8 space-y-6" novalidate>
                 <div>
                   <label for="login-email" class="text-sm font-medium text-landing-text-dark-secondary">{{ 'loginModal.form.email' | translate }}</label>
@@ -44,14 +45,14 @@
                 </div>
                 <div>
                   <button type="submit" [disabled]="submitting()" class="w-full rounded-lg px-8 py-3 text-base font-semibold bg-landing-primary text-white hover:bg-landing-primary-focus transition-all duration-300 ease-in-out shadow-primary-glow disabled:opacity-50 flex items-center justify-center">
-                    @if (submitting()) { <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>{{ 'loginModal.form.submitting' | translate }}</span> } 
+                    @if (submitting()) { <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>{{ 'loginModal.form.submitting' | translate }}</span> }
                     @else { <span>{{ 'loginModal.form.submit' | translate }}</span> }
                   </button>
                 </div>
               </form>
               <div class="mt-6 text-center text-sm">
                 <p class="text-landing-text-dark-secondary">
-                  {{ 'loginModal.signup.prompt' | translate }} 
+                  {{ 'loginModal.signup.prompt' | translate }}
                   <button (click)="switchToSignup()" class="font-semibold text-landing-primary hover:underline">{{ 'loginModal.signup.link' | translate }}</button>
                 </p>
               </div>
@@ -81,16 +82,20 @@
                 </div>
                 <div>
                   <button type="submit" [disabled]="signupSubmitting()" class="w-full rounded-lg px-8 py-3 text-base font-semibold bg-landing-primary text-white hover:bg-landing-primary-focus transition-all duration-300 ease-in-out shadow-primary-glow disabled:opacity-50 flex items-center justify-center">
-                    @if (signupSubmitting()) { <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>{{ 'loginModal.signup.form.submitting' | translate }}</span> } 
+                    @if (signupSubmitting()) { <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>{{ 'loginModal.signup.form.submitting' | translate }}</span> }
                     @else { <span>{{ 'loginModal.signup.form.submit' | translate }}</span> }
                   </button>
-                   @if (signupSuccess() === true) { <p class="mt-4 text-sm text-green-400 text-center">{{ 'loginModal.signup.form.success' | translate }}</p> }
-                   @if (signupSuccess() === false) { <p class="mt-4 text-sm text-red-400 text-center">{{ 'loginModal.signup.form.error' | translate }}</p> }
+                   @if (signupSuccess()) {
+                    <p class="mt-4 text-sm text-green-400 text-center">{{ 'loginModal.signup.form.success' | translate }}</p>
+                   }
+                   @if (signupError()) {
+                    <p class="mt-4 text-sm text-red-400 text-center">{{ (signupError() ?? '') | translate }}</p>
+                   }
                 </div>
               </form>
               <div class="mt-6 text-center text-sm">
                 <p class="text-landing-text-dark-secondary">
-                  {{ 'loginModal.login.prompt' | translate }} 
+                  {{ 'loginModal.login.prompt' | translate }}
                   <button (click)="switchToLogin()" class="font-semibold text-landing-primary hover:underline">{{ 'loginModal.login.link' | translate }}</button>
                 </p>
               </div>
@@ -113,10 +118,15 @@
                 </div>
                 <div>
                    <button type="submit" [disabled]="forgotPasswordSubmitting()" class="w-full rounded-lg px-8 py-3 text-base font-semibold bg-landing-primary text-white hover:bg-landing-primary-focus transition-all duration-300 ease-in-out shadow-primary-glow disabled:opacity-50 flex items-center justify-center">
-                    @if (forgotPasswordSubmitting()) { <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>{{ 'loginModal.forgotPassword.submitting' | translate }}</span> } 
+                    @if (forgotPasswordSubmitting()) { <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>{{ 'loginModal.forgotPassword.submitting' | translate }}</span> }
                     @else { <span>{{ 'loginModal.forgotPassword.submit' | translate }}</span> }
                   </button>
-                   @if (forgotPasswordSuccess() === true) { <p class="mt-4 text-sm text-green-400 text-center">{{ 'loginModal.forgotPassword.success' | translate }}</p> }
+                   @if (forgotPasswordSuccess()) {
+                    <p class="mt-4 text-sm text-green-400 text-center">{{ 'loginModal.forgotPassword.success' | translate }}</p>
+                   }
+                   @if (forgotPasswordError()) {
+                    <p class="mt-4 text-sm text-red-400 text-center">{{ (forgotPasswordError() ?? '') | translate }}</p>
+                   }
                 </div>
               </form>
               <div class="mt-6 text-center text-sm">

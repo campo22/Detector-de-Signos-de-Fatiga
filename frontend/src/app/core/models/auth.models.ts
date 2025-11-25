@@ -12,6 +12,13 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface SignupRequest {
+  name: string;
+  company: string;
+  email: string;
+  password: string;
+}
+
 
 export interface AuthResponse {
   accessToken: string;
@@ -27,6 +34,7 @@ export interface UserProfile {
   name: string;
   email: string;
   role: Role;
+  company?: string;
   activo?: boolean; // Made activo optional
 }
 
@@ -35,4 +43,3 @@ export interface ResetPasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
-

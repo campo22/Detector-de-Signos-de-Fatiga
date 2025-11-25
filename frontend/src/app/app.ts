@@ -1,5 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { AuthService } from './features/auth/services/auth.service';
 import { WebSocketService } from './features/auth/services/web-socket.service';
 import { LanguageService } from './core/services/language.service';
@@ -7,7 +9,8 @@ import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ToastModule],
+  providers: [MessageService],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
