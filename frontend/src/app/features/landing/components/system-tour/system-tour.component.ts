@@ -18,25 +18,25 @@ export class SystemTourComponent implements OnInit, OnDestroy {
 
   slides = computed(() => [
     {
-      imgSrc: '/assets/images/system-tour/tour-step1.jpg',
+      imgSrc: '/assets/images/system-tour/Dashboard.png',
       alt: 'Dashboard Principal de SafeTrack',
       title: this.languageService.translate('systemTour.slides.dashboard.title'),
       description: this.languageService.translate('systemTour.slides.dashboard.description')
     },
     {
-      imgSrc: '/assets/images/system-tour/tour-step2.jpg',
+      imgSrc: '/assets/images/system-tour/monitoreo.png',
       alt: 'Vista de Monitoreo Individual',
       title: this.languageService.translate('systemTour.slides.monitoring.title'),
       description: this.languageService.translate('systemTour.slides.monitoring.description')
     },
     {
-      imgSrc: '/assets/images/system-tour/tour-step3.jpg',
+      imgSrc: '/assets/images/system-tour/Reportes.png',
       alt: 'Reportes Analíticos',
       title: this.languageService.translate('systemTour.slides.reports.title'),
       description: this.languageService.translate('systemTour.slides.reports.description')
     },
     {
-      imgSrc: '/assets/images/system-tour/tour-step4.jpg',
+      imgSrc: '/assets/images/system-tour/conductor.png',
       alt: 'Gestión de Alertas',
       title: this.languageService.translate('systemTour.slides.alerts.title'),
       description: this.languageService.translate('systemTour.slides.alerts.description')
