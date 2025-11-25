@@ -1,11 +1,11 @@
 <!-- Chatbot Toggle Button -->
 <div class="fixed bottom-6 right-6 z-40 group animate-fade-in">
   <button (click)="toggleChat()" 
-     class="w-16 h-16 flex items-center justify-center bg-landing-primary rounded-full shadow-lg shadow-primary-glow hover:bg-landing-primary-focus transition-all duration-300 ease-in-out transform hover:scale-110">
+     class="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center bg-landing-primary rounded-full shadow-lg shadow-primary-glow hover:bg-landing-primary-focus transition-all duration-300 ease-in-out transform hover:scale-110">
     @if (!isOpen()) {
-      <span class="material-symbols-outlined text-3xl text-white">voice_chat</span>
+      <span class="material-symbols-outlined text-2xl sm:text-3xl text-white">voice_chat</span>
     } @else {
-      <span class="material-symbols-outlined text-3xl text-white">close</span>
+      <span class="material-symbols-outlined text-2xl sm:text-3xl text-white">close</span>
     }
   </button>
   <div class="absolute right-full mr-4 top-1/2 -translate-y-1/2 px-4 py-2 bg-[#111620] text-text-dark-primary rounded-lg shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
@@ -24,7 +24,7 @@
 
 <!-- Chatbot Window -->
 @if (isOpen()) {
-  <div class="fixed bottom-24 right-6 z-40 w-full max-w-sm h-[60vh] flex flex-col bg-[#111620] rounded-xl border border-border-dark shadow-2xl animate-fade-in-scale">
+  <div class="fixed bottom-20 right-4 z-40 w-full max-w-sm h-[60vh] flex flex-col bg-[#111620] rounded-xl border border-border-dark shadow-2xl animate-fade-in-scale">
     <!-- Header -->
     <div class="flex-shrink-0 flex items-center justify-between p-4 border-b border-border-dark">
       <div class="flex items-center gap-3">

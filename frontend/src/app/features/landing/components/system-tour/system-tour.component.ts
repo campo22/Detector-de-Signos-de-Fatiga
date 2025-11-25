@@ -18,25 +18,25 @@ export class SystemTourComponent implements OnInit, OnDestroy {
 
   slides = computed(() => [
     {
-      imgSrc: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+      imgSrc: '/assets/images/system-tour/tour-step1.jpg',
       alt: 'Dashboard Principal de SafeTrack',
       title: this.languageService.translate('systemTour.slides.dashboard.title'),
       description: this.languageService.translate('systemTour.slides.dashboard.description')
     },
     {
-      imgSrc: 'https://images.unsplash.com/photo-1611068813580-b371d1a13322?q=80&w=1200&auto=format&fit=crop',
+      imgSrc: '/assets/images/system-tour/tour-step2.jpg',
       alt: 'Vista de Monitoreo Individual',
       title: this.languageService.translate('systemTour.slides.monitoring.title'),
       description: this.languageService.translate('systemTour.slides.monitoring.description')
     },
     {
-      imgSrc: 'https://images.unsplash.com/photo-1560415755-bd80d06eda60?q=80&w=1200&auto=format&fit=crop',
+      imgSrc: '/assets/images/system-tour/tour-step3.jpg',
       alt: 'Reportes Analíticos',
       title: this.languageService.translate('systemTour.slides.reports.title'),
       description: this.languageService.translate('systemTour.slides.reports.description')
     },
     {
-      imgSrc: 'https://images.unsplash.com/photo-1591696205602-2f950c416cb1?q=80&w=1200&auto=format&fit=crop',
+      imgSrc: '/assets/images/system-tour/tour-step4.jpg',
       alt: 'Gestión de Alertas',
       title: this.languageService.translate('systemTour.slides.alerts.title'),
       description: this.languageService.translate('systemTour.slides.alerts.description')
