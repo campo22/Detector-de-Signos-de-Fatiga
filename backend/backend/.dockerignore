@@ -1,0 +1,16 @@
+# Ignorar directorios de compilación y de IDEs
+target/
+.mvn/
+.gradle/
+build/
+
+# Ignorar archivos de configuración específicos de entorno local
+.env
+.DS_Store
+
+# Ignorar archivos del IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
