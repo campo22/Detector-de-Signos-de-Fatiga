@@ -76,6 +76,7 @@ Thumbs.db
 # Project specific
 *.dat
 *.wav
+frontend/src/environments/environment.local.ts
 
 # Reports and logs
 app.log

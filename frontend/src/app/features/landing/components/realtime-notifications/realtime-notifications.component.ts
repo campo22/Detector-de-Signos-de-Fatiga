@@ -16,7 +16,7 @@ interface Notification {
       <!-- Contenedor de notificaciones -->
       @for (notification of notifications; track notification.id) {
         <div 
-          class="notification-item animate-slide-in p-3 rounded-lg border-l-4 text-white text-xs transition-all duration-300"
+          class="notification-item animate-slide-in py-3 px-2 sm:px-3 rounded-lg border-l-4 text-white text-xs transition-all duration-300"
           [class.bg-red-900/30]="notification.severity === 'high'"
           [class.bg-yellow-900/30]="notification.severity === 'medium'"
           [class.bg-blue-900/30]="notification.severity === 'low'"
@@ -44,7 +44,7 @@ interface Notification {
                 {{ getNotificationTitle(notification.type) }}
               </span>
             </div>
-            <span class="text-slate-500">{{ notification.time }}</span>
+            <span class="text-slate-500 flex-shrink-0">{{ notification.time }}</span>
           </div>
           <div class="mt-1 text-slate-300">{{ notification.message }}</div>
         </div>

@@ -10,7 +10,7 @@
       <div class="absolute inset-0 -mx-8 bg-landing-primary/10 blur-3xl opacity-40 rounded-full"></div>
       
       <!-- Carousel Container -->
-      <div class="relative bg-[#111620] rounded-2xl border border-border-dark p-4 sm:p-6 lg:p-8">
+      <div class="relative bg-[#111620] rounded-2xl border border-border-dark p-3 sm:p-4 lg:p-8">
         <div class="relative overflow-hidden aspect-[16/9] rounded-lg">
           @for (slide of slides(); track slide.title; let i = $index) {
             <img [ngSrc]="slide.imgSrc" 
@@ -38,7 +38,7 @@
         </div>
 
         <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <div class="md:col-span-8 relative h-28"> <!-- Set fixed height for text area -->
+          <div class="md:col-span-8 relative"> <!-- Set fixed height for text area -->
             @for (slide of slides(); track slide.title; let i = $index) {
               <div class="absolute inset-0 transition-opacity duration-500" 
                   [class.opacity-100]="i === currentSlide()"

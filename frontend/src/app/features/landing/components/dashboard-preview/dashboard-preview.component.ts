@@ -19,9 +19,9 @@ import { LiveEventsComponent } from '../live-events/live-events.component';
       </div>
 
       <!-- Contenido principal -->
-      <div class="flex-grow grid grid-cols-3 gap-4">
+      <div class="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Columna izquierda - Alertas en tiempo real -->
-        <div class="col-span-2 bg-slate-800/70 rounded-lg p-3 flex flex-col border border-slate-700">
+        <div class="col-span-1 md:col-span-2 bg-slate-800/70 rounded-lg p-3 flex flex-col border border-slate-700">
           <div class="flex justify-between items-center mb-2">
             <h4 class="text-slate-300 text-xs font-semibold">Notificaciones en Vivo</h4>
             <span class="text-xs text-slate-500">3 nuevas</span>

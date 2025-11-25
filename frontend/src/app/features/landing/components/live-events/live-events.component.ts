@@ -30,7 +30,7 @@ interface LiveEvent {
         <div class="space-y-3">
           @for (event of liveEvents; track event.id) {
             <div 
-              class="bg-opacity-50 p-3 rounded-lg border-l-4 shadow-sm hover:bg-opacity-70 transition-all duration-300 cursor-pointer relative overflow-hidden group"
+              class="bg-opacity-50 py-3 px-2 sm:px-3 rounded-lg border-l-4 shadow-sm hover:bg-opacity-70 transition-all duration-300 cursor-pointer relative overflow-hidden group"
               [class.bg-red-900/20]="event.severity === 'destructive'"
               [class.bg-yellow-900/20]="event.severity === 'warning'"
               [class.bg-green-900/20]="event.severity === 'success'"
@@ -39,8 +39,8 @@ interface LiveEvent {
               [class.border-green-500]="event.severity === 'success'"
             >
               <div class="relative z-10">
-                <div class="flex justify-between items-start mb-1">
-                  <div class="flex items-center">
+                <div class="flex flex-col sm:flex-row justify-between items-start mb-1">
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center">
                     <span 
                       class="px-2 py-0.5 text-xs font-bold rounded-full text-white uppercase tracking-wide"
                       [class.bg-red-500]="event.severity === 'destructive'"
@@ -60,7 +60,7 @@ interface LiveEvent {
                   </div>
                   <p class="text-xs text-slate-500 font-mono">{{ event.timeAgo }}</p>
                 </div>
-                <div class="flex items-center text-xs">
+                <div class="flex flex-wrap items-center text-xs">
                   <span class="material-symbols-outlined mr-1 text-slate-400 text-xs">person</span>
                   <p class="text-slate-300 font-semibold">{{ event.driver }}</p>
                   <span class="material-symbols-outlined mx-2 text-slate-400 text-xs">local_shipping</span>
