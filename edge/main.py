@@ -6,7 +6,7 @@ import time
 import os
 import pygame
 import numpy as np # Necesario para dibujar la pose de la cabeza
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 from logging.handlers import RotatingFileHandler
 import csv
@@ -236,11 +236,7 @@ def main():
                     reconnect_attempts += 1
                     reconnect_backoff = min(reconnect_backoff * 2.0, 5.0)
                     print(f"[ERROR] Reintento de cámara #{reconnect_attempts} falló: {e}")
-                    if reconnect_attempts >= max_reconnect_attempts:
-                        print("[ERROR] No se pudo reconectar la cámara. Saliendo.")
-                        break
-                    else:
-                        continue
+                    continue
             else:
                 time.sleep(0.05)
                 continue
