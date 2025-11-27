@@ -1,12 +1,12 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../core/services/notification.service';
 import { Notification } from '../../core/models/notification.model';
-import { Page } from '../../core/models/event.models'; // Import Page
+import { Page } from '../../core/models/event.models';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-notifications',
@@ -20,7 +20,7 @@ import { take } from 'rxjs';
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss'],
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsComponent implements OnInit, OnDestroy {
   private notificationService = inject(NotificationService);
   private messageService = inject(MessageService);
   private translate = inject(TranslateService);
@@ -28,10 +28,25 @@ export class NotificationsComponent implements OnInit {
   notificationsPage = signal<Page<Notification> | null>(null);
   loading = signal<boolean>(true);
 
+  private destroy$ = new Subject<void>();
+
   constructor() {}
 
   ngOnInit(): void {
     this.loadNotifications();
+
+    // Subscribe to real-time updates
+    this.notificationService.notificationReceived$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // Reload notifications, but without showing a toast every time
+        this.loadNotifications(this.notificationsPage()?.number ?? 0);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadNotifications(page: number = 0, size: number = 10, showToast: boolean = false): void {

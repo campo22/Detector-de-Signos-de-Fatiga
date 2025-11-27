@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Notification } from '../models/notification.model';
 import { WebSocketService } from '../../features/auth/services/web-socket.service';
@@ -26,6 +26,10 @@ export class NotificationService {
   private unreadCount = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCount.asObservable();
 
+  // New subject to signal notification arrival
+  private _notificationReceived = new Subject<void>();
+  public notificationReceived$ = this._notificationReceived.asObservable();
+
   constructor() {
     this.listenForRealTimeNotifications();
     this.webSocketService.connect(); // Ensure WebSocket is connected
@@ -49,6 +53,9 @@ export class NotificationService {
 
       // Update unread count
       this.unreadCount.next(this.unreadCount.value + 1);
+
+      // Signal that a new notification has arrived
+      this._notificationReceived.next();
     });
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Client, IMessage } from '@stomp/stompjs';
 import { Subject } from 'rxjs';
 import { FatigueEvent } from '../../../core/models/event.models';
@@ -17,7 +17,7 @@ export class WebSocketService {
 
   public fatigueEvent$ = this.fatigueEventSubject.asObservable();
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
     // crear la instancia de Stomp
     this.stompClient = new Client({
 
@@ -40,8 +40,10 @@ export class WebSocketService {
 
         // convertir el mensaje en un objeto FatigueEvent
         const event = JSON.parse(message.body) as FatigueEvent;
-        // emitir el evento
-        this.fatigueEventSubject.next(event);
+        // emitir el evento dentro de la zona de Angular
+        this.ngZone.run(() => {
+          this.fatigueEventSubject.next(event);
+        });
       });
 
     };

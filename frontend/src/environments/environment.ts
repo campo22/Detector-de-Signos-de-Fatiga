@@ -5,6 +5,6 @@ export const environment = {
   production: false,
   // URL base de la API
   apiUrl: '/api/v1',
-  websocketUrl: 'ws://localhost:8080/ws',
+  websocketUrl: 'ws://localhost/ws',
   geminiApiKey: ''
 };

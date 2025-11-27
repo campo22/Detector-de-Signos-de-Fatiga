@@ -110,6 +110,13 @@ export class Header implements OnInit, OnDestroy { // Implemented OnInit, OnDest
         this.unreadNotificationCount.set(count);
       });
 
+    // Suscribirse a la llegada de nuevas notificaciones para refrescar la lista
+    this.notificationService.notificationReceived$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadRecentNotifications();
+      });
+
     // Cargar el conteo inicial al iniciar el componente
     this.notificationService.getUnreadNotificationsCount().subscribe();
   }
