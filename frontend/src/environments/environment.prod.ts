@@ -9,8 +9,7 @@ export const environment = {
   // la ruta relativa /api/v1 es adecuada. De lo contrario, usar el dominio completo.
   apiUrl: '/api/v1',
   // URL de WebSocket para producción. Ajustar según el despliegue.
-  // ws://localhost:8080/ws es un placeholder. Usar wss:// o ws:// con el dominio de producción.
-  websocketUrl: 'ws://localhost/ws',
+  websocketUrl: 'ws://localhost:8080/ws',
   // Clave API de Gemini. DEBE ser inyectada de forma segura por CI/CD
   // o configurada como variable de entorno en el despliegue.
   // NO LA COMIETEES CON LA CLAVE REAL.
